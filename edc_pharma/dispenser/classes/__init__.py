@@ -1,2 +1,0 @@
-from dispensing_identifier import DispensingIdentifier
-from dispensing_label import DispensingLabel
