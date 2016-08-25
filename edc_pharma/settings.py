@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'edc_pharma.apps.AppConfig',
+    'edc_base.apps.AppConfig',
 ]
 
 MIDDLEWARE = [
@@ -120,3 +121,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+GIT_DIR = BASE_DIR
