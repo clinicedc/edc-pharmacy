@@ -1,0 +1,6 @@
+include AUTHORS CHANGES README.md LICENCE
+recursive-include edc_pharma/templates *
+recursive-include edc_pharma/static *
+recursive-include docs *
+recursive-exclude edc_example/*
+recursive-exclude etc/*
