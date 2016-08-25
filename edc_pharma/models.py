@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils import timezone
-from edc_base.model.models import BaseModel
+from edc_base.model.models import BaseUuidModel
 
 
-class Protocol(BaseModel):
+class Protocol(BaseUuidModel):
     protocol_number = models.CharField(max_length=30)
     protocol_name = models.CharField(max_length=200)
 
@@ -11,7 +11,7 @@ class Protocol(BaseModel):
         return self.protocol_name
 
 
-class Site(BaseModel):
+class Site(BaseUuidModel):
     protocol = models.ForeignKey(Protocol)
     site_number = models.CharField(max_length=20)
     telephone_number = models.CharField(max_length=7)
@@ -20,7 +20,7 @@ class Site(BaseModel):
         return self.site_number
 
 
-class Patient(BaseModel):
+class Patient(BaseUuidModel):
     subject_identifier = models.CharField(max_length=20)
     initials = models.CharField(max_length=5)
     sid = models.CharField(max_length=20)
@@ -31,7 +31,7 @@ class Patient(BaseModel):
         return self.subject_identifier
 
 
-class Treatment(BaseModel):
+class Treatment(BaseUuidModel):
     treatment_name = models.CharField(max_length=50)
     protocol = models.ForeignKey(Protocol)
     medium = models.CharField(max_length=50)
@@ -41,7 +41,7 @@ class Treatment(BaseModel):
         return self.treatment_name
 
 
-class Dispense(BaseModel):
+class Dispense(BaseUuidModel):
     patient = models.ForeignKey(Patient)
     treatment = models.ForeignKey(Treatment)
     dose_amount = models.CharField(max_length=20)

@@ -6,7 +6,7 @@ from .models import Dispense, Patient, Treatment, Site, Protocol
 @admin.register(Dispense)
 class DispenseAdmin(admin.ModelAdmin):
     list_display = ('patient', 'treatment', 'frequency_per_day', 'date_prepared',)
-    list_filter = ('date_prepared',)
+    list_filter = ('date_prepared', 'frequency_per_day',)
 
 
 @admin.register(Patient)
