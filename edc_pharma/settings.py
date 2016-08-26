@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_revision.apps.AppConfig',
     'edc_pharma.apps.AppConfig',
+    'edc_pharma.apps.EdcLabelAppConfig',
     'edc_pharma.apps.EdcBaseAppConfig',
 ]
 
@@ -122,6 +123,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'edc_pharma', 'static')
 GIT_DIR = BASE_DIR
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

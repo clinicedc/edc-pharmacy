@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
     url(r'^admin/', edc_pharma_admin.urls),
     url(r'^admin/', admin.site.urls),
+    url(r'^edc_label/', include('edc_label.urls', namespace='edc-label')),
     url(r'^edc/', include('edc_base.urls', namespace='edc-base')),
     url(r'^', HomeView.as_view(), name='home_url'),
 ]
