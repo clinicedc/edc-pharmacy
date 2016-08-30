@@ -10,7 +10,6 @@ from django.http.response import HttpResponse
 from django.views.generic.base import TemplateView
 from edc_label.label import app_config, Label
 from edc_label.print_server import PrintServer
-from django.core import serializers
 
 from .models import Dispense, Patient, Treatment, Site, Protocol
 
@@ -19,6 +18,8 @@ class HomeView(EdcBaseViewMixin, TemplateView):
 
     template_name = 'edc_pharma/home.html'
     print_server_error = None
+
+    paginate_by = 10
 
     def __init__(self, **kwargs):
         self._print_server = None
@@ -29,13 +30,17 @@ class HomeView(EdcBaseViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
+        subject_identifier = self.request.GET.get("subject_identifier")
+        dispenses = Dispense.objects.filter(
+            patient__subject_identifier=subject_identifier).order_by('date_prepared')
+        print(dispenses)
+        context.update({'dispenses': dispenses})
         return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(HomeView, self).dispatch(*args, **kwargs)
-
-    def get_dispense_data(self):
-        json_serializer = serializers.get_serializer("json")()
-        dispense_data = json_serializer.serialize(Dispense.objects.all().order_by('id')[:5], ensure_ascii=False)
-        return HttpResponse(request, "home.html", {'dispense_label': dispense_data})
