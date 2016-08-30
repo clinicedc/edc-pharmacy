@@ -14,7 +14,7 @@ class DispenseAdmin(admin.ModelAdmin):
 @admin.register(Patient, site=edc_pharma_admin)
 class PatientAdmin(admin.ModelAdmin):
     list_display = ('initials', 'consent_date',)
-    list_filter = ('subject_identifier',)
+    list_filter = ('consent_date',)
 
 
 @admin.register(Treatment, site=edc_pharma_admin)
@@ -26,8 +26,10 @@ class TreatmentAdmin(admin.ModelAdmin):
 @admin.register(Site, site=edc_pharma_admin)
 class SiteAdmin(admin.ModelAdmin):
     list_display = ('protocol', 'site_number', 'telephone_number',)
+    list_filter = ('site_number',)
 
 
 @admin.register(Protocol, site=edc_pharma_admin)
 class ProtocolAdmin(admin.ModelAdmin):
     list_display = ('protocol_number', 'protocol_name',)
+    list_filter = ('protocol_number',)
