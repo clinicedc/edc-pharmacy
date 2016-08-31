@@ -50,11 +50,3 @@ class Dispense(BaseUuidModel):
 
     def __str__(self):
         return self.patient.subject_identifier
-    
-    
-class PrintSave(models.Model):
-    def next(self):
-        try:
-            return PrintSave.objects.save()
-        except:
-            return None
