@@ -1,5 +1,2 @@
-<<<<<<< HEAD
-{"dispense_label": {"storage_instructions": "temp 20","treatment": "2", "initials": "EE", "date_prepared": "2016-08-16 12:35", "site": "10", "protocol": "BHP999", "doctor": "me", "patient": "999-123456-02", "frequency_per_day": "3", "telephone_number": "099123456780002"}}
-=======
 {"dispense_label": {"storage_instructions": "temp 20", "initials": "EE", "date_prepared": "2016-08-16 12:35", "site": "10", "protocol": "BHP999", "doctor": "me", "patient": "999-123456-02", "dose": "25mg", "frequency_per_day": "3", "telephone_number": "099123456780002", "treatment": "AZT(Zidovudine)"}}
->>>>>>> 7d62eef16f5942d04de6c93345c41f74753ae74e
+
