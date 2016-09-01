@@ -9,13 +9,13 @@ from django.utils.decorators import method_decorator
 from django.apps import apps as django_apps
 from django.http.response import HttpResponse
 from django.views.generic.base import TemplateView
-from edc_label.label import app_config, Label
-from edc_label.print_server import PrintServer
+from edc_label.view_mixins import EdcLabelViewMixin
+
 
 from .models import Dispense, Patient, Treatment, Site, Protocol
 
 
-class HomeView(EdcBaseViewMixin, TemplateView):
+class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
 
     template_name = 'edc_pharma/home.html'
     print_server_error = None
@@ -45,4 +45,6 @@ class HomeView(EdcBaseViewMixin, TemplateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(HomeView, self).dispatch(*args, **kwargs)
+    
+    
 
