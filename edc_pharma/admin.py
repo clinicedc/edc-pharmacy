@@ -38,7 +38,7 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin, PrintButtonAdminMixin):
             self.print_label("dispense_label", 1, context)
         except KeyError:
             pass
-    return admin.ModelAdmin.save_form(self, request, form, change)
+        return admin.ModelAdmin.save_form(self, request, form, change)
 
 
 @admin.register(Patient, site=edc_pharma_admin)

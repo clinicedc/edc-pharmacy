@@ -56,9 +56,10 @@ class Dispense(BaseUuidModel):
         choices=DISPENSE_TYPES,
         default=TABLET
     )
-    number_of_tablets_or_teaspoons = models.CharField(max_length=3)
+    number_of_tablets_or_teaspoons = models.CharField(max_length=5)
     times_per_day = models.CharField(max_length=3)
-    total_number_of_tablets = models.CharField(max_length=3)
+    total_number_of_tablets = models.CharField(blank=True, max_length=5)
+    total_dosage_volume = models.CharField(blank=True, max_length=10)
     date_prepared = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

@@ -45,7 +45,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
                     'sid': dispense_data.patient.sid,
                     'times_per_day': dispense_data.times_per_day,
                     'drug_name': dispense_data.treatment,
-                    'date_prepared': dispense_data.date_prepared,
+                    'date_prepared': dispense_data.date_prepared.date(),
                     'prepared_by': dispense_data.user_created,
                     'storage_instructions': dispense_data.treatment.storage_instructions,
                     'protocol': dispense_data.treatment.protocol,
@@ -60,14 +60,16 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
                     'site': dispense_data.patient.site,
                     'telephone_number': dispense_data.patient.site.telephone_number,
                     'patient': dispense_data.patient.subject_identifier,
-                    'sid': dispense_data.patient.sid,
                     'initials': dispense_data.patient.initials,
-                    'dosage': dispense_data.patient.initials,
-                    'prep_time_and_date': dispense_data.patient.initials,
-                    'delivery_date_and_time': dispense_data.patient.initials,
-                    'prepared_by': dispense_data.patient.initials,
+                    'number_of_teaspoons': dispense_data.number_of_tablets_or_teaspoons,
+                    'quantity_dispensed': dispense_data.total_dosage_volume,
+                    'sid': dispense_data.patient.sid,
+                    'times_per_day': dispense_data.times_per_day,
+                    'drug_name': dispense_data.treatment,
+                    'date_prepared': dispense_data.date_prepared.date(),
+                    'prepared_by': dispense_data.user_created,
                     'storage_instructions': dispense_data.treatment.storage_instructions,
-                    'protocol': dispense_data.treatment.protocol
+                    'protocol': dispense_data.treatment.protocol,
                 }
                 context.update(context)
                 print(context)
