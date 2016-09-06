@@ -40,6 +40,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
                 'telephone_number': dispense_data.patient.site.telephone_number,
                 'patient': dispense_data.patient.subject_identifier,
                 'initials': dispense_data.patient.initials,
+                'medium': dispense_data.treatment.medium,
                 'dosage': dispense_data.dose_amount,
                 'frequency': dispense_data.frequency_per_day,
                 'date_prepared': dispense_data.date_prepared,
@@ -53,6 +54,10 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
             context.update(context)
             self.print_label("dispense_label", 1, context)
             return self.render_to_response(context)
+<<<<<<< HEAD
+=======
+
+>>>>>>> e3507a38432175645294fd5b2f749a74de22fb1a
         else:
             return self.render_to_response(context)
 

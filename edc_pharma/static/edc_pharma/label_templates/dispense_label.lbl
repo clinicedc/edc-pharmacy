@@ -1,11 +1,11 @@
 ^XA
-^FO100,15^A0N,20,20^FDBOTSWANA HARVARD PARTNERSHIP 			SITE___^FS
+^FO100,15^A0N,20,20^FDBOTSWANA HARVARD PARTNERSHIP 			SITE: ${site}^FS
 ^FO100,35^A0N,20,20^FDPRIVATE BAG BO 320, GABORONE  TELEPHONE: ${telephone_number}^FS
 ^FO100,60^FS
-^FO100,90^A0N,20,20^FDPID :${patient}                INITIALS :${initials}^FS
-^FO100,120^A0N,20,20^FDDOSAGE :${treatment}TABLET /SPOON     FREQUENCY :${frequency_per_day}^FS
-^FO100,190^A0N,20,20^FDDate of Preparation: :${date_prepared}      Prepared By :_______________^FS
+^FO100,90^A0N,20,20^FDPID: ${patient}                INITIALS: ${initials}^FS
+^FO100,120^A0N,20,20^FDDOSAGE: ${dosage} 	MEDIUM: ${medium}     FREQUENCY: ${frequency}^FS
+^FO100,190^A0N,20,20^FDDate of Preparation: ${date_prepared}      Prepared By: ${user_created}^FS
 ^FO100,210^FS
-^FO100,250^A0N,30,40^FDStorage Instructions :${storage_instructions} ^FS
-^FO100,290^A0N,40,40^FDPROTOCOL :${protocol} ^FS
+^FO100,250^A0N,20,20^FDStorage Instructions: ${storage_instructions} ^FS
+^FO100,290^A0N,20,20^FDPROTOCOL: ${protocol} ^FS
 ^XZ
