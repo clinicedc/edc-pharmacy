@@ -52,7 +52,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
                 }
                 context.update(context)
                 print(context)
-                #self.print_label("dispense_label", 1, context)
+                self.print_label("dispense_label", 1, context)
                 return self.render_to_response(context)
 
             else:
@@ -71,7 +71,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
                 }
                 context.update(context)
                 print(context)
-                #self.print_label("dispense_label_syrup", 1, context)
+                self.print_label("dispense_label_syrup", 1, context)
                 return self.render_to_response(context)
 
         else:

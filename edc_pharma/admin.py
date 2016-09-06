@@ -1,8 +1,10 @@
 from django.contrib import admin
 
+from edc_label.view_mixins import EdcLabelViewMixin
 from .models import Dispense, Patient, Treatment, Site, Protocol
 
 from .admin_site import edc_pharma_admin
+from .admin_mixin import PrintButtonAdminMixin
 from edc_base.modeladmin.mixins import ModelAdminBasicMixin,\
     ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,\
     ModelAdminFormInstructionsMixin
@@ -14,9 +16,29 @@ class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelA
 
 
 @admin.register(Dispense, site=edc_pharma_admin)
-class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
+class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin, PrintButtonAdminMixin):
     list_display = ('patient', 'treatment', 'date_prepared',)
     list_filter = ('date_prepared',)
+
+    def save_form(self, request, form, change):
+        try:
+            request.POST['_save_print']
+            context = {
+                'site': form.instance.patient.site,
+                'telephone_number': form.instance.patient.site.telephone_number,
+                'patient': form.instance.patient.subject_identifier,
+                'initials': form.instance.patient.initials,
+                'dosage': form.instance.dose_amount,
+                'frequency': form.instance.frequency_per_day,
+                'date_prepared': form.instance.date_prepared,
+                'prepared_by': form.instance.user_created,
+                'storage_instructions': form.instance.treatment.storage_instructions,
+                'protocol': form.instance.treatment.protocol
+            }
+            self.print_label("dispense_label", 1, context)
+        except KeyError:
+            pass
+    return admin.ModelAdmin.save_form(self, request, form, change)
 
 
 @admin.register(Patient, site=edc_pharma_admin)
