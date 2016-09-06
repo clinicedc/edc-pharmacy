@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
+
 from edc_base.model.models import BaseUuidModel
+from django.contrib.admin.filters import ChoicesFieldListFilter
 
 
 class Protocol(BaseUuidModel):
@@ -8,7 +10,7 @@ class Protocol(BaseUuidModel):
     protocol_name = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.protocol_name
+        return self.protocol_number
 
 
 class Site(BaseUuidModel):
@@ -34,7 +36,6 @@ class Patient(BaseUuidModel):
 class Treatment(BaseUuidModel):
     treatment_name = models.CharField(max_length=50)
     protocol = models.ForeignKey(Protocol)
-    medium = models.CharField(max_length=50)
     storage_instructions = models.TextField(max_length=200)
 
     def __str__(self):
@@ -44,8 +45,20 @@ class Treatment(BaseUuidModel):
 class Dispense(BaseUuidModel):
     patient = models.ForeignKey(Patient)
     treatment = models.ForeignKey(Treatment)
-    dose_amount = models.CharField(max_length=20)
-    frequency_per_day = models.IntegerField()
+    TABLET = 'TABLET'
+    SYRUP = 'SYRUP'
+    DISPENSE_TYPES = (
+        (TABLET, 'TABLET'),
+        (SYRUP, 'SYRUP'),
+    )
+    dispense_type = models.CharField(
+        max_length=8,
+        choices=DISPENSE_TYPES,
+        default=TABLET
+    )
+    number_of_tablets_or_teaspoons = models.CharField(max_length=3)
+    times_per_day = models.CharField(max_length=3)
+    total_number_of_tablets = models.CharField(max_length=3)
     date_prepared = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

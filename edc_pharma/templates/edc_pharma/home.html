@@ -38,15 +38,16 @@
                 <div class="panel-body">
                  
                   <table id="tbl-dispense-data" class="table table-striped table_responsive">
-                  <thead><th>Subject Identifier</th><th>Treatment</th><th>Dose</th><th>Frequency(Per day)</th></thead>
+                  <thead><th>Subject Identifier</th><th>Drug Name</th><th>Number of Tablets</th><th>Times Per Day</th><th>Quantity Dispensed</th><th></th></thead>
                   {% for dispense in dispenses %}
                   <form action="{% url 'home_url' %}" method="get">
                   	<input type="text" name="pk" value="{{ dispense.id }}" style="display:none">
                   		<tr> 
                   			<td> {{ dispense.patient }} </td>
                   			<td> {{ dispense.treatment }} </td>
-                  			<td> {{ dispense.dose_amount }} </td>
-                  			<td> {{ dispense.frequency_per_day }} </td> 
+                  			<td> {{ dispense.number_of_tablets_or_teaspoons }} </td>
+                  			<td> {{ dispense.times_per_day }} </td> 
+                  			<td> {{ dispense.total_number_of_tablets }} </td>
                   			<td> <button class="btn btn-default" type="submit" >Print</button></td>                			
                   		</tr>
                  </form>

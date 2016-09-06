@@ -34,26 +34,45 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
         if 'pk' in request.GET:
             dispense_id = self.request.GET.get("pk")
             dispense_data = Dispense.objects.get(pk=dispense_id)
+            if dispense_data.dispense_type == "TABLET":
+                context = {
+                    'site': dispense_data.patient.site,
+                    'telephone_number': dispense_data.patient.site.telephone_number,
+                    'patient': dispense_data.patient.subject_identifier,
+                    'initials': dispense_data.patient.initials,
+                    'number_of_tablets': dispense_data.number_of_tablets_or_teaspoons,
+                    'total_tablets_dispensed': dispense_data.total_number_of_tablets,
+                    'sid': dispense_data.patient.sid,
+                    'times_per_day': dispense_data.times_per_day,
+                    'drug_name': dispense_data.treatment,
+                    'date_prepared': dispense_data.date_prepared,
+                    'prepared_by': dispense_data.user_created,
+                    'storage_instructions': dispense_data.treatment.storage_instructions,
+                    'protocol': dispense_data.treatment.protocol,
+                }
+                context.update(context)
+                print(context)
+                #self.print_label("dispense_label", 1, context)
+                return self.render_to_response(context)
 
-            context = {
-                'site': dispense_data.patient.site,
-                'telephone_number': dispense_data.patient.site.telephone_number,
-                'patient': dispense_data.patient.subject_identifier,
-                'initials': dispense_data.patient.initials,
-                'medium': dispense_data.treatment.medium,
-                'dosage': dispense_data.dose_amount,
-                'frequency': dispense_data.frequency_per_day,
-                'date_prepared': dispense_data.date_prepared,
-                'prepared_by': dispense_data.user_created,
-                'storage_instructions': dispense_data.treatment.storage_instructions,
-                'protocol': dispense_data.treatment.protocol
-            }
-
-            print(context)
-
-            context.update(context)
-            self.print_label("dispense_label", 1, context)
-            return self.render_to_response(context)
+            else:
+                context = {
+                    'site': dispense_data.patient.site,
+                    'telephone_number': dispense_data.patient.site.telephone_number,
+                    'patient': dispense_data.patient.subject_identifier,
+                    'sid': dispense_data.patient.sid,
+                    'initials': dispense_data.patient.initials,
+                    'dosage': dispense_data.patient.initials,
+                    'prep_time_and_date': dispense_data.patient.initials,
+                    'delivery_date_and_time': dispense_data.patient.initials,
+                    'prepared_by': dispense_data.patient.initials,
+                    'storage_instructions': dispense_data.treatment.storage_instructions,
+                    'protocol': dispense_data.treatment.protocol
+                }
+                context.update(context)
+                print(context)
+                #self.print_label("dispense_label_syrup", 1, context)
+                return self.render_to_response(context)
 
         else:
             return self.render_to_response(context)
