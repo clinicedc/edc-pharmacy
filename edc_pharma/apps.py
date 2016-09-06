@@ -18,6 +18,6 @@ class EdcBaseAppConfig(EdcBaseAppConfigParent):
 
 class EdcLabelAppConfig(EdcLabelAppConfigParent):
     default_cups_server_ip = None
-    default_printer_label = 'Photosmart_C4500_series__AD3629_'
+    default_printer_label = 'kagiso_testing'
     extra_templates_folder = os.path.join(settings.STATIC_ROOT, 'edc_pharma', 'label_templates')
 
