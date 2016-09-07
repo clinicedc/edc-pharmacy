@@ -13,12 +13,12 @@ DISPENSE_TYPES = (
 
 class Protocol(BaseUuidModel):
 
-    protocol_number = models.CharField(max_length=30)
+    number = models.CharField(max_length=30)
 
-    protocol_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.protocol_number
+        return self.number
 
 
 class Site(BaseUuidModel):
@@ -51,14 +51,14 @@ class Patient(BaseUuidModel):
 
 class Treatment(BaseUuidModel):
 
-    treatment_name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
 
     protocol = models.ForeignKey(Protocol)
 
     storage_instructions = models.TextField(max_length=200)
 
     def __str__(self):
-        return self.treatment_name
+        return self.name
 
 
 class Dispense(BaseUuidModel):

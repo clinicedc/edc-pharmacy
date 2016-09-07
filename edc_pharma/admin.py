@@ -48,8 +48,8 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
 
 @admin.register(Treatment, site=edc_pharma_admin)
 class TreatmentAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('treatment_name', 'storage_instructions',)
-    list_filter = ('treatment_name', )
+    list_display = ('name', 'storage_instructions',)
+    list_filter = ('name', )
 
 
 @admin.register(Site, site=edc_pharma_admin)
@@ -60,5 +60,5 @@ class SiteAdmin(BaseModelAdmin, admin.ModelAdmin):
 
 @admin.register(Protocol, site=edc_pharma_admin)
 class ProtocolAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('protocol_number', 'protocol_name',)
-    list_filter = ('protocol_number',)
+    list_display = ('number', 'name',)
+    list_filter = ('number',)
