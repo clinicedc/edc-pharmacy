@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'django_revision.apps.AppConfig',
-    'bootstrap3',
     'edc_pharma.apps.AppConfig',
     'edc_pharma.apps.EdcLabelAppConfig',
     'edc_pharma.apps.EdcBaseAppConfig',

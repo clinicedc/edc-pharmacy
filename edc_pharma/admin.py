@@ -1,13 +1,12 @@
 from django.contrib import admin
 
-from edc_label.view_mixins import EdcLabelViewMixin
-from .models import Dispense, Patient, Treatment, Site, Protocol
+from edc_base.modeladmin.mixins import (
+    ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
+    ModelAdminFormInstructionsMixin)
+from edc_label.view_mixins import EdcLabelMixin
 
 from .admin_site import edc_pharma_admin
-from .admin_mixin import PrintButtonAdminMixin
-from edc_base.modeladmin.mixins import ModelAdminBasicMixin,\
-    ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,\
-    ModelAdminFormInstructionsMixin
+from .models import Dispense, Patient, Treatment, Site, Protocol
 
 
 class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminFormInstructionsMixin,
@@ -16,9 +15,9 @@ class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelA
 
 
 @admin.register(Dispense, site=edc_pharma_admin)
-class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin, PrintButtonAdminMixin):
-    list_display = ('patient', 'treatment', 'date_prepared',)
-    list_filter = ('date_prepared',)
+class DispenseAdmin(BaseModelAdmin, EdcLabelMixin, admin.ModelAdmin):
+    list_display = ('patient', 'treatment', 'prepared_datetime',)
+    list_filter = ('prepared_datetime',)
 
     def save_form(self, request, form, change):
         try:
@@ -30,7 +29,7 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin, PrintButtonAdminMixin):
                 'initials': form.instance.patient.initials,
                 'dosage': form.instance.dose_amount,
                 'frequency': form.instance.frequency_per_day,
-                'date_prepared': form.instance.date_prepared,
+                'prepared_datetime': form.instance.prepared_datetime,
                 'prepared_by': form.instance.user_created,
                 'storage_instructions': form.instance.treatment.storage_instructions,
                 'protocol': form.instance.treatment.protocol
@@ -43,8 +42,8 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin, PrintButtonAdminMixin):
 
 @admin.register(Patient, site=edc_pharma_admin)
 class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('initials', 'consent_date',)
-    list_filter = ('consent_date',)
+    list_display = ('initials', 'consent_datetime',)
+    list_filter = ('consent_datetime',)
 
 
 @admin.register(Treatment, site=edc_pharma_admin)
@@ -55,8 +54,8 @@ class TreatmentAdmin(BaseModelAdmin, admin.ModelAdmin):
 
 @admin.register(Site, site=edc_pharma_admin)
 class SiteAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('protocol', 'site_number', 'telephone_number',)
-    list_filter = ('site_number',)
+    list_display = ('protocol', 'site_code', 'telephone_number',)
+    list_filter = ('site_code',)
 
 
 @admin.register(Protocol, site=edc_pharma_admin)
