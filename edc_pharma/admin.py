@@ -1,13 +1,14 @@
 from django.contrib import admin
-from django import forms
+from django.http.response import HttpResponseRedirect
+
+from edc_base.modeladmin.mixins import (
+    ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
+    ModelAdminFormInstructionsMixin)
+from edc_label.view_mixins import EdcLabelMixin
 
 from .admin_site import edc_pharma_admin
-from edc_base.modeladmin.mixins import ModelAdminBasicMixin,\
-    ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,\
-    ModelAdminFormInstructionsMixin
 
 from .models import Dispense, Patient, Medication, Site, Protocol
-from django.http.response import HttpResponseRedirect
 
 
 class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminFormInstructionsMixin,
@@ -78,8 +79,8 @@ class MedicationAdmin(BaseModelAdmin, admin.ModelAdmin):
 
 @admin.register(Site, site=edc_pharma_admin)
 class SiteAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('protocol', 'site_number', 'telephone_number',)
-    list_filter = ('site_number',)
+    list_display = ('protocol', 'site_code', 'telephone_number',)
+    list_filter = ('site_code',)
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect("/")

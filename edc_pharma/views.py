@@ -1,14 +1,11 @@
 import json
 
+from django.apps import apps as django_apps
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 
 from edc_base.views.edc_base_view_mixin import EdcBaseViewMixin
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-
-from django.apps import apps as django_apps
-from django.http.response import HttpResponse
-from django.views.generic.base import TemplateView
 from edc_label.view_mixins import EdcLabelViewMixin
 
 from .models import Dispense, Patient
@@ -41,6 +38,8 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
         else:
             context.update({'patient_exists': False})
             return context
+        context.update({'dispenses': dispenses})
+        return context
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -60,6 +59,8 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
                     'times_per_day': dispense_data.times_per_day,
                     'drug_name': dispense_data.medication,
                     'date_prepared': dispense_data.prepared_datetime.date(),
+                    'drug_name': dispense_data.treatment,
+                    'prepared_datetime': dispense_data.prepared_datetime.date(),
                     'prepared_by': dispense_data.user_created,
                     'storage_instructions': dispense_data.medication.storage_instructions,
                     'protocol': dispense_data.medication.protocol,
@@ -80,6 +81,8 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
                     'times_per_day': dispense_data.times_per_day,
                     'drug_name': dispense_data.medication,
                     'date_prepared': dispense_data.prepared_datetime.date(),
+                    'drug_name': dispense_data.treatment,
+                    'prepared_datetime': dispense_data.prepared_datetime.date(),
                     'prepared_by': dispense_data.user_created,
                     'storage_instructions': dispense_data.medication.storage_instructions,
                     'protocol': dispense_data.medication.protocol,
