@@ -5,9 +5,6 @@
 {% block extra-scripts %}
 	<script type="text/javascript" src="{% static "edc_pharma/js/edc_pharma.js" %}"></script>
     <script type="text/javascript" charset="utf8" class="init">
-      //$(document).ready( function () {
-      		//edcPharmaReady()
-      //})
     </script> 
 {% endblock extra-scripts %}
 
@@ -18,46 +15,69 @@
 		<div class=col-md-3>
 		</div>
 		<div class="form-group col-md-4">
-    		<input class="form-control" type="text" name="subject_identifier" placeholder="Filter by Subject Identifier"></input>
+    		<input class="form-control" type="text" name="subject_identifier" placeholder="Filter Patients by Subject Identifier"></input>
     	</div>
     	
     	<div class="form-group col-md-1">
     		<button type="submit" class="btn btn-default">Search</button>
     	</div>
+   
  </form>
- 
- 	<div class="form-group col-md-3">
- 		<a href="/admin/edc_pharma/dispense/add/">Add new dispense</a>
- 	</div>
-
+ 	
     <div class="col-md-8">
+    	{% if patient_exists > 0 %}
+    			{% if dispenses %}
+                      
         <div class="panel-group">
           <div class="panel panel-default">
-          <div class="panel-heading">Dispensing</div>
-
+          <div class="panel-heading">Dispenses for Patient: {{ subject_identifier }} Consent Date: {{ consent_datetime }}	 <a href="/admin/edc_pharma/dispense/add/?patient={{ subject_identifier }}">Add dispense For This Patient</a></div>
                 <div class="panel-body">
-                 
                   <table id="tbl-dispense-data" class="table table-striped table_responsive">
-                  <thead><th>Subject Identifier</th><th>Drug Name</th><th>Number of Tablets</th><th>Times Per Day</th><th>Quantity Dispensed</th><th></th></thead>
+                  <thead><th>Subject Identifier</th><th>Medication</th><th>Teaspoons/Tablets</th><th>Times a Day</th><th>Total Dosage</th></thead>
                   {% for dispense in dispenses %}
                   <form action="{% url 'home_url' %}" method="get">
                   	<input type="text" name="pk" value="{{ dispense.id }}" style="display:none">
                   		<tr> 
                   			<td> {{ dispense.patient }} </td>
-                  			<td> {{ dispense.treatment }} </td>
+                  			<td> {{ dispense.medication }} </td>
                   			<td> {{ dispense.number_of_tablets_or_teaspoons }} </td>
                   			<td> {{ dispense.times_per_day }} </td> 
                   			<td> {{ dispense.total_number_of_tablets }} </td>
-                  			<td> <button class="btn btn-default" type="submit" >Print</button></td>                			
+                  			<td> <button class="btn btn-default" type="submit" >Print</button></td>                       			
                   		</tr>
                  </form>
-                  	{% endfor %}
+                 {% endfor %}
                   </table>
-   
                 </div>         
          </div>
-    </div>   
-    </div>
+    </div>                      	
+                     {% else %}
+        <div class="panel-group">
+          <div class="panel panel-default">
+          <div class="panel-heading">No dispense history found, add a dispense <a href="/admin/edc_pharma/dispense/add/?patient={{ subject_identifier }}">here</a></div>
+                <div class="panel-body">
+                  <table id="tbl-dispense-data" class="table table-striped table_responsive">
+                  <thead><th>Subject Identifier</th><th>Medication</th><th>Teaspoons/Tablets</th><th>Times a Day</th><th>Total Dosage</th></thead>
+                  </table>
+                </div>         
+         </div>
+    </div>                    	
+                      	
+                      	
+                   {% endif %}
+        {% else %}
+        <div class="panel-group">
+          <div class="panel panel-default">
+          <div class="panel-heading">No patient found, add patients <a href="/admin/edc_pharma/patient/add/">Here</a></div>
+                <div class="panel-body">
+                  <table id="tbl-dispense-data" class="table table-striped table_responsive">
+                  <thead><th>Subject Identifier</th><th>Medication</th><th>Teaspoons/Tablets</th><th>Times a Day</th><th>Total Dosage</th></thead>
+                  </table>
+                </div>         
+         </div>
+    </div>  
+         {% endif %}           	
+   </div>
 
     <div class="col-md-4">
         <div class="panel-group">
@@ -68,8 +88,17 @@
                       <li class="active"><a href="{% url 'edc_pharma_admin:index' %}" disabled">Admin 
                             <span class="glyphicon glyphicon-home pull-right" aria-hidden="true"></span>
                       </a></li>
-                       <li><a id="pill-call-manager" href="{% url 'edc-label:home_url' %}">Edc Label
-                            <span class="glyphicon glyphicon-barcode pull-right" aria-hidden="true"></span>
+                       <li><a id="pill-call-manager" href="{% url 'edc-label:home_url' %}">Edc Label                         
+                      </a></li>
+                       <li><a id="pill-call-manager" href="/admin/edc_pharma/dispense/add/">Add new dispense                            
+                      </a></li>
+                       <li><a id="pill-call-manager" href="/admin/edc_pharma/patient/add/">Add new patient                          
+                      </a></li>
+                       <li><a id="pill-call-manager" href="/admin/edc_pharma/protocol/add/">Add new protocol                          
+                      </a></li>
+                       <li><a id="pill-call-manager" href="/admin/edc_pharma/site/add/">Add new site                            
+                      </a></li>
+                       <li><a id="pill-call-manager" href="/admin/edc_pharma/treatment/add/">Add new treatment                           
                       </a></li>
                     </ul>
                 </div>

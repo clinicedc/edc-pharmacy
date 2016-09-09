@@ -2,15 +2,23 @@ from django.db import models
 from django.utils import timezone
 
 from edc_base.model.models import BaseUuidModel
-from django.contrib.admin.filters import ChoicesFieldListFilter
+
+TABLET = 'TABLET'
+SYRUP = 'SYRUP'
+IV = 'IV'
+DISPENSE_TYPES = (
+    (TABLET, 'TABLET'),
+    (SYRUP, 'SYRUP'),
+    (IV, 'IV'),
+)
 
 
 class Protocol(BaseUuidModel):
-    protocol_number = models.CharField(max_length=30)
-    protocol_name = models.CharField(max_length=200)
+    number = models.CharField(max_length=30)
+    name = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.protocol_number
+        return self.number
 
 
 class Site(BaseUuidModel):
@@ -26,41 +34,39 @@ class Patient(BaseUuidModel):
     subject_identifier = models.CharField(max_length=20)
     initials = models.CharField(max_length=5)
     sid = models.CharField(max_length=20)
-    consent_date = models.DateTimeField(default=timezone.now)
+    consent_datetime = models.DateTimeField(default=timezone.now)
     site = models.ForeignKey(Site)
 
     def __str__(self):
         return self.subject_identifier
 
 
-class Treatment(BaseUuidModel):
-    treatment_name = models.CharField(max_length=50)
+class Medication(BaseUuidModel):
+    name = models.CharField(max_length=50, unique=True)
     protocol = models.ForeignKey(Protocol)
     storage_instructions = models.TextField(max_length=200)
 
     def __str__(self):
-        return self.treatment_name
+        return self.name
 
 
 class Dispense(BaseUuidModel):
     patient = models.ForeignKey(Patient)
-    treatment = models.ForeignKey(Treatment)
-    TABLET = 'TABLET'
-    SYRUP = 'SYRUP'
-    DISPENSE_TYPES = (
-        (TABLET, 'TABLET'),
-        (SYRUP, 'SYRUP'),
-    )
+    medication = models.ForeignKey(Medication)
     dispense_type = models.CharField(
         max_length=8,
         choices=DISPENSE_TYPES,
         default=TABLET
     )
-    number_of_tablets_or_teaspoons = models.CharField(max_length=5)
-    times_per_day = models.CharField(max_length=3)
-    total_number_of_tablets = models.CharField(blank=True, max_length=5)
-    total_dosage_volume = models.CharField(blank=True, max_length=10)
-    date_prepared = models.DateTimeField(default=timezone.now)
+    number_of_tablets_or_teaspoons = models.IntegerField(default=1)
+    times_per_day = models.IntegerField(default=3)
+    total_number_of_tablets = models.IntegerField(default=30, blank=True)
+    total_dosage_volume = models.CharField(max_length=10, blank=True)
+    iv_duration = models.CharField(max_length=15)
+    prepared_datetime = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.patient.subject_identifier
+
+    class Meta:
+        unique_together = (('patient', 'medication', 'prepared_datetime'), )

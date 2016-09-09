@@ -11,7 +11,8 @@ from django.http.response import HttpResponse
 from django.views.generic.base import TemplateView
 from edc_label.view_mixins import EdcLabelViewMixin
 
-from .models import Dispense
+from .models import Dispense, Patient
+from edc_pharma.models import TABLET, SYRUP
 
 
 class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
@@ -23,18 +24,31 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         subject_identifier = self.request.GET.get("subject_identifier")
+        patient_data = Patient.objects.filter(subject_identifier=subject_identifier)
         dispenses = Dispense.objects.filter(
-            patient__subject_identifier=subject_identifier).order_by('date_prepared')
-        context.update({'dispenses': dispenses})
-        return context
+            patient__subject_identifier=subject_identifier)
+        if patient_data.exists():
+            context.update({'patient_exists': True})
+            if dispenses.exists():
+                context.update({'dispenses': dispenses})
+                patient_data = patient_data.values()[0]
+                context.update(patient_data)
+                return context
+            else:
+                patient_data = patient_data.values()[0]
+                context.update(patient_data)
+                return context
+        else:
+            context.update({'patient_exists': False})
+            return context
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
         if 'pk' in request.GET:
-            dispense_id = self.request.GET.get("pk")
+            dispense_id = self.request.GET.get('pk')
             dispense_data = Dispense.objects.get(pk=dispense_id)
-            if dispense_data.dispense_type == "TABLET":
+            if dispense_data.dispense_type == TABLET:
                 context = {
                     'site': dispense_data.patient.site,
                     'telephone_number': dispense_data.patient.site.telephone_number,
@@ -44,15 +58,35 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
                     'total_tablets_dispensed': dispense_data.total_number_of_tablets,
                     'sid': dispense_data.patient.sid,
                     'times_per_day': dispense_data.times_per_day,
-                    'drug_name': dispense_data.treatment,
-                    'date_prepared': dispense_data.date_prepared.date(),
+                    'drug_name': dispense_data.medication,
+                    'date_prepared': dispense_data.prepared_datetime.date(),
                     'prepared_by': dispense_data.user_created,
-                    'storage_instructions': dispense_data.treatment.storage_instructions,
-                    'protocol': dispense_data.treatment.protocol,
+                    'storage_instructions': dispense_data.medication.storage_instructions,
+                    'protocol': dispense_data.medication.protocol,
+                }
+                context.update(context)
+                self.print_label("dispense_label", 1, context)
+                return self.render_to_response(context)
+
+            elif dispense_data.dispense_type == SYRUP:
+                context = {
+                    'site': dispense_data.patient.site,
+                    'telephone_number': dispense_data.patient.site.telephone_number,
+                    'patient': dispense_data.patient.subject_identifier,
+                    'initials': dispense_data.patient.initials,
+                    'number_of_teaspoons': dispense_data.number_of_tablets_or_teaspoons,
+                    'quantity_dispensed': dispense_data.total_dosage_volume,
+                    'sid': dispense_data.patient.sid,
+                    'times_per_day': dispense_data.times_per_day,
+                    'drug_name': dispense_data.medication,
+                    'date_prepared': dispense_data.prepared_datetime.date(),
+                    'prepared_by': dispense_data.user_created,
+                    'storage_instructions': dispense_data.medication.storage_instructions,
+                    'protocol': dispense_data.medication.protocol,
                 }
                 context.update(context)
                 print(context)
-                self.print_label("dispense_label", 1, context)
+                self.print_label("dispense_label_syrup", 1, context)
                 return self.render_to_response(context)
 
             else:
@@ -65,17 +99,16 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
                     'quantity_dispensed': dispense_data.total_dosage_volume,
                     'sid': dispense_data.patient.sid,
                     'times_per_day': dispense_data.times_per_day,
-                    'drug_name': dispense_data.treatment,
-                    'date_prepared': dispense_data.date_prepared.date(),
+                    'drug_name': dispense_data.medication,
+                    'date_prepared': dispense_data.prepared_datetime.date(),
                     'prepared_by': dispense_data.user_created,
-                    'storage_instructions': dispense_data.treatment.storage_instructions,
-                    'protocol': dispense_data.treatment.protocol,
+                    'storage_instructions': dispense_data.medication.storage_instructions,
+                    'protocol': dispense_data.medication.protocol,
                 }
                 context.update(context)
                 print(context)
-                self.print_label("dispense_label_syrup", 1, context)
+                self.print_label("dispense_label_iv", 1, context)
                 return self.render_to_response(context)
-
         else:
             return self.render_to_response(context)
 
