@@ -18,7 +18,7 @@ class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelA
 @admin.register(Dispense, site=edc_pharma_admin)
 class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('patient', 'medication', 'prepared_datetime',)
-    list_filter = ('prepared_datetime',)
+    list_filter = ('prepared_datetime', 'medication',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "patient":
@@ -27,10 +27,7 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
                 kwargs["queryset"] = patient_queryset
             else:
                 kwargs["queryset"] = Patient.objects.all()
-            return super(DispenseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-        else:
-            pass
+        return super(DispenseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_form(self, request, form, change):
         try:
@@ -47,8 +44,8 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
                 'drug_name': form.instance.medication,
                 'date_prepared': form.instance.date_prepared.date(),
                 'prepared_by': form.instance.user_created,
-                'storage_instructions': form.instance.treatment.storage_instructions,
-                'protocol': form.instance.treatment.protocol,
+                'storage_instructions': form.instance.medication.storage_instructions,
+                'protocol': form.instance.medication.protocol,
             }
             self.print_label("dispense_label", 1, context)
         except KeyError:
