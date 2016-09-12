@@ -4,7 +4,6 @@ from django.http.response import HttpResponseRedirect
 from edc_base.modeladmin.mixins import (
     ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
     ModelAdminFormInstructionsMixin)
-from edc_label.view_mixins import EdcLabelMixin
 
 from .admin_site import edc_pharma_admin
 
