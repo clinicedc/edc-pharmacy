@@ -1,7 +1,7 @@
 import os
 
-from django.conf import settings
 from django.apps import AppConfig as DjangoAppConfig
+from django.conf import settings
 
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_label.apps import AppConfig as EdcLabelAppConfigParent
@@ -20,4 +20,3 @@ class EdcLabelAppConfig(EdcLabelAppConfigParent):
     default_cups_server_ip = None
     default_printer_label = 'kagiso_testing'
     extra_templates_folder = os.path.join(settings.STATIC_ROOT, 'edc_pharma', 'label_templates')
-

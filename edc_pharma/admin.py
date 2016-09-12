@@ -1,17 +1,38 @@
 from django.contrib import admin
+from django.http.response import HttpResponseRedirect
+from simple_history.admin import SimpleHistoryAdmin
 
-from edc_label.view_mixins import EdcLabelViewMixin
-from .models import Dispense, Patient, Treatment, Site, Protocol
+from edc_base.modeladmin.mixins import (
+    ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
+    ModelAdminFormInstructionsMixin)
+#from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+#from edc_label.view_mixins import EdcLabelViewMixin
 
 from .admin_site import edc_pharma_admin
-from .admin_mixin import PrintButtonAdminMixin
+from .models import Dispense, Patient, Medication, Site, Protocol
+from edc_pharma.models import Patient, Medication
+
+admin.site.register(Patient, SimpleHistoryAdmin)
+admin.site.register(Medication, SimpleHistoryAdmin)
+
+class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminFormInstructionsMixin,
+                     ModelAdminAuditFieldsMixin):
+    pass
 
 
 @admin.register(Dispense, site=edc_pharma_admin)
-class DispenseAdmin(PrintButtonAdminMixin, admin.ModelAdmin):
-    
-    list_display = ('patient', 'treatment', 'frequency_per_day', 'date_prepared',)
-    list_filter = ('date_prepared', 'frequency_per_day',)
+class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
+    list_display = ('patient', 'medication', 'prepared_datetime',)
+    list_filter = ('prepared_datetime',)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "patient":
+            patient_queryset = Patient.objects.filter(subject_identifier=request.GET.get("patient"))
+            if patient_queryset.exists():
+                kwargs["queryset"] = patient_queryset
+            else:
+                kwargs["queryset"] = Patient.objects.all()
+        return super(DispenseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_form(self, request, form, change):
         try:
@@ -23,37 +44,53 @@ class DispenseAdmin(PrintButtonAdminMixin, admin.ModelAdmin):
                 'initials': form.instance.patient.initials,
                 'dosage': form.instance.dose_amount,
                 'frequency': form.instance.frequency_per_day,
-                'date_prepared': form.instance.date_prepared,
+                'prepared_datetime': form.instance.prepared_datetime,
                 'prepared_by': form.instance.user_created,
-                'storage_instructions': form.instance.treatment.storage_instructions,
-                'protocol': form.instance.treatment.protocol
+                'storage_instructions': form.instance.medication.storage_instructions,
+                'protocol': form.instance.medication.protocol
             }
-            #print(context)
             self.print_label("dispense_label", 1, context)
         except KeyError:
             pass
         return admin.ModelAdmin.save_form(self, request, form, change)
 
+    def response_add(self, request, obj, post_url_continue=None):
+        return HttpResponseRedirect("/")
 
 @admin.register(Patient, site=edc_pharma_admin)
-class PatientAdmin(admin.ModelAdmin):
-    list_display = ('initials', 'consent_date',)
-    list_filter = ('consent_date',)
+class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
+    list_display = ('initials', 'consent_datetime',)
+    list_filter = ('consent_datetime',)
+
+    def response_add(self, request, obj, post_url_continue=None):
+        return HttpResponseRedirect("/")
 
 
-@admin.register(Treatment, site=edc_pharma_admin)
-class TreatmentAdmin(admin.ModelAdmin):
-    list_display = ('treatment_name', 'medium', 'storage_instructions',)
-    list_filter = ('treatment_name', 'medium',)
+@admin.register(Medication, site=edc_pharma_admin)
+class MedicationAdmin(BaseModelAdmin, admin.ModelAdmin):
+    list_display = ('name', 'storage_instructions',)
+    list_filter = ('name', )
+
+    def response_add(self, request, obj, post_url_continue=None):
+        return HttpResponseRedirect("/")
 
 
 @admin.register(Site, site=edc_pharma_admin)
-class SiteAdmin(admin.ModelAdmin):
-    list_display = ('protocol', 'site_number', 'telephone_number',)
-    list_filter = ('site_number',)
+class SiteAdmin(BaseModelAdmin, admin.ModelAdmin):
+    list_display = ('protocol', 'site_code', 'telephone_number',)
+    list_filter = ('site_code',)
+
+    def response_add(self, request, obj, post_url_continue=None):
+        return HttpResponseRedirect("/")
 
 
 @admin.register(Protocol, site=edc_pharma_admin)
-class ProtocolAdmin(admin.ModelAdmin):
-    list_display = ('protocol_number', 'protocol_name',)
-    list_filter = ('protocol_number',)
+class ProtocolAdmin(BaseModelAdmin, admin.ModelAdmin):
+    list_display = ('number', 'name',)
+    list_filter = ('number',)
+
+    def response_add(self, request, obj, post_url_continue=None):
+        return HttpResponseRedirect("/")
+
+
+
