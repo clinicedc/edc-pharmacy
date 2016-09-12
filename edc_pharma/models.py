@@ -1,21 +1,17 @@
 from django.db import models
 from django.utils import timezone
 from simple_history.models import HistoricalRecords
-# from audit_log.models import AuthStampedModel
-# from audit_log.models.fields import LastUserField, LastSessionKeyField
-# from audit_log.models.managers import AuditLog
-
 
 from edc_base.model.models import BaseUuidModel
 
 
-
-
 TABLET = 'TABLET'
 SYRUP = 'SYRUP'
+IV = 'IV'
 DISPENSE_TYPES = (
-    (TABLET, 'Tablet'),
-    (SYRUP, 'Syrup'),
+    (TABLET, 'TABLET'),
+    (SYRUP, 'SYRUP'),
+    (IV, 'IV'),
 )
 
 
@@ -52,17 +48,16 @@ class Patient(BaseUuidModel):
     consent_datetime = models.DateTimeField(default=timezone.now)
 
     site = models.ForeignKey(Site)
-    
+
     history = HistoricalRecords()
-   # form.patient.queryset = Patient.objects.filter(subject_identifier)[:1]
 
     def __str__(self):
         return self.subject_identifier
 
 
 class Medication(BaseUuidModel):
-
-    name = models.CharField(max_length=50)
+    
+    name = models.CharField(max_length=50, unique=True)
 
     protocol = models.ForeignKey(Protocol)
 
@@ -83,20 +78,26 @@ class Dispense(BaseUuidModel):
     dispense_type = models.CharField(
         max_length=8,
         choices=DISPENSE_TYPES,
-        default=TABLET)
+        default=TABLET
+    )
 
-    number_of_tablets_or_teaspoons = models.CharField(max_length=5)
+    number_of_tablets_or_teaspoons = models.IntegerField(default=1)
 
-    times_per_day = models.CharField(max_length=3)
+    times_per_day = models.IntegerField(default=3)
 
-    total_number_of_tablets = models.CharField(blank=False, max_length=5)
+    total_number_of_tablets = models.IntegerField(default=30, blank=True)
 
-    total_dosage_volume = models.CharField(blank=True, max_length=10)
+    total_dosage_volume = models.CharField(max_length=10, blank=True)
+
+    iv_duration = models.CharField(max_length=15)
 
     prepared_datetime = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
+
         return str(self.patient)
 
-    class Meta():
+
+    class Meta:
+
         unique_together = (('patient', 'medication', 'prepared_datetime'), )
