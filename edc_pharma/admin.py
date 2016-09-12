@@ -25,10 +25,12 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
             patient_queryset = Patient.objects.filter(subject_identifier=request.GET.get("patient"))
             if patient_queryset.exists():
                 kwargs["queryset"] = patient_queryset
-                return super(DispenseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
             else:
                 kwargs["queryset"] = Patient.objects.all()
-                return super(DispenseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+            return super(DispenseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+        else:
+            pass
 
     def save_form(self, request, form, change):
         try:
@@ -54,7 +56,7 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
         return admin.ModelAdmin.save_form(self, request, form, change)
 
     def response_add(self, request, obj, post_url_continue=None):
-        next_url = "/?subject_identifier="+str(obj)
+        next_url = "/?subject_identifier=" + str(obj.subject_identifier)
         return HttpResponseRedirect(next_url)
 
 
@@ -64,7 +66,8 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_filter = ('consent_datetime',)
 
     def response_add(self, request, obj, post_url_continue=None):
-        return HttpResponseRedirect("/")
+        next_url = "/?subject_identifier=" + str(obj.subject_identifier)
+        return HttpResponseRedirect(next_url)
 
 
 @admin.register(Medication, site=edc_pharma_admin)
