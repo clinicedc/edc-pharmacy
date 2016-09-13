@@ -3,6 +3,7 @@ from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
 from edc_base.model.models import BaseUuidModel
+from django.template.defaultfilters import default
 
 
 TABLET = 'TABLET'
@@ -89,7 +90,7 @@ class Dispense(BaseUuidModel):
 
     total_dosage_volume = models.CharField(max_length=10, blank=True)
 
-    iv_duration = models.CharField(max_length=15)
+    iv_duration = models.CharField(default=timezone.now, max_length=15)
 
     prepared_datetime = models.DateTimeField(default=timezone.now)
 
