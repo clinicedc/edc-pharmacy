@@ -5,7 +5,9 @@
 {% block extra-scripts %}
 	<script type="text/javascript" src="{% static "edc_pharma/js/edc_pharma.js" %}"></script>
     <script type="text/javascript" charset="utf8" class="init">
-    	document.ready()
+      $(document).ready( function () {
+        edcPharmaReady();
+      })
     </script> 
 {% endblock extra-scripts %}
 
@@ -20,6 +22,7 @@
     	</div>
     	
     	<div class="form-group col-md-1">
+    		<a href="{% url 'admin:edc_pharma_patient_add' %}"class="btn btn-default pull-right" role="button">Add Patient</a>
     		<button type="submit" class="btn btn-default">Search</button>
     	</div>
    
@@ -69,7 +72,7 @@
         {% else %}
         <div class="panel-group">
           <div class="panel panel-default">
-          <div class="panel-heading">No patient found, add patients <a href="/admin/edc_pharma/patient/add/"><button style="float:right;">ADD-PATIENT</button></a></div>
+          <div class="panel-heading clearfix">{{ subject_identifier }} Dispense History </div>
                 <div class="panel-body">
                   <table id="tbl-dispense-data" class="table table-striped table_responsive">
                   <thead><th>Subject Identifier</th><th>Medication</th><th>Prepared_On</th><th>Times a Day</th><th>Total Dosage</th></thead>
