@@ -18,7 +18,7 @@ from django.core import paginator
 class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
 
     template_name = 'edc_pharma/home.html'
-    paginate_by = 5
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
@@ -27,17 +27,15 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
             self.print_label("dispense_label", 1, dispense.label_context)
         try:
             patient = Patient.objects.get(subject_identifier=self.request.GET.get("subject_identifier"))
-            dispenses = Dispense.objects.filter(patient=patient)
+            dispenses = Dispense.objects.filter(patient=patient).order_by("prepared_datetime")
             paginator = Paginator(dispenses, self.paginate_by)
-
             page = self.request.GET.get('page')
-
             try:
                 dispenses = paginator.page(page)
             except PageNotAnInteger:
                 dispenses = paginator.page(1)
             except EmptyPage:
-                dispenses = paginator.page(paginator.num_pages)
+                dispenses = paginator.page()
 
         except Patient.DoesNotExist:
             patient = None
