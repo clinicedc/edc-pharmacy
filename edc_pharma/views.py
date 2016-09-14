@@ -2,6 +2,7 @@ import json
 
 from django.apps import apps as django_apps
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 
@@ -9,13 +10,15 @@ from edc_base.views.edc_base_view_mixin import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 
 from .models import Dispense, Patient
+from django.contrib.admin.templatetags.admin_list import pagination
+from django.template.context_processors import request
+from django.core import paginator
 
 
 class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
 
     template_name = 'edc_pharma/home.html'
-
-    paginate_by = 10
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
@@ -25,6 +28,17 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
         try:
             patient = Patient.objects.get(subject_identifier=self.request.GET.get("subject_identifier"))
             dispenses = Dispense.objects.filter(patient=patient)
+            paginator = Paginator(dispenses, self.paginate_by)
+
+            page = self.request.GET.get('page')
+
+            try:
+                dispenses = paginator.page(page)
+            except PageNotAnInteger:
+                dispenses = paginator.page(1)
+            except EmptyPage:
+                dispenses = paginator.page(paginator.num_pages)
+
         except Patient.DoesNotExist:
             patient = None
             dispenses = None
