@@ -2,15 +2,9 @@ from django.contrib import admin
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
 
-from simple_history.admin import SimpleHistoryAdmin
-
 from edc_base.modeladmin.mixins import (
     ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
     ModelAdminFormInstructionsMixin, ModelAdminRedirectMixin)
-
-from .admin_site import edc_pharma_admin
-from .models import Dispense, Patient, Medication, Site, Protocol
-from edc_pharma.models import Patient, Medication
 
 from .admin_site import edc_pharma_admin
 
@@ -66,6 +60,7 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
 
+
 @admin.register(Patient, site=edc_pharma_admin)
 class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('initials', 'consent_datetime',)
@@ -73,6 +68,7 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(reverse('home_url', kwargs={'subject_identifier': str(obj.subject_identifier)}))
+
 
 @admin.register(Medication, site=edc_pharma_admin)
 class MedicationAdmin(BaseModelAdmin, admin.ModelAdmin):
