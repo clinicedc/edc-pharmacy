@@ -1,0 +1,15 @@
+<div class="pagination">
+    <span class="step-links">
+        {% if dispenses.has_previous %}
+            <a href="{% url 'home_url' subject_identifier=patient.subject_identifier page=dispenses.previous_page_number %}" class="btn btn-sm btn-default"><<</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ dispenses.number }} of {{ dispenses.paginator.num_pages }}
+        </span>
+
+        {% if dispenses.has_next %}
+            <a href="{% url 'home_url' subject_identifier=patient.subject_identifier page=dispenses.next_page_number %}" class="btn btn-sm btn-default">>></a>
+        {% endif %}
+    </span>
+</div>
