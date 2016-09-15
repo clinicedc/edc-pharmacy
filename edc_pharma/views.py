@@ -47,7 +47,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
         if self.kwargs.get('dispense_pk'):
             dispense = Dispense.objects.get(pk=self.kwargs.get('dispense_pk'))
             dispense_type = self.get_dispense_type(dispense)
-            self.print_label("dispense_label" + dispense_type, self.number_of_copies, dispense.label_context)
+            self.print_label(dispense_type, self.number_of_copies, dispense.label_context)
         patient = self.patient(kwargs.get('subject_identifier'))
         context.update({
             'dispenses': self.dispenses(patient),
@@ -56,11 +56,11 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
 
     def get_dispense_type(self, dispense):
         if dispense.dispense_type == TABLET:
-            return "_tablet"
+            return "dispense_label_tablet"
         elif dispense.dispense_type == SYRUP:
-            return "_syrup"
+            return "dispense_label_syrup"
         elif dispense.dispense_type == IV:
-            return "_iv"
+            return "dispense_label_iv"
 
     def patient(self, subject_identifier):
         try:
