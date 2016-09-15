@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
 
+from simple_history.admin import SimpleHistoryAdmin
+
 from edc_base.modeladmin.mixins import (
     ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
     ModelAdminFormInstructionsMixin, ModelAdminRedirectMixin)
