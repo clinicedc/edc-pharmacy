@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.http.response import HttpResponseRedirect
-from django import forms
+from django.urls.base import reverse
 
 from simple_history.admin import SimpleHistoryAdmin
 
 from edc_base.modeladmin.mixins import (
     ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
-    ModelAdminFormInstructionsMixin)
+    ModelAdminFormInstructionsMixin, ModelAdminRedirectMixin)
 
 from .admin_site import edc_pharma_admin
 from .models import Dispense, Patient, Medication, Site, Protocol
@@ -21,7 +21,7 @@ admin.site.register(Patient, SimpleHistoryAdmin)
 admin.site.register(Medication, SimpleHistoryAdmin)
 
 class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminFormInstructionsMixin,
-                     ModelAdminAuditFieldsMixin):
+                     ModelAdminAuditFieldsMixin, ModelAdminRedirectMixin):
     pass
 
 
@@ -64,8 +64,7 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
         return admin.ModelAdmin.save_form(self, request, form, change)
 
     def response_add(self, request, obj, post_url_continue=None):
-        next_url = "/?subject_identifier=" + str(obj.patient.subject_identifier)
-        return HttpResponseRedirect(next_url)
+        return HttpResponseRedirect(reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
 
 @admin.register(Patient, site=edc_pharma_admin)
 class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
@@ -73,8 +72,7 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_filter = ('consent_datetime',)
 
     def response_add(self, request, obj, post_url_continue=None):
-        next_url = "/?subject_identifier=" + str(obj.subject_identifier)
-        return HttpResponseRedirect(next_url)
+        return HttpResponseRedirect(reverse('home_url', kwargs={'subject_identifier': str(obj.subject_identifier)}))
 
 @admin.register(Medication, site=edc_pharma_admin)
 class MedicationAdmin(BaseModelAdmin, admin.ModelAdmin):

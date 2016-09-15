@@ -17,6 +17,7 @@ from django.core import paginator
 from edc_pharma.forms import PatientForm
 from django.views.generic.edit import FormView
 from django.urls.base import reverse
+from edc_pharma.models import TABLET, SYRUP, IV
 
 
 class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
@@ -24,6 +25,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
     template_name = 'edc_pharma/home.html'
     form_class = PatientForm
     paginate_by = 3
+    number_of_copies = 1
 
     def get_success_url(self):
         return reverse('home_url')
@@ -45,12 +47,21 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
         context = super(HomeView, self).get_context_data(**kwargs)
         if self.kwargs.get('dispense_pk'):
             dispense = Dispense.objects.get(pk=self.kwargs.get('dispense_pk'))
-            self.print_label("dispense_label", 1, dispense.label_context)
+            dispense_type = self.get_dispense_type(dispense)
+            self.print_label(dispense_type, self.number_of_copies, dispense.label_context)
         patient = self.patient(kwargs.get('subject_identifier'))
         context.update({
             'dispenses': self.dispenses(patient),
             'patient': patient})
         return context
+
+    def get_dispense_type(self, dispense):
+        if dispense.dispense_type == TABLET:
+            return "dispense_label_tablet"
+        elif dispense.dispense_type == SYRUP:
+            return "dispense_label_syrup"
+        elif dispense.dispense_type == IV:
+            return "dispense_label_iv"
 
     def patient(self, subject_identifier):
         try:

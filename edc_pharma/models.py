@@ -124,12 +124,16 @@ class Dispense(BaseUuidModel):
         if self.dispense_type == TABLET:
             label_context.update({
                 'number_of_tablets': self.number_of_tablets,
-                'total_tablets_dispensed': self.total_number_of_tablets,
+                'total_number_of_tablets': self.total_number_of_tablets,
             })
         elif self.dispense_type == SYRUP:
             label_context.update({
                 'number_of_teaspoons': self.number_of_teaspoons,
                 'quantity_dispensed': self.total_dosage_volume,
+            })
+        elif self.dispense_type == IV:
+            label_context.update({
+                'total_dosage_volume': self.total_dosage_volume
             })
         return label_context
 
