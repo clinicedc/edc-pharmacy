@@ -4,7 +4,7 @@ from django.urls.base import reverse
 
 from edc_base.modeladmin.mixins import (
     ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
-    ModelAdminFormInstructionsMixin)
+    ModelAdminFormInstructionsMixin, ModelAdminRedirectMixin)
 
 from .admin_site import edc_pharma_admin
 
@@ -13,7 +13,7 @@ from edc_pharma.forms import DispenseForm
 
 
 class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminFormInstructionsMixin,
-                     ModelAdminAuditFieldsMixin):
+                     ModelAdminAuditFieldsMixin, ModelAdminRedirectMixin):
     pass
 
 
