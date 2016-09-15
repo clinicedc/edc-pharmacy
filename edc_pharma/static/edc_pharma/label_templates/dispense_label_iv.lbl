@@ -4,11 +4,16 @@
 ^FO100,60^FS
 ^FO100,90^A0N,20,20^FDPID: ${patient}                   SID: ${sid}              INITIALS: ${initials}^FS
 ^FO100,130^A0N,20,20^FDDrug Name/Strength: ${drug_name}         ^FS
-^FO100,160^A0N,20,20^FDDosage: ${total_dosage_volume}^FS
-^FO100,190^A0N,20,20^FD   PHARMACY                                                          CLINIC ^FS
-^FO100,210^A0N,20,20^FDDate &Time of Prep: ${prepared_datetime}              Date of Admin: __________________^FS
-^FO100,230^A0N,20,20^FDDate & Time Delivered at Clinic:                      Time of Admin: __________________^FS
-^FO100,250^A0N,20,20^FDDisp By(Initials): ${prepared_by}                     Admin by(Initials): ________________^FS                      
-^FO100,280^A0N,30,30^FDStorage instructions: ${storage_instructions} ^FS
-^FO100,310^A0N,35,25^FDFOR INVESTIGATIONAL USE ONLY (PROTOCOL NUMBER ${protocol})^FS
+^FO100,155^A0N,20,20^FDDosage: ${total_dosage_volume}^FS
+^FO100,180^A0N,20,20^FD   PHARMACY                                                          CLINIC ^FS
+^FO90,175^A0N^GB320,110,1,B^FS        
+^FO410,175^A0N^GB320,110,1,B^FS 
+^FO100,220^A0N,20,20^FDDate & Time of Prep: ${prepared_datetime}^FS
+^FO100,240^A0N,20,20^FDDate & Time Delivery at Clinic^FS   
+^FO100,260^A0N,20,20^FDDisp By(Initials): ${prepared_by} ^FS
+^FO420,220^A0N,20,20^FDDate of Admin:____________^FS
+^FO420,240^A0N,20,20^FDTime of Admin:____________^FS
+^FO420,260^A0N,20,20^FDAdmin By(Initials):__________^FS
+^FO100,300^A0N,30,30^FDStorage instructions: ${storage_instructions} ^FS
+^FO100,330^A0N,35,25^FDFOR INVESTIGATIONAL USE ONLY (PROTOCOL NUMBER ${protocol})^FS
 ^XZ
