@@ -1,5 +1,9 @@
+import pytz
+
 from django.db import models
-from django.utils import timezone
+#from django.utils import timezone
+from datetime import datetime
+
 from simple_history.models import HistoricalRecords
 
 from edc_base.model.models import BaseUuidModel
@@ -46,7 +50,7 @@ class Patient(BaseUuidModel):
 
     sid = models.CharField(max_length=20)
 
-    consent_datetime = models.DateTimeField(default=timezone.now)
+    consent_datetime = models.DateTimeField(default=datetime.now())
 
     site = models.ForeignKey(Site)
 
@@ -97,7 +101,7 @@ class Dispense(BaseUuidModel):
 
     iv_duration = models.CharField(max_length=15, blank=True, null=True, help_text="Only required if dispense type IV is chosen")
 
-    prepared_datetime = models.DateTimeField(default=timezone.now)
+    prepared_datetime = models.DateTimeField(default=datetime.now())
 
     def __str__(self):
 
@@ -114,9 +118,9 @@ class Dispense(BaseUuidModel):
             'sid': self.patient.sid,
             'times_per_day': self.times_per_day,
             'drug_name': self.medication,
-            'date_prepared': self.prepared_datetime.date(),
+            'date_prepared': self.prepared_datetime(),
             'drug_name': self.medication,
-            'prepared_datetime': self.prepared_datetime.date(),
+            'prepared_datetime': self.prepared_datetime(),
             'prepared_by': self.user_created,
             'storage_instructions': self.medication.storage_instructions,
             'protocol': self.medication.protocol,

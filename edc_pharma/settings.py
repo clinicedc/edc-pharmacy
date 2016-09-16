@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_paginator.apps.AppConfig',
     'crispy_forms',
     'simple_history',
     'django_revision.apps.AppConfig',

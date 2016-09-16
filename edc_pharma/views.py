@@ -8,7 +8,9 @@ from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 
 from edc_base.views.edc_base_view_mixin import EdcBaseViewMixin
+from django_paginator import PaginatorMixin
 from edc_label.view_mixins import EdcLabelViewMixin
+#from edc_dashboard.views import PaginatorMixin
 
 from .models import Dispense, Patient
 from django.contrib.admin.templatetags.admin_list import pagination
@@ -20,7 +22,7 @@ from django.urls.base import reverse
 from edc_pharma.models import TABLET, SYRUP, IV
 
 
-class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
+class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, PaginatorMixin, FormView):
 
     template_name = 'edc_pharma/home.html'
     form_class = PatientForm
