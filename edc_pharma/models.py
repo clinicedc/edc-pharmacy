@@ -133,7 +133,7 @@ class Dispense(BaseUuidModel):
         elif self.dispense_type == SYRUP:
             label_context.update({
                 'number_of_teaspoons': self.number_of_teaspoons,
-                'quantity_dispensed': self.total_dosage_volume,
+                'total_dosage_volume': self.total_dosage_volume,
             })
         elif self.dispense_type == IV:
             label_context.update({
