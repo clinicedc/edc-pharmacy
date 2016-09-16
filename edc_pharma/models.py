@@ -1,14 +1,11 @@
-import pytz
-
 from django.db import models
-#from django.utils import timezone
 from datetime import datetime
 
 from simple_history.models import HistoricalRecords
 
 from edc_base.model.models import BaseUuidModel
 from django.template.defaultfilters import default
-
+from django.core.validators import RegexValidator
 
 TABLET = 'TABLET'
 SYRUP = 'SYRUP'
@@ -46,7 +43,10 @@ class Patient(BaseUuidModel):
 
     subject_identifier = models.CharField(max_length=20)
 
-    initials = models.CharField(max_length=5)
+    initials = models.CharField(
+        max_length=5,
+        validators=[RegexValidator('[A-Z]{2,3}')],
+        help_text='Format is AA or AAA')
 
     sid = models.CharField(max_length=20)
 
@@ -118,13 +118,9 @@ class Dispense(BaseUuidModel):
             'sid': self.patient.sid,
             'times_per_day': self.times_per_day,
             'drug_name': self.medication,
-<<<<<<< HEAD
-            'date_prepared': "{ :%YYYY-%MM-%%DD }".format(self.prepared_datetime.date()),
-=======
-            'date_prepared': self.prepared_datetime(),
->>>>>>> e436f4394d956e28e92fff616f472cab24c50ded
+            'date_prepared': self.prepared_datetime,
             'drug_name': self.medication,
-            'prepared_datetime': "{ :%YYYY-%MM-%%DD }".format(self.prepared_datetime.date()),
+            'prepared_datetime': self.prepared_datetime.date(),
             'prepared_by': self.user_created,
             'storage_instructions': self.medication.storage_instructions,
             'protocol': self.medication.protocol,
