@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
 
+from simple_history.admin import SimpleHistoryAdmin
+
+
 from edc_base.modeladmin.mixins import (
     ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
     ModelAdminFormInstructionsMixin, ModelAdminRedirectMixin)
@@ -10,6 +13,9 @@ from .admin_site import edc_pharma_admin
 
 from .models import Dispense, Patient, Medication, Site, Protocol
 from edc_pharma.forms import DispenseForm
+
+admin.site.register(Patient, SimpleHistoryAdmin)
+admin.site.register(Medication, SimpleHistoryAdmin)
 
 
 class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminFormInstructionsMixin,

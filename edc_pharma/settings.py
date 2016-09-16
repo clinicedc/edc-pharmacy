@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'simple_history',
     'crispy_forms',
     'django_revision.apps.AppConfig',
     'edc_pharma.apps.AppConfig',

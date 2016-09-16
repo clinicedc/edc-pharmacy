@@ -5,6 +5,11 @@
 
 {% block extra-scripts %}
 	<script type="text/javascript" src="{% static "edc_pharma/js/edc_pharma.js" %}"></script>
+	<script type="text/javascript">
+      $(document).ready( function () {
+        
+      })		
+	</script>
 {% endblock extra-scripts %}
 {% block main %}
 
@@ -32,7 +37,7 @@
 					  {% endif %}
                       {% for dispense in dispenses %}
                   		<tr> 
-                  			<td> {{ dispense.prepared_datetime }} </td>                  		
+                  			<td> {{ dispense.prepared_datetime|date:"Y-m-d"}} </td>                  		
                   			<td> {{ dispense.medication }} </td>
                   			<td> <a href="{% url 'home_url' dispense.pk %}" class="btn btn-default">Print</a></td>                       			
                   		</tr>

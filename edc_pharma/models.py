@@ -3,6 +3,8 @@ from django.utils import timezone
 
 from edc_base.model.models import BaseUuidModel
 
+from simple_history import HistoricalRecords
+
 TABLET = 'TABLET'
 SYRUP = 'SYRUP'
 IV = 'IV'
@@ -105,9 +107,9 @@ class Dispense(BaseUuidModel):
             'sid': self.patient.sid,
             'times_per_day': self.times_per_day,
             'drug_name': self.medication,
-            'date_prepared': self.prepared_datetime.date(),
+            'date_prepared': "{ :%YYYY-%MM-%%DD }".format(self.prepared_datetime.date()),
             'drug_name': self.medication,
-            'prepared_datetime': self.prepared_datetime.date().timestamp(),
+            'prepared_datetime': "{ :%YYYY-%MM-%%DD }".format(self.prepared_datetime.date()),
             'prepared_by': self.user_created,
             'storage_instructions': self.medication.storage_instructions,
             'protocol': self.medication.protocol,
