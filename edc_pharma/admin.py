@@ -27,15 +27,6 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('patient', 'medication', 'prepared_datetime',)
     list_filter = ('prepared_datetime', 'medication',)
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "patient":
-            patient_queryset = Patient.objects.filter(subject_identifier=request.GET.get("patient"))
-            if patient_queryset.exists():
-                kwargs["queryset"] = patient_queryset
-            else:
-                kwargs["queryset"] = Patient.objects.all()
-        return super(DispenseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
     def save_form(self, request, form, change):
         try:
             request.POST['_save_print']

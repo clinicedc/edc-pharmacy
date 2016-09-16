@@ -1,9 +1,10 @@
 import json
 
-from django.shortcuts import render_to_response, get_object_or_404
+from urllib.parse import urlencode 
+
 from django.apps import apps as django_apps
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 
@@ -20,6 +21,8 @@ from edc_pharma.forms import PatientForm
 from django.views.generic.edit import FormView
 from django.urls.base import reverse
 from edc_pharma.models import TABLET, SYRUP, IV
+from edc_base.model.constants import DEFAULT_BASE_FIELDS
+from test.test_socketserver import receive
 
 
 class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, PaginatorMixin, FormView):
@@ -39,6 +42,14 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, PaginatorMixin, FormView):
             patient = self.patient(subject_identifier)
             if not patient:
                 form.add_error('subject_identifier', 'Patient not found. Try again.')
+            else:
+                recent_dispense = self.get_recent_dispensing(patient)
+                if recent_dispense:
+                    recent_dispense_patient_id = recent_dispense.patient.id
+                    recent_dispense_medication_id = recent_dispense.medication.id
+                    recent_dispense = {field: value for field, value in recent_dispense.__dict__.items() if field not in DEFAULT_BASE_FIELDS + ['prepared_datetime'] + ['medication_id'] + ['patient_id'] and value is not None}
+                    recent_dispense.update({'patient': recent_dispense_patient_id, 'medication': recent_dispense_medication_id})
+                context.update({'recent_dispense_querystring': urlencode(recent_dispense)})
             context.update({
                 'dispenses': self.dispenses(patient),
                 'patient': patient,
@@ -71,6 +82,15 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, PaginatorMixin, FormView):
         except Patient.DoesNotExist:
             patient = None
         return patient
+
+    def get_recent_dispensing(self, patient):
+        try:
+            recent_dispense = Dispense.objects.filter(patient=patient).order_by("-prepared_datetime")
+            if recent_dispense:
+                recent_dispense = recent_dispense[0]
+        except Dispense.DoesNotExist:
+            recent_dispense = {'patient': None, 'medication': None}
+        return recent_dispense
 
     def dispenses(self, patient):
         """Returns a dispense queryset after pagination."""
