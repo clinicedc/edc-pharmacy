@@ -1,8 +1,6 @@
 from django.conf.urls import url, include
 from django.contrib import admin
 
-#from .views import MostRecentView, SubjectSearchView, QueryView
-
 from edc_base.views import LoginView, LogoutView
 from edc_pharma.admin_site import edc_pharma_admin
 from edc_pharma.views import HomeView
@@ -16,9 +14,7 @@ urlpatterns = [
     url(r'^edc/', include('edc_base.urls', namespace='edc-base')),
     url(r'^label/(?P<dispense_pk>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
         HomeView.as_view(), name='home_url'),
-    url(r'^(?P<subject_identifier>\w+)/(?P<page>\d+)/$', HomeView.as_view(), name='home_url'),
-    url(r'^(?P<subject_identifier>\w+)/$', HomeView.as_view(), name='home_url'),
-#     url(r'^recent/(?P<model>[\w]+)/(?P<page>[\d]+)/', MostRecentView.as_view(), name='most-recent'),
-#     url(r'^recent/(?P<model>[\w]+)/', MostRecentView.as_view(), name='most-recent'),
+    url(r'^(?P<subject_identifier>[-\w]+)/(?P<page>\d+)/$', HomeView.as_view(), name='home_url'),
+    url(r'^(?P<subject_identifier>[-\w]+)/$', HomeView.as_view(), name='home_url'),
     url(r'^', HomeView.as_view(), name='home_url'),
 ]

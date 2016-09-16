@@ -9,10 +9,8 @@ from edc_base.modeladmin.mixins import (
     ModelAdminFormInstructionsMixin, ModelAdminRedirectMixin)
 
 from .admin_site import edc_pharma_admin
-
-
+from .forms import DispenseForm
 from .models import Dispense, Patient, Medication, Site, Protocol
-from edc_pharma.forms import DispenseForm
 
 admin.site.register(Patient, SimpleHistoryAdmin)
 admin.site.register(Medication, SimpleHistoryAdmin)
@@ -30,7 +28,12 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_filter = ('prepared_datetime', 'medication',)
 
     def response_add(self, request, obj, post_url_continue=None):
-        return HttpResponseRedirect(reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
+        return HttpResponseRedirect(
+            reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
+
+    def response_change(self, request, obj):
+        return HttpResponseRedirect(
+            reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
 
 
 @admin.register(Patient, site=edc_pharma_admin)
@@ -39,7 +42,8 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_filter = ('consent_datetime',)
 
     def response_add(self, request, obj, post_url_continue=None):
-        return HttpResponseRedirect(reverse('home_url', kwargs={'subject_identifier': str(obj.subject_identifier)}))
+        return HttpResponseRedirect(
+            reverse('home_url', kwargs={'subject_identifier': str(obj.subject_identifier)}))
 
 
 @admin.register(Medication, site=edc_pharma_admin)
