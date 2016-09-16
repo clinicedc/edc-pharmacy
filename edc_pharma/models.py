@@ -107,7 +107,7 @@ class Dispense(BaseUuidModel):
             'drug_name': self.medication,
             'date_prepared': self.prepared_datetime.date(),
             'drug_name': self.medication,
-            'prepared_datetime': self.prepared_datetime.date(),
+            'prepared_datetime': self.prepared_datetime.date().timestamp(),
             'prepared_by': self.user_created,
             'storage_instructions': self.medication.storage_instructions,
             'protocol': self.medication.protocol,
