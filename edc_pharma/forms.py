@@ -1,3 +1,4 @@
+
 from django import forms
 
 from crispy_forms.helper import FormHelper
@@ -6,13 +7,13 @@ from django.urls.base import reverse
 from django.core.validators import RegexValidator
 
 from edc_pharma.models import TABLET, SYRUP, IV
+from crispy_forms.bootstrap import FieldWithButtons, StrictButton
 
 
 class PatientForm(forms.Form):
 
     subject_identifier = forms.CharField(
         label='Patient Identifier',
-        # validators=[RegexValidator(r'[0-9]')],
         max_length=36)
 
     def __init__(self, *args, **kwargs):
@@ -26,8 +27,10 @@ class PatientForm(forms.Form):
         self.helper.layout = Layout(
             'subject_identifier',
             ButtonHolder(
-                Submit('submit', 'Search', css_class="pull-right"),
-            ))
+                Submit('submit', 'Search', css_class="pull-right")),
+#         self.helper.layout = Layout(
+#             FieldWithButtons('search_term', StrictButton("subject_identifier", type='submit')),
+            )
 
 
 class DispenseForm(forms.ModelForm):

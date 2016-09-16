@@ -5,11 +5,6 @@
 
 {% block extra-scripts %}
 	<script type="text/javascript" src="{% static "edc_pharma/js/edc_pharma.js" %}"></script>
-	<script type="text/javascript">
-      $(document).ready( function () {
-        
-      })		
-	</script>
 {% endblock extra-scripts %}
 {% block main %}
 
@@ -22,8 +17,9 @@
                 <div class="panel-body">
                 {% crispy form %}
 	    	</div>
-	    	</div>
+	    </div>
 		  {% if patient %}  
+
           <div class="panel panel-default"> 
 	          <div class="panel-heading clearfix">Dispensing history: {{ patient.subject_identifier }}
  				<a href="{% url 'edc_pharma_admin:edc_pharma_dispense_add' %}?patient={{ patient.pk }}" class="btn btn-default pull-right" role="button">Add</a>
@@ -44,9 +40,12 @@
                       {% endfor %}
                   </tbody>
                   </table>
+                   <div id="paginator-row"></div>
+
+                  </div>
                   {% if dispenses %}
                   	<div class="text-center">
-                      {% include 'edc_pharma/pager.html' %}
+                    {% include 'edc_pharma/pager.html' %}
                      </div>
                   {% endif %}    
                 </div> <!-- panel-body-->         

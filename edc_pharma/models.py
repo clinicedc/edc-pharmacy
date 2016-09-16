@@ -1,9 +1,14 @@
+import pytz
+
 from django.db import models
-from django.utils import timezone
+#from django.utils import timezone
+from datetime import datetime
+
+from simple_history.models import HistoricalRecords
 
 from edc_base.model.models import BaseUuidModel
+from django.template.defaultfilters import default
 
-from simple_history import HistoricalRecords
 
 TABLET = 'TABLET'
 SYRUP = 'SYRUP'
@@ -45,9 +50,11 @@ class Patient(BaseUuidModel):
 
     sid = models.CharField(max_length=20)
 
-    consent_datetime = models.DateTimeField(default=timezone.now)
+    consent_datetime = models.DateTimeField(default=datetime.now())
 
     site = models.ForeignKey(Site)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return '{}, ({}), Site {}'.format(self.subject_identifier, self.initials, self.site.site_code)
@@ -60,6 +67,8 @@ class Medication(BaseUuidModel):
     protocol = models.ForeignKey(Protocol)
 
     storage_instructions = models.TextField(max_length=200)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -92,10 +101,12 @@ class Dispense(BaseUuidModel):
 
     iv_duration = models.CharField(max_length=15, blank=True, null=True, help_text="Only required if dispense type IV is chosen")
 
-    prepared_datetime = models.DateTimeField(default=timezone.now)
+    prepared_datetime = models.DateTimeField(default=datetime.now())
 
     def __str__(self):
-        return self.patient.subject_identifier
+
+        return str(self.patient)
+
 
     @property
     def label_context(self):
@@ -107,7 +118,11 @@ class Dispense(BaseUuidModel):
             'sid': self.patient.sid,
             'times_per_day': self.times_per_day,
             'drug_name': self.medication,
+<<<<<<< HEAD
             'date_prepared': "{ :%YYYY-%MM-%%DD }".format(self.prepared_datetime.date()),
+=======
+            'date_prepared': self.prepared_datetime(),
+>>>>>>> e436f4394d956e28e92fff616f472cab24c50ded
             'drug_name': self.medication,
             'prepared_datetime': "{ :%YYYY-%MM-%%DD }".format(self.prepared_datetime.date()),
             'prepared_by': self.user_created,
@@ -131,6 +146,7 @@ class Dispense(BaseUuidModel):
         return label_context
 
     class Meta:
+
         unique_together = (('patient', 'medication', 'prepared_datetime'), )
 
 
