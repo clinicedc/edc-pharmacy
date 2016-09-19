@@ -179,10 +179,10 @@ class Dispense(BaseUuidModel):
                     total_dosage_volume=self.total_dosage_volume))
         if self.dispense_type == IV:
             prescription = (
-                '{medication} {iv_duration} '
+                '{medication} Intravenous {iv_duration} '
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
-                    number_of_teaspoons=self.number_of_teaspoons,
+                    iv_duration=self.iv_duration,
                     times_per_day=self.times_per_day,
                     total_dosage_volume=self.total_dosage_volume))
         return prescription
