@@ -25,5 +25,5 @@ Medication:
 
 Dispense:
 
-	Whenever the user dispenses a prescription, he/she should add the Dispense to the system, \n indicating the Patient, Medication and other information relevant during dispensing \n eg drug dosage and frequency per day..
+	Whenever the user dispenses a prescription, he/she should add the Dispense to the system, <br /> indicating the Patient, Medication and other information relevant during dispensing <br /> eg drug dosage and frequency per day..
 
