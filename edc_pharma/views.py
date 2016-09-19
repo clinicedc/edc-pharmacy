@@ -10,6 +10,7 @@ from django.urls.base import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
 from edc_base.model.constants import DEFAULT_BASE_FIELDS
+from edc_base.views.edc_base_view_mixin import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 from edc_pharma.forms import PatientForm
 from edc_pharma.models import TABLET, SYRUP, IV
@@ -17,11 +18,11 @@ from edc_pharma.models import TABLET, SYRUP, IV
 from .models import Dispense, Patient
 
 
-class HomeView(EdcLabelViewMixin, FormView):
+class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
 
     template_name = 'edc_pharma/home.html'
     form_class = PatientForm
-    paginate_by = 6
+    paginate_by = 2
     paginator_template = 'edc_pharma/paginator_row.html'
     number_of_copies = 1
 
