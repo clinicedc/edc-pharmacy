@@ -52,6 +52,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
                 self.patient = Patient.objects.get(subject_identifier=self.kwargs.get('subject_identifier'))
             except Patient.DoesNotExist:
                 pass
+        print(kwargs)
         dispenses = Dispense.objects.filter(patient=self.patient).order_by('-prepared_datetime')
         if dispenses:
             context.update({'dispenses': self.dispenses})

@@ -36,10 +36,10 @@ class DispenseForm(forms.ModelForm):
         return self.cleaned_data
 
     def validate_tablet(self):
-        if self.data['number_of_teaspoons']:
+        if self.data['syrup_volume']:
             raise forms.ValidationError({
-                'number_of_teaspoons': [
-                    'You have selected dispense type tablet, you should NOT enter number of teaspoons']})
+                'syrup_volume': [
+                    'You have selected dispense type tablet, you should NOT enter syrup volume']})
         if not self.data['number_of_tablets']:
             raise forms.ValidationError({
                 'number_of_tablets': [
@@ -56,12 +56,20 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'total_number_of_tablets': [
                     'You have selected dispense type tablet, you should enter total number of tablets']})
+        if not self.data['times_per_day']:
+            raise forms.ValidationError({
+                'times_per_day': [
+                    'You have selected dispense type tablet, you should enter times per day']})
+        if self.data['iv_concentration']:
+            raise forms.ValidationError({
+                'iv_concentration': [
+                    'You have selected dispense type tablet, you should NOT enter IV concentration']})
 
     def validate_syrup(self):
-        if not self.data['number_of_teaspoons']:
+        if not self.data['syrup_volume']:
             raise forms.ValidationError({
-                'number_of_teaspoons': [
-                    'You have selected dispense type syrup, you should enter number of teaspoons']})
+                'syrup_volume': [
+                    'You have selected dispense type syrup, you should enter syrup volume']})
         if self.data['number_of_tablets']:
             raise forms.ValidationError({
                 'number_of_tablets': [
@@ -77,13 +85,21 @@ class DispenseForm(forms.ModelForm):
         if self.data['iv_duration']:
             raise forms.ValidationError({
                 'iv_duration': [
-                    'You have selected dispense type syrup, you should NOT enter  IV duration']})
+                    'You have selected dispense type syrup, you should NOT enter IV duration']})
+        if self.data['iv_concentration']:
+            raise forms.ValidationError({
+                'iv_concentration': [
+                    'You have selected dispense type syrup, you should NOT enter IV concentration']})
+        if not self.data['times_per_day']:
+            raise forms.ValidationError({
+                'times_per_day': [
+                    'You have selected dispense type syrup, you should enter times per day']})
 
     def validate_iv(self):
-        if self.data['number_of_teaspoons']:
+        if self.data['syrup_volume']:
             raise forms.ValidationError({
-                'number_of_teaspoons': [
-                    'You have selected dispense type IV, you should NOT enter number of teaspoons']})
+                'syrup_volume': [
+                    'You have selected dispense type IV, you should NOT enter syrup volume']})
         if self.data['number_of_tablets']:
             raise forms.ValidationError({
                 'number_of_tablets': [
@@ -96,3 +112,15 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'iv_duration': [
                     'You have selected dispense type IV, you should enter IV duration']})
+        if not self.data['iv_concentration']:
+            raise forms.ValidationError({
+                'iv_concentration': [
+                    'You have selected dispense type IV, you should enter IV concentration']})
+        if self.data['total_number_of_tablets']:
+            raise forms.ValidationError({
+                'total_number_of_tablets': [
+                    'You have selected dispense type IV, you should NOT enter total number of tablets']})
+        if self.data['times_per_day']:
+            raise forms.ValidationError({
+                'times_per_day': [
+                    'You have selected dispense type IV, you should NOT enter times per day']})
