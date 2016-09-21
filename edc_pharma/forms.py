@@ -37,7 +37,7 @@ class DispenseForm(forms.ModelForm):
             self.validate_iv()
         else:
             pass
-        self.catch_unique_identity_error(self.cleaned_data)
+        self.catch_unique_integrity_error(self.cleaned_data)
         return self.cleaned_data
 
     def catch_unique_integrity_error(self, cleaned_data):
