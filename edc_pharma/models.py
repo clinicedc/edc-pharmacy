@@ -9,6 +9,7 @@ from edc_constants.choices import GENDER
 from edc_base.model.validators.date import date_not_future
 from edc_base.utils.age import formatted_age
 from dateutil.relativedelta import relativedelta
+from django.contrib.admin.utils import help_text_for_field
 
 TABLET = 'TABLET'
 SYRUP = 'SYRUP'
@@ -60,6 +61,8 @@ class Patient(BaseUuidModel):
         choices=GENDER)
 
     dob = models.DateField(
+        blank=True,
+        null=True,
         validators=[date_not_future])
 
     sid = models.CharField(
@@ -121,12 +124,16 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type TABLET is chosen")
 
-    number_of_teaspoons = models.IntegerField(
+    syrup_volume = models.CharField(
+        max_length=20,
         blank=True,
         null=True,
         help_text="Only required if dispense type SYRUP is chosen")
 
-    times_per_day = models.IntegerField(default=3)
+    times_per_day = models.IntegerField(
+        blank=True,
+        null=True,
+        help_text="Only required if dispense type TABLET or SYRUP is chosen")
 
     total_number_of_tablets = models.IntegerField(
         blank=True,
@@ -138,6 +145,12 @@ class Dispense(BaseUuidModel):
         blank=True,
         null=True,
         help_text="Only required if dispense type SYRUP or IV is chosen")
+
+    iv_concentration = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        help_text="Only required if dispense type IV is chosen")
 
     iv_duration = models.CharField(
         max_length=15,
@@ -178,18 +191,19 @@ class Dispense(BaseUuidModel):
                     total_number_of_tablets=self.total_number_of_tablets))
         if self.dispense_type == SYRUP:
             prescription = (
-                '{medication} {number_of_teaspoons} teaspoons {times_per_day} times per day '
+                '{medication} {syrup_volume} volume {times_per_day} times per day '
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
-                    number_of_teaspoons=self.number_of_teaspoons,
+                    syrup_volume=self.syrup_volume,
                     times_per_day=self.times_per_day,
                     total_dosage_volume=self.total_dosage_volume))
         if self.dispense_type == IV:
             prescription = (
-                '{medication} {iv_duration} '
+                '{medication} Intravenous {iv_concentration} {iv_duration} '
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
-                    number_of_teaspoons=self.number_of_teaspoons,
+                    iv_duration=self.iv_duration,
+                    iv_concentration=self.iv_concentration,
                     times_per_day=self.times_per_day,
                     total_dosage_volume=self.total_dosage_volume,
                     total_concentration=self.total_concentration))
@@ -205,7 +219,7 @@ class Dispense(BaseUuidModel):
             'sid': self.patient.sid,
             'times_per_day': self.times_per_day,
             'drug_name': self.medication,
-            'prepared_datetime': self.prepared_datetime.strftime('%Y-%m-%d %H:%i'),
+            'prepared_datetime': self.prepared_datetime.strftime("%d-%m-%y %H:%M"),
             'prepared_by': self.user_created,
             'storage_instructions': self.medication.storage_instructions,
             'protocol': self.medication.protocol,
@@ -217,12 +231,13 @@ class Dispense(BaseUuidModel):
             })
         elif self.dispense_type == SYRUP:
             label_context.update({
-                'number_of_teaspoons': self.number_of_teaspoons,
+                'number_of_teaspoons': self.syrup_volume,
                 'total_dosage_volume': self.total_dosage_volume,
             })
         elif self.dispense_type == IV:
             label_context.update({
-                'total_dosage_volume': self.total_volume
+                'concentration': self.iv_concentration,
+                'total_dosage_volume': self.total_dosage_volume
             })
         elif self.dispense_type == IV:
             label_context.update({

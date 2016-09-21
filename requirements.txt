@@ -6,3 +6,4 @@ git+https://github.com/erikvw/django-appconfig-ini@develop#egg=django-appconfig-
 git+https://github.com/botswana-harvard/edc-base@develop#egg=edc_base
 git+https://github.com/botswana-harvard/edc-label@develop#egg=edc_label
 git+https://github.com/botswana-harvard/edc-constants@develop#egg=edc_constants
+

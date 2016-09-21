@@ -10,20 +10,19 @@ from django.urls.base import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
 from edc_base.model.constants import DEFAULT_BASE_FIELDS
-#from edc_base.view_mixins import EdcBaseViewMixin
+from edc_base.views.edc_base_view_mixin import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 from edc_pharma.forms import PatientForm
 from edc_pharma.models import TABLET, SYRUP, IV
 
 from .models import Dispense, Patient
-from django_paginator.paginator_mixin import PaginatorMixin
 
 
-class HomeView(EdcLabelViewMixin, PaginatorMixin, FormView):
+class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
 
     template_name = 'edc_pharma/home.html'
     form_class = PatientForm
-    paginate_by = 6
+    paginate_by = 2
     paginator_template = 'edc_pharma/paginator_row.html'
     number_of_copies = 1
 
@@ -54,9 +53,10 @@ class HomeView(EdcLabelViewMixin, PaginatorMixin, FormView):
                 self.patient = Patient.objects.get(subject_identifier=self.kwargs.get('subject_identifier'))
             except Patient.DoesNotExist:
                 pass
+        print(kwargs)
         dispenses = Dispense.objects.filter(patient=self.patient).order_by('-prepared_datetime')
         if dispenses:
-            context.update({'dispenses': self.paginate_queryset(dispenses, self.kwargs.get('page', 1))})
+            context.update({'dispenses': self.dispenses})
         context.update({
             'recent_dispense_querystring': self.refill_query_string,
             'patient': self.patient})
