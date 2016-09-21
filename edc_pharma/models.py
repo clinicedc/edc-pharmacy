@@ -1,4 +1,5 @@
 from datetime import datetime, date
+from django.db import IntegrityError
 from django.core.validators import RegexValidator
 from django.db import models
 from simple_history.models import HistoricalRecords
@@ -144,6 +145,12 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type IV is chosen")
 
+    total_concentration = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        help_text="Only required if dispense type IV is chosen")
+
     prepared_datetime = models.DateTimeField(default=datetime.now)
 
     prepared_date = models.DateTimeField(default=date.today, editable=False)
@@ -184,7 +191,8 @@ class Dispense(BaseUuidModel):
                     medication=self.medication.name,
                     number_of_teaspoons=self.number_of_teaspoons,
                     times_per_day=self.times_per_day,
-                    total_dosage_volume=self.total_dosage_volume))
+                    total_dosage_volume=self.total_dosage_volume,
+                    total_concentration=self.total_concentration))
         return prescription
 
     @property
@@ -214,8 +222,12 @@ class Dispense(BaseUuidModel):
             })
         elif self.dispense_type == IV:
             label_context.update({
-                'total_dosage_volume': self.total_dosage_volume
+                'total_dosage_volume': self.total_volume
             })
+        elif self.dispense_type == IV:
+            label_context.update({
+                'IV_concentration': self.total_concentration
+        })
         return label_context
 
     class Meta:

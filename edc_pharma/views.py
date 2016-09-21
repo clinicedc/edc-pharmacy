@@ -10,7 +10,7 @@ from django.urls.base import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
 from edc_base.model.constants import DEFAULT_BASE_FIELDS
-from edc_base.view_mixins import EdcBaseViewMixin
+#from edc_base.view_mixins import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 from edc_pharma.forms import PatientForm
 from edc_pharma.models import TABLET, SYRUP, IV
@@ -19,7 +19,7 @@ from .models import Dispense, Patient
 from django_paginator.paginator_mixin import PaginatorMixin
 
 
-class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, PaginatorMixin, FormView):
+class HomeView(EdcLabelViewMixin, PaginatorMixin, FormView):
 
     template_name = 'edc_pharma/home.html'
     form_class = PatientForm
@@ -47,6 +47,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, PaginatorMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         if self.kwargs.get('dispense_pk'):
+            print("hello")
             self.print_label()
         if not self.patient:
             try:

@@ -29,10 +29,13 @@ class DispenseForm(forms.ModelForm):
     def clean(self):
         if self.data['dispense_type'] == TABLET:
             self.validate_tablet()
+            self.save()
         elif self.data['dispense_type'] == SYRUP:
             self.validate_syrup()
+            self.save()
         elif self.data['dispense_type'] == IV:
             self.validate_iv()
+            self.save()
         return self.cleaned_data
 
     def validate_tablet(self):
