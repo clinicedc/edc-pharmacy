@@ -3,8 +3,9 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from django import forms
 from django.urls.base import reverse
-
+from django.db.models import Q
 from edc_pharma.models import TABLET, SYRUP, IV
+from .models import Dispense
 
 
 class PatientForm(forms.Form):
@@ -26,6 +27,7 @@ class PatientForm(forms.Form):
 
 
 class DispenseForm(forms.ModelForm):
+
     def clean(self):
         if self.data['dispense_type'] == TABLET:
             self.validate_tablet()
@@ -33,7 +35,22 @@ class DispenseForm(forms.ModelForm):
             self.validate_syrup()
         elif self.data['dispense_type'] == IV:
             self.validate_iv()
+        else:
+            pass
+        self.catch_unique_identity_error(self.cleaned_data)
         return self.cleaned_data
+
+    def catch_unique_integrity_error(self, cleaned_data):
+        try:
+            Dispense.objects.filter(
+                Q(patient=self.cleaned_data['patient']) &
+                Q(medication=self.cleaned_data['medication']) &
+                Q(prepared_date=str(self.cleaned_data['prepared_datetime'].date())))
+        except Dispense.DoesNotExist:
+            pass
+        else:
+            raise forms.ValidationError('Dispense with this medication on this date already exists for this patient')
+        return cleaned_data
 
     def validate_tablet(self):
         if self.data['syrup_volume']:
