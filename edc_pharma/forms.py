@@ -27,15 +27,22 @@ class PatientForm(forms.Form):
 
 class DispenseForm(forms.ModelForm):
     def clean(self):
+#         cleaned_data = super(DispenseForm, self).clean()
+#         prepared_date = cleaned_data.get("prepared_date")
+#         medication = cleaned_data.get("medication")
+#         patient = cleaned_data.get("patient")
+#         if prepared_date and medication and patient:
+#             # Only do something if both fields are valid so far.
+#             if prepared_date.now() >= prepared_date:
+#                 raise forms.ValidationError(
+#                     "Did not change dates"
+#                 )
         if self.data['dispense_type'] == TABLET:
             self.validate_tablet()
-            self.save()
         elif self.data['dispense_type'] == SYRUP:
             self.validate_syrup()
-            self.save()
         elif self.data['dispense_type'] == IV:
             self.validate_iv()
-            self.save()
         return self.cleaned_data
 
     def validate_tablet(self):

@@ -166,7 +166,7 @@ class Dispense(BaseUuidModel):
 
     prepared_datetime = models.DateTimeField(default=datetime.now)
 
-    prepared_date = models.DateTimeField(default=date.today, editable=False)
+    prepared_date = models.DateTimeField(default=datetime.today(), editable=False)
 
     def __str__(self):
         return str(self.patient)
@@ -244,6 +244,7 @@ class Dispense(BaseUuidModel):
                 'IV_concentration': self.total_concentration
         })
         return label_context
+
 
     class Meta:
         unique_together = (('patient', 'medication', 'prepared_date'), )
