@@ -9,7 +9,6 @@ from edc_constants.choices import GENDER
 from edc_base.model.validators.date import date_not_future
 from edc_base.utils.age import formatted_age
 from dateutil.relativedelta import relativedelta
-from django.contrib.admin.utils import help_text_for_field
 
 TABLET = 'TABLET'
 SYRUP = 'SYRUP'

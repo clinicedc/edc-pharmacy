@@ -46,7 +46,7 @@
         <div class="panel-group">
           {% if patient %}  
             <div class="panel panel-success"> 
-              <div class="panel-heading"><B>Patient:</B> <a title="Edit patient information" href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}">{{ patient.subject_identifier }}</a> <B>Intials:</B> {{ patient.initials }} <B>Gender:</B> {{ patient.get_gender_display }} <B>DOB:</B> {{ patient.born }}  <B>Age:</B> {{ patient.age }}</div>
+              <div class="panel-heading"><b>Patient:</b> <a title="Edit patient information" href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}">{{ patient.subject_identifier }}</a> <b>Intials:</b> {{ patient.initials }} <b>Gender:</b> {{ patient.get_gender_display }} <b>DOB:</b> {{ patient.born }}  <b>Age:</b> {{ patient.age }}</div>
             </div>
 
             <div class="panel panel-default"> 
