@@ -37,16 +37,16 @@ class DispenseForm(forms.ModelForm):
             self.validate_iv()
         else:
             pass
-        self.catch_unique_integrity_error(self.cleaned_data)
+        self.catch_unique_integrity_error()
         return self.cleaned_data
 
-    def catch_unique_integrity_error(self, cleaned_data):
+    def catch_unique_integrity_error(self):
         if Dispense.objects.filter(
                 Q(patient=self.cleaned_data['patient']) &
                 Q(medication=self.cleaned_data['medication']) &
                 Q(prepared_date=str(self.cleaned_data['prepared_datetime'].date()))):
-            raise forms.ValidationError('Dispense with this medication on this date already exists for this patient')
-        return cleaned_data
+            raise forms.ValidationError('Dispense record of this medication on this date already exists for this patient')
+        return self.cleaned_data
 
     def validate_tablet(self):
         if self.data['syrup_volume']:
