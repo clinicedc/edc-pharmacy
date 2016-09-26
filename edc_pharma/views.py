@@ -1,11 +1,7 @@
-import json
-
 from urllib.parse import urlencode
 
-from django.apps import apps as django_apps
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
-from django.template.context_processors import request
 from django.urls.base import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView

@@ -77,6 +77,10 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'iv_concentration': [
                     'You have selected dispense type tablet, you should NOT enter IV concentration']})
+        if float(self.data['total_number_of_tablets']) < float(self.data['times_per_day']) * float(self.data['number_of_tablets']):
+            raise forms.ValidationError({
+                'total_number_of_tablets': [
+                    'Cannot have total number of tablets less than number of tablets by times per day']})
 
     def validate_syrup(self):
         if not self.data['syrup_volume']:
@@ -137,3 +141,7 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'times_per_day': [
                     'You have selected dispense type IV, you should NOT enter times per day']})
+
+    class Meta:
+        model = Dispense
+        fields = '__all__'
