@@ -5,7 +5,7 @@ from django import forms
 from django.urls.base import reverse
 from django.db.models import Q
 from edc_pharma.models import TABLET, SYRUP, IV
-from .models import Dispense
+from .models import Dispense, Patient
 
 
 class PatientForm(forms.Form):
@@ -28,17 +28,11 @@ class PatientForm(forms.Form):
 
 class DispenseForm(forms.ModelForm):
 
+ 
+#     def __init__(self, *args, **kwargs):
+#         super(DispenseForm, self).__init__(*args, **kwargs)
+
     def clean(self):
-#         cleaned_data = super(DispenseForm, self).clean()
-#         prepared_date = cleaned_data.get("prepared_date")
-#         medication = cleaned_data.get("medication")
-#         patient = cleaned_data.get("patient")
-#         if prepared_date and medication and patient:
-#             # Only do something if both fields are valid so far.
-#             if prepared_date.now() >= prepared_date:
-#                 raise forms.ValidationError(
-#                     "Did not change dates"
-#                 )
         if self.data['dispense_type'] == TABLET:
             self.validate_tablet()
         elif self.data['dispense_type'] == SYRUP:
@@ -147,3 +141,7 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'times_per_day': [
                     'You have selected dispense type IV, you should NOT enter times per day']})
+
+    class meta:
+        model = Dispense
+        fields = '__all__'

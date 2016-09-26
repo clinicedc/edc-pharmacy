@@ -1,5 +1,4 @@
 from datetime import datetime, date
-from django.db import IntegrityError
 from django.core.validators import RegexValidator
 from django.db import models
 from simple_history.models import HistoricalRecords
@@ -241,9 +240,8 @@ class Dispense(BaseUuidModel):
         elif self.dispense_type == IV:
             label_context.update({
                 'IV_concentration': self.total_concentration
-        })
+            })
         return label_context
-
 
     class Meta:
         unique_together = (('patient', 'medication', 'prepared_date'), )
