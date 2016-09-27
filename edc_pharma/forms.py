@@ -5,7 +5,7 @@ from django import forms
 from django.urls.base import reverse
 from django.db.models import Q
 from edc_pharma.models import TABLET, SYRUP, IV
-from .models import Dispense, Patient
+from .models import Dispense
 
 
 class PatientForm(forms.Form):
@@ -28,10 +28,6 @@ class PatientForm(forms.Form):
 
 class DispenseForm(forms.ModelForm):
 
- 
-#     def __init__(self, *args, **kwargs):
-#         super(DispenseForm, self).__init__(*args, **kwargs)
-
     def clean(self):
         if self.data['dispense_type'] == TABLET:
             self.validate_tablet()
@@ -41,16 +37,17 @@ class DispenseForm(forms.ModelForm):
             self.validate_iv()
         else:
             pass
-        self.catch_unique_integrity_error(self.cleaned_data)
+        #self.catch_unique_integrity_error()
         return self.cleaned_data
 
-    def catch_unique_integrity_error(self, cleaned_data):
+    def catch_unique_integrity_error(self):
+        print(self.cleaned_data)
         if Dispense.objects.filter(
                 Q(patient=self.cleaned_data['patient']) &
                 Q(medication=self.cleaned_data['medication']) &
                 Q(prepared_date=str(self.cleaned_data['prepared_datetime'].date()))):
-            raise forms.ValidationError('Dispense with this medication on this date already exists for this patient')
-        return cleaned_data
+            raise forms.ValidationError('Dispense record of this medication on this date already exists for this patient')
+        return self.cleaned_data
 
     def validate_tablet(self):
         if self.data['syrup_volume']:
@@ -81,6 +78,10 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'iv_concentration': [
                     'You have selected dispense type tablet, you should NOT enter IV concentration']})
+        if float(self.data['total_number_of_tablets']) < float(self.data['times_per_day']) * float(self.data['number_of_tablets']):
+            raise forms.ValidationError({
+                'total_number_of_tablets': [
+                    'Cannot have total number of tablets less than number of tablets by times per day']})
 
     def validate_syrup(self):
         if not self.data['syrup_volume']:
@@ -142,6 +143,6 @@ class DispenseForm(forms.ModelForm):
                 'times_per_day': [
                     'You have selected dispense type IV, you should NOT enter times per day']})
 
-    class meta:
+    class Meta:
         model = Dispense
         fields = '__all__'

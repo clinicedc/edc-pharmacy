@@ -156,15 +156,9 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type IV is chosen")
 
-    total_concentration = models.CharField(
-        max_length=15,
-        blank=True,
-        null=True,
-        help_text="Only required if dispense type IV is chosen")
-
     prepared_datetime = models.DateTimeField(default=datetime.now)
 
-    prepared_date = models.DateTimeField(default=datetime.today(), editable=False)
+    prepared_date = models.DateTimeField(default=date.today, editable=False)
 
     def __str__(self):
         return str(self.patient)
@@ -203,8 +197,7 @@ class Dispense(BaseUuidModel):
                     iv_duration=self.iv_duration,
                     iv_concentration=self.iv_concentration,
                     times_per_day=self.times_per_day,
-                    total_dosage_volume=self.total_dosage_volume,
-                    total_concentration=self.total_concentration))
+                    total_dosage_volume=self.total_dosage_volume))
         return prescription
 
     @property
@@ -236,10 +229,6 @@ class Dispense(BaseUuidModel):
             label_context.update({
                 'concentration': self.iv_concentration,
                 'total_dosage_volume': self.total_dosage_volume
-            })
-        elif self.dispense_type == IV:
-            label_context.update({
-                'IV_concentration': self.total_concentration
             })
         return label_context
 
