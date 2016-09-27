@@ -6,7 +6,7 @@ from simple_history.admin import SimpleHistoryAdmin
 
 from edc_base.modeladmin.mixins import (
     ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
-    ModelAdminFormInstructionsMixin, ModelAdminRedirectMixin)
+    ModelAdminFormInstructionsMixin)
 
 from .admin_site import edc_pharma_admin
 from .forms import DispenseForm

@@ -37,11 +37,10 @@ class DispenseForm(forms.ModelForm):
             self.validate_iv()
         else:
             pass
-        #self.catch_unique_integrity_error()
+        self.catch_unique_integrity_error()
         return self.cleaned_data
 
     def catch_unique_integrity_error(self):
-        print(self.cleaned_data)
         if Dispense.objects.filter(
                 Q(patient=self.cleaned_data['patient']) &
                 Q(medication=self.cleaned_data['medication']) &
