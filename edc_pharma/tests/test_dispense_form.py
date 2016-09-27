@@ -1,13 +1,12 @@
 from datetime import datetime
 from django.test import TestCase
 
-from edc_constants.constants import YES, NO
+from edc_constants.constants import NO
 from edc_pharma.models import TABLET, SYRUP, IV
 
 from edc_pharma.forms import DispenseForm
-from edc_pharma.models import Dispense, Protocol, Site, Patient, Medication
-from edc_pharma.tests.factories.patient_factory import PatientFactory, SiteFactory,\
-    ProtocolFactory
+from edc_pharma.tests.factories.factory import SiteFactory, PatientFactory, ProtocolFactory,\
+    MedicationFactory
 
 
 class TestDispenseTabletForm(TestCase):
@@ -16,10 +15,7 @@ class TestDispenseTabletForm(TestCase):
         self.protocol = ProtocolFactory()
         self.site = SiteFactory()
         self.patient = PatientFactory()
-        self.medication = Medication.objects.create(
-            name='compral',
-            protocol=self.protocol,
-            storage_instructions='store at 5 deg centigrade')
+        self.medication = MedicationFactory()
         self.data = {
             'patient': self.patient.id,
             'medication': self.medication.id,
@@ -64,7 +60,7 @@ class TestDispenseTabletForm(TestCase):
             'You have selected dispense type tablet, you should enter total number of tablets',
             dispense_form.errors.get('number_of_tablets', []))
 
-    def test_validate_taking_right_amount_tablets_is_invalid(self):
+    def test_validate_taking_right_amount_tablets(self):
         """Test if the patient is taking correct amount of tablets"""
         self.data['dispense_type'] = TABLET
         self.data['number_of_tablets'] = None
@@ -137,6 +133,34 @@ class TestDispenseTabletForm(TestCase):
         dispense_form = DispenseForm(data=self.data)
         self.assertNotIn('You have selected dispense type syrup, you should enter times per day',
                          dispense_form.errors.get('times_per_day', []))
+
+    def test_without_total_dosage_volume(self):
+        """Test if the patient is taking syrup, when total syrup volume isn't included"""
+        self.data['syrup_volume'] = '5mL'
+        dispense_form = DispenseForm(data=self.data)
+        self.assertNotIn(
+            'You have selected dispense type syrup, you should enter total dosage volume',
+            dispense_form.errors.get('total_dosage_volume', []))
+
+    def test_with_iv_duration(self):
+        """Test if the patient is taking syrup, when iv duration is not included"""
+        self.data['syrup_volume'] = '5mL'
+        self.data['total_dosage_volume'] = '250mL'
+        self.data['iv_duration'] = None
+        dispense_form = DispenseForm(data=self.data)
+        self.assertNotIn(
+            'You have selected dispense type syrup, you should enter IV duration',
+            dispense_form.errors.get('iv_duration', []))
+
+    def test_without_times_per_day(self):
+        """Test if the patient is taking syrup, when times per day isn't included"""
+        self.data['syrup_volume'] = '5mL'
+        self.data['total_dosage_volume'] = '250mL'
+        self.data['times_per_day'] = None
+        dispense_form = DispenseForm(data=self.data)
+        self.assertNotIn(
+            'You have selected dispense type syrup, you should enter times per day',
+            dispense_form.errors.get('times_per_day', []))
 
     def test_validate_taking_not_iv(self):
             """Test if the patient is not taking iv"""
