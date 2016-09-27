@@ -183,7 +183,7 @@ class Dispense(BaseUuidModel):
                     total_number_of_tablets=self.total_number_of_tablets))
         if self.dispense_type == SYRUP:
             prescription = (
-                '{medication} {syrup_volume} volume {times_per_day} times per day '
+                '{medication} {syrup_volume} volume {times_per_day} times a day '
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
                     syrup_volume=self.syrup_volume,
