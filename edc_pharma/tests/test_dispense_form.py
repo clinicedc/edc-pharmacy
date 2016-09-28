@@ -1,7 +1,6 @@
 from datetime import datetime
 from django.test import TestCase
 
-from edc_constants.constants import NO
 from edc_pharma.models import TABLET, SYRUP, IV
 
 from edc_pharma.forms import DispenseForm
@@ -33,7 +32,7 @@ class TestDispenseTabletForm(TestCase):
         form = DispenseForm(data=self.data)
         self.assertTrue(form.is_valid)
 
-    def test_validate_taking_not_syrup(self):
+    def test_with_syrup_volume(self):
             """Test if the patient is not taking syrup"""
             self.data['dispense_type'] = TABLET
             self.data['syrup_volume'] = "10ml"
@@ -42,7 +41,7 @@ class TestDispenseTabletForm(TestCase):
                 'You have selected dispense type tablet, you should NOT enter syrup volume',
                 dispense_form.errors.get('syrup_volume', []))
 
-    def test_validate_taking_not_syrup_valid(self):
+    def test_with_syrup_volume_valid(self):
             """Test if the patient is not taking syrup"""
             self.data['dispense_type'] = TABLET
             self.data['syrup_volume'] = None
@@ -81,7 +80,7 @@ class TestDispenseTabletForm(TestCase):
     def test_validate_taking_iv(self):
         """Test if the patient is not taking iv within set time(minutes)"""
         self.data['dispense_type'] = TABLET
-        self.data['iv_duration'] = NO
+        self.data['iv_duration'] = None
         dispense_form = DispenseForm(data=self.data)
         self.assertNotIn('You have selected dispense type tablet, you should select dispense type iv',
                          dispense_form.errors.get('iv_duration', []))
@@ -89,7 +88,7 @@ class TestDispenseTabletForm(TestCase):
     def test_validate_iv_concentration(self):
         """Test if the patient is not taking iv within set time(minutes)"""
         self.data['dispense_type'] = TABLET
-        self.data['iv_concentration'] = NO
+        self.data['iv_concentration'] = None
         dispense_form = DispenseForm(data=self.data)
         self.assertNotIn('You have selected dispense type tablet, you should select dispense type iv',
                          dispense_form.errors.get('iv_concentration', []))
