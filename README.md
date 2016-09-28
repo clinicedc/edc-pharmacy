@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/botswana-harvard/edc-pharma.svg?branch=develop)](https://travis-ci.org/botswana-harvard/edc-pharma) [![Coverage Status](https://coveralls.io/repos/botswana-harvard/edc-pharma/badge.svg?branch=develop&service=github)](https://coveralls.io/github.com/botswana-harvard/edc-pharma.git)
+[![Build Status](https://travis-ci.org/botswana-harvard/edc-pharma.svg?branch=develop)](https://travis-ci.org/botswana-harvard/edc-pharma) [![Coverage Status](https://coveralls.io/repos/botswana-harvard/edc-pharma/badge.svg?branch=develop&service=github)](https://coveralls.io/github/botswana-harvard/edc-pharma?branch=develop)
 
 # edc-pharma
 
