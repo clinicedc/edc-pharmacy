@@ -1,4 +1,7 @@
+[![Build Status](https://travis-ci.org/botswana-harvard/edc-pharma.svg?branch=develop)](https://travis-ci.org/botswana-harvard/tshilo-dikotla) [![Coverage Status](https://coveralls.io/repos/botswana-harvard/edc-pharma/badge.svg?branch=develop&service=github)](https://coveralls.io/github.com/botswana-harvard/edc-pharma.git)
+
 # edc-pharma
+
 Allows pharmacists to print labels during dispensing
 
 
