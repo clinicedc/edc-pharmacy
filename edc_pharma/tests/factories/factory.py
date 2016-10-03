@@ -61,4 +61,3 @@ class DispenseFactory(factory.DjangoModelFactory):
     times_per_day = 3
     total_number_of_tablets = 45
     prepared_date = date.today()
-    #prepared_datetime = datetime.now()
