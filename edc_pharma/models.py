@@ -174,13 +174,21 @@ class Dispense(BaseUuidModel):
     @property
     def prescription(self):
         if self.dispense_type == TABLET:
-            prescription = (
-                '{medication} {number_of_tablets} tablets {times_per_day} times per day '
-                '({total_number_of_tablets} tablets)'.format(
-                    medication=self.medication.name,
-                    number_of_tablets=self.number_of_tablets,
-                    times_per_day=self.times_per_day,
-                    total_number_of_tablets=self.total_number_of_tablets))
+            if self.number_of_tablets > 1:
+                prescription = (
+                    '{medication} {number_of_tablets} tablets {times_per_day} times per day '
+                    '({total_number_of_tablets} tablets)'.format(
+                        medication=self.medication.name,
+                        number_of_tablets=self.number_of_tablets,
+                        times_per_day=self.times_per_day,
+                        total_number_of_tablets=self.total_number_of_tablets))
+            else:
+                prescription = (
+                    '{medication} 1 tablet {times_per_day} times per day '
+                    '({total_number_of_tablets} tablets)'.format(
+                        medication=self.medication.name,
+                        times_per_day=self.times_per_day,
+                        total_number_of_tablets=self.total_number_of_tablets))
         if self.dispense_type == SYRUP:
             prescription = (
                 '{medication} {syrup_volume} volume {times_per_day} times a day '
