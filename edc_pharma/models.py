@@ -83,13 +83,11 @@ class Patient(BaseUuidModel):
 
     @property
     def born(self):
-        if self.dob:
-            return self.dob.strftime('%Y-%m-%d')
+        return self.dob.strftime('%Y-%m-%d')
 
     @property
     def age(self):
-        if self.dob:
-            return formatted_age(self.dob, date.today())
+        return formatted_age(self.dob, date.today())
 
 
 class Medication(BaseUuidModel):
