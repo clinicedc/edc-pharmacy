@@ -28,6 +28,9 @@ class Protocol(BaseUuidModel):
     def __str__(self):
         return self.number
 
+    class Meta:
+        unique_together = (('number', 'name'),)
+
 
 class Site(BaseUuidModel):
 
@@ -35,7 +38,8 @@ class Site(BaseUuidModel):
 
     site_code = models.CharField(
         max_length=20,
-        validators=[RegexValidator('[\d]+', 'Invalid format.')])
+        validators=[RegexValidator('[\d]+', 'Invalid format.')],
+        unique=True)
 
     telephone_number = models.CharField(
         max_length=7,
@@ -47,7 +51,7 @@ class Site(BaseUuidModel):
 
 class Patient(BaseUuidModel):
 
-    subject_identifier = models.CharField(max_length=20)
+    subject_identifier = models.CharField(max_length=20, unique=True)
 
     initials = models.CharField(
         max_length=5,
@@ -79,11 +83,13 @@ class Patient(BaseUuidModel):
 
     @property
     def born(self):
-        return self.dob.strftime('%Y-%m-%d')
+        if self.dob:
+            return self.dob.strftime('%Y-%m-%d')
 
     @property
     def age(self):
-        return formatted_age(self.dob, date.today())
+        if self.dob:
+            return formatted_age(self.dob, date.today())
 
 
 class Medication(BaseUuidModel):
