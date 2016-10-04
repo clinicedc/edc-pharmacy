@@ -23,13 +23,10 @@ class Protocol(BaseUuidModel):
 
     number = models.CharField(max_length=30)
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
         return self.number
-
-    class Meta:
-        unique_together = (('number', 'name'),)
 
 
 class Site(BaseUuidModel):
@@ -72,7 +69,7 @@ class Patient(BaseUuidModel):
         validators=[RegexValidator('[\d]+', 'Invalid format.')],
     )
 
-    consent_datetime = models.DateTimeField()
+    consent_date = models.DateField()
 
     site = models.ForeignKey(Site)
 
