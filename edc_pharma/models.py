@@ -35,8 +35,7 @@ class Site(BaseUuidModel):
 
     site_code = models.CharField(
         max_length=20,
-        validators=[RegexValidator('[\d]+', 'Invalid format.')],
-        unique=True)
+        validators=[RegexValidator('[\d]+', 'Invalid format.')])
 
     telephone_number = models.CharField(
         max_length=7,
