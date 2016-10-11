@@ -152,6 +152,12 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type SYRUP or IV is chosen")
 
+    total_volume = models.CharField(
+        max_length=10,
+        blank=True,
+        null=True,
+        help_text="Only required if dispense type IV is chosen")
+
     iv_concentration = models.CharField(
         max_length=60,
         blank=True,
