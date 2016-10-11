@@ -128,9 +128,9 @@ class Dispense(BaseUuidModel):
     number_of_tablets = models.IntegerField(
         blank=True,
         null=True,
-        help_text="Only required if dispense type TABLET is chosen")
+        help_text="Only required if dispense type TABLET, CAPSULES and or SUPPOSITORIES is chosen")
 
-    syrup_volume = models.CharField(
+    syrup_dose = models.CharField(
         max_length=20,
         blank=True,
         null=True,
@@ -139,30 +139,30 @@ class Dispense(BaseUuidModel):
     times_per_day = models.IntegerField(
         blank=True,
         null=True,
-        help_text="Only required if dispense type TABLET or SYRUP is chosen")
+        help_text="Only required if dispense type TABLET, CAPSULES, SUPPOSITORIES,and or SYRUP is chosen")
 
     total_number_of_tablets = models.IntegerField(
         blank=True,
         null=True,
-        help_text="Only required if dispense type TABLET is chosen")
+        help_text="Only required if dispense type TABLET,  is chosen")
 
     total_dosage_volume = models.CharField(
         max_length=10,
         blank=True,
         null=True,
-        help_text="Only required if dispense type SYRUP or IV is chosen")
+        help_text="Only required if dispense type SYRUP, IM, IV is chosen")
 
     total_volume = models.CharField(
         max_length=10,
         blank=True,
         null=True,
-        help_text="Only required if dispense type IV is chosen")
+        help_text="Only required if dispense type IV and or IM is chosen")
 
-    iv_concentration = models.CharField(
+    concentration = models.CharField(
         max_length=60,
         blank=True,
         null=True,
-        help_text="Only required if dispense type IV is chosen")
+        help_text="Only required if dispense type IV, IM, CAPSULES, SOLUTION, SUPPOSITORIES, TABLET is chosen")
 
     iv_duration = models.CharField(
         max_length=15,
@@ -205,10 +205,10 @@ class Dispense(BaseUuidModel):
                         total_number_of_tablets=self.total_number_of_tablets))
         if self.dispense_type == SYRUP:
             prescription = (
-                '{medication} {syrup_volume} volume {times_per_day} times a day '
+                '{medication} {syrup_dose} dose {times_per_day} times a day '
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
-                    syrup_volume=self.syrup_volume,
+                    syrup_dose=self.syrup_dose,
                     times_per_day=self.times_per_day,
                     total_dosage_volume=self.total_dosage_volume))
         if self.dispense_type == IV:
@@ -269,32 +269,32 @@ class Dispense(BaseUuidModel):
             })
         elif self.dispense_type == SYRUP:
             label_context.update({
-                'number_of_teaspoons': self.syrup_volume,
+                'number_of_teaspoons': self.syrup_dose,
                 'total_dosage_volume': self.total_dosage_volume,
             })
         elif self.dispense_type == IV:
             label_context.update({
-                'concentration': self.iv_concentration,
+                'concentration': self.concentration,
                 'total_dosage_volume': self.total_dosage_volume
             })
         elif self.dispense_type == IM:
             label_context.update({
-                'concentration': self.iv_concentration,
+                'concentration': self.concentration,
                 'total_dosage_volume': self.total_dosage_volume
             })
         elif self.dispense_type == SOLUTION:
             label_context.update({
-                'concentration': self.iv_concentration,
+                'concentration': self.concentration,
                 'total_dosage_volume': self.total_dosage_volume
             })
         elif self.dispense_type == CAPSULES:
             label_context.update({
-                'concentration': self.iv_concentration,
+                'concentration': self.concentration,
                 'total_dosage_volume': self.total_dosage_volume
             })
         elif self.dispense_type == SUPPOSITORIES:
             label_context.update({
-                'concentration': self.iv_concentration,
+                'concentration': self.concentration,
                 'total_dosage_volume': self.total_dosage_volume
             })
         return label_context
