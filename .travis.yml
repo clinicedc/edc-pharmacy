@@ -46,5 +46,9 @@ before_script:
 script: 
   - coverage run --source=edc_pharma manage.py test
 
+r_github_packages:
+  - edc-pharma/covr
+
 after_success:
   - coveralls
+  - Rscript -e 'covr::coveralls()'

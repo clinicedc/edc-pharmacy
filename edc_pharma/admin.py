@@ -38,8 +38,8 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
 
 @admin.register(Patient, site=edc_pharma_admin)
 class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('initials', 'consent_datetime',)
-    list_filter = ('consent_datetime',)
+    list_display = ('initials', 'consent_date',)
+    list_filter = ('consent_date',)
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(
