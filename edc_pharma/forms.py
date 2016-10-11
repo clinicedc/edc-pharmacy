@@ -1,6 +1,7 @@
 from crispy_forms.bootstrap import FieldWithButtons, StrictButton
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
+from datetime import date
 from django import forms
 from django.urls.base import reverse
 from django.db.models import Q
@@ -50,7 +51,7 @@ class DispenseForm(forms.ModelForm):
         if Dispense.objects.filter(
                 Q(patient=self.cleaned_data['patient']) &
                 Q(medication=self.cleaned_data['medication']) &
-                Q(prepared_date=str(self.cleaned_data['prepared_datetime'].date()))):
+                Q(prepared_date=date.today())):
             raise forms.ValidationError('Dispense record of this medication on this date already exists for this patient')
         return self.cleaned_data
 

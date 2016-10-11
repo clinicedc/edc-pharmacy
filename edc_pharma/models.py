@@ -31,7 +31,7 @@ class Protocol(BaseUuidModel):
 
     number = models.CharField(max_length=30)
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
         return self.number
@@ -55,7 +55,7 @@ class Site(BaseUuidModel):
 
 class Patient(BaseUuidModel):
 
-    subject_identifier = models.CharField(max_length=20)
+    subject_identifier = models.CharField(max_length=20, unique=True)
 
     initials = models.CharField(
         max_length=5,
@@ -182,13 +182,21 @@ class Dispense(BaseUuidModel):
     @property
     def prescription(self):
         if self.dispense_type == TABLET:
-            prescription = (
-                '{medication} {number_of_tablets} tablets {times_per_day} times per day '
-                '({total_number_of_tablets} tablets)'.format(
-                    medication=self.medication.name,
-                    number_of_tablets=self.number_of_tablets,
-                    times_per_day=self.times_per_day,
-                    total_number_of_tablets=self.total_number_of_tablets))
+            if self.number_of_tablets > 1:
+                prescription = (
+                    '{medication} {number_of_tablets} tablets {times_per_day} times per day '
+                    '({total_number_of_tablets} tablets)'.format(
+                        medication=self.medication.name,
+                        number_of_tablets=self.number_of_tablets,
+                        times_per_day=self.times_per_day,
+                        total_number_of_tablets=self.total_number_of_tablets))
+            else:
+                prescription = (
+                    '{medication} 1 tablet {times_per_day} times per day '
+                    '({total_number_of_tablets} tablets)'.format(
+                        medication=self.medication.name,
+                        times_per_day=self.times_per_day,
+                        total_number_of_tablets=self.total_number_of_tablets))
         if self.dispense_type == SYRUP:
             prescription = (
                 '{medication} {syrup_volume} volume {times_per_day} times a day '
