@@ -4,8 +4,8 @@
 ^FO60,60^FS
 ^FO60,90^A0N,20,20^FDPID: ${patient}  	        	   SID: ${sid}               INITIALS: ${initials}^FS
 ^FO60,130^A0N,20,20^FDDrug Name/Strength: ${drug_name}         ^FS
-^FO60,160^A0N,20,20^FDDosage: ${number_of_tablets} Tablet(s) 	${times_per_day} Time(s) a Day with or  without food^FS
-^FO60,200^A0N,20,20^FDDate of Prep.: ${prepared_datetime}  Prep. By: ${prepared_by}  Qnty Disp: ${total_number_of_tablets} tablets^FS
+^FO60,160^A0N,20,20^FDInsert: ${number_of_tablets}Suppository(s) 	${times_per_day} Time(s) a Day with or  without food^FS
+^FO60,200^A0N,20,20^FDDate of Prep.: ${prepared_datetime}  Prep. By: ${prepared_by}  Qnty Disp: ${total_number_of_tablets} suppository^FS
 ^FO60,230^A0N,30,30^FDStorage instructions: ${storage_instructions} ^FS
 ^FO60,260^A0N,35,25^FDFOR INVESTIGATIONAL USE ONLY (PROTOCOL NUMBER ${protocol})^FS
 ^XZ

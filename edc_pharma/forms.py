@@ -204,9 +204,9 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'iv_duration': [
                     'You have selected dispense type IV, you should enter IV duration']})
-        if not self.data['iv_concentration']:
+        if not self.data['concentration']:
             raise forms.ValidationError({
-                'iv_concentration': [
+                'concentration': [
                     'You have selected dispense type IV, you should enter IV concentration']})
         if self.data['total_number_of_tablets']:
             raise forms.ValidationError({

@@ -12,7 +12,8 @@ class ProtocolFactory(factory.DjangoModelFactory):
         model = Protocol
 
     number = '12'
-    name = 'bhp012'
+    #name = 'bhp089'
+    name = factory.Sequence(lambda n: 'bhp012{0}'.format(n))
 
 
 class SiteFactory(factory.DjangoModelFactory):
@@ -45,7 +46,7 @@ class PatientFactory(factory.DjangoModelFactory):
     gender = FEMALE
     dob = date(1988, 7, 7)
     sid = 'A2345'
-    consent_datetime = datetime.now()
+    consent_date = date.today()
     site = factory.SubFactory(SiteFactory)
 
 

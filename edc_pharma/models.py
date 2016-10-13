@@ -217,7 +217,7 @@ class Dispense(BaseUuidModel):
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
                     iv_duration=self.iv_duration,
-                    iv_concentration=self.iv_concentration,
+                    concentration=self.concentration,
                     times_per_day=self.times_per_day,
                     total_dosage_volume=self.total_dosage_volume))
         if self.dispense_type == IM:
@@ -226,7 +226,7 @@ class Dispense(BaseUuidModel):
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
                     im_duration=self.im_duration,
-                    im_concentration=self.im_concentration,
+                    concentration=self.concentration,
                     times_per_day=self.times_per_day,
                     total_dosage_volume=self.total_dosage_volume))
         if self.dispense_type == SUPPOSITORIES:
