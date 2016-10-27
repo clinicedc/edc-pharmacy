@@ -31,11 +31,11 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type TABLET, CAPSULES and or SUPPOSITORIES is chosen")
 
-    syrup_dose = models.CharField(
+    dose = models.CharField(
         max_length=20,
         blank=True,
         null=True,
-        help_text="Only required if dispense type SYRUP is chosen")
+        help_text="Only required if dispense type SYRUP or SOLUTION is chosen")
 
     times_per_day = models.IntegerField(
         blank=True,
@@ -47,17 +47,11 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type TABLET or SUPPOSITORY  is chosen")
 
-    total_dosage_volume = models.CharField(
-        max_length=10,
-        blank=True,
-        null=True,
-        help_text="Only required if dispense type SYRUP, IM, IV is chosen")
-
     total_volume = models.CharField(
         max_length=10,
         blank=True,
         null=True,
-        help_text="Only required if dispense type IV and or IM is chosen")
+        help_text="Only required if dispense type is SYRUP, IM, IV is chosen")
 
     concentration = models.CharField(
         max_length=60,
@@ -65,7 +59,7 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type IV, IM, CAPSULES, SOLUTION, SUPPOSITORIES, TABLET is chosen")
 
-    iv_duration = models.CharField(
+    duration = models.CharField(
         max_length=15,
         blank=True,
         null=True,
@@ -109,7 +103,15 @@ class Dispense(BaseUuidModel):
                 '{medication} {dose} dose {times_per_day} times a day '
                 '({total_volume})'.format(
                     medication=self.medication.name,
-                    syrup_dose=self.syrup_dose,
+                    dose=self.dose,
+                    times_per_day=self.times_per_day,
+                    total_volume=self.total_volume))
+        if self.dispense_type == SOLUTION:
+            prescription = (
+                '{medication} {dose} dose {times_per_day} times a day '
+                '({total_volume})'.format(
+                    medication=self.medication.name,
+                    dose=self.dose,
                     times_per_day=self.times_per_day,
                     total_volume=self.total_volume))
         if self.dispense_type == IV:
@@ -117,7 +119,7 @@ class Dispense(BaseUuidModel):
                 '{medication} Intravenous {concentration} {duration} '
                 '({total_volume})'.format(
                     medication=self.medication.name,
-                    iv_duration=self.iv_duration,
+                    duration=self.duration,
                     concentration=self.concentration,
                     times_per_day=self.times_per_day,
                     total_volume=self.total_volume))
@@ -126,7 +128,7 @@ class Dispense(BaseUuidModel):
                 '{medication} IntraMuscular {concentration} {duration} '
                 '({total_volume})'.format(
                     medication=self.medication.name,
-                    im_duration=self.im_duration,
+                    duration=self.duration,
                     concentration=self.concentration,
                     times_per_day=self.times_per_day,
                     total_volume=self.total_volume))

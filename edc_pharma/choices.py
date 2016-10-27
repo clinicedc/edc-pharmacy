@@ -1,3 +1,4 @@
+from edc_constants.choices import GENDER
 TABLET = 'TABLET'
 SYRUP = 'SYRUP'
 IV = 'IV'
@@ -14,3 +15,4 @@ DISPENSE_TYPES = (
     (CAPSULE, 'CAPSULE'),
     (SUPPOSITORY, 'SUPPOSITORY'),
 )
+GENDER
