@@ -6,7 +6,7 @@
 ^FO100,80^FS 
 ^FO100,105^A0N,20,20^FDWEIGHT (kg): ${weight}      INFUSION (#): {infusion}^FS
 ^FO100,130^A0N,20,20^FDDrug Name/Concentration: ${drug_name}/${concentration}         ^FS
-^FO100,155^A0N,20,20^FDDosage: ${total_dosage_volume}^FS
+^FO100,155^A0N,20,20^FDDosage: ${total_volume}^FS
 ^FO100,190^A0N,20,20^FD   PHARMACY                                                          CLINIC ^FS
 ^FO90,185^A0N^GB320,110,1,B^FS        
 ^FO410,185^A0N^GB320,110,1,B^FS 
