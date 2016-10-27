@@ -63,7 +63,12 @@ class Dispense(BaseUuidModel):
         max_length=15,
         blank=True,
         null=True,
-        help_text="Only required if dispense type IV is chosen")
+        help_text="Only required if dispense type IV or IM is chosen")
+
+    weight = models.DecimalField(
+        blank=True,
+        null=True,
+        help_text="Only required if IV or IM is chosen")
 
     prepared_datetime = models.DateTimeField(default=datetime.now)
 
