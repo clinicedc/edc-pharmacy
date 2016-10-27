@@ -5,7 +5,7 @@ from datetime import date
 from django import forms
 from django.urls.base import reverse
 from django.db.models import Q
-from edc_pharma.models import TABLET, SYRUP, IV, CAPSULES, SOLUTION, IM
+from edc_pharma.models import TABLET, SYRUP, IV, CAPSULE, SOLUTION, IM, SUPPOSITORY
 from .models import Dispense
 
 
@@ -36,12 +36,14 @@ class DispenseForm(forms.ModelForm):
             self.validate_syrup()
         elif self.data['dispense_type'] == IV:
             self.validate_iv()
-        elif self.data['dispense_type'] == CAPSULES:
-            self.validate_iv()
+        elif self.data['dispense_type'] == CAPSULE:
+            self.validate_capsules()
         elif self.data['dispense_type'] == IM:
-            self.validate_iv()
+            self.validate_im()
         elif self.data['dispense_type'] == SOLUTION:
-            self.validate_iv()
+            self.validate_solution()
+        elif self.data['dispense_type'] == SUPPOSITORY:
+            self.validate_solution()
         else:
             pass
         self.catch_unique_integrity_error()
@@ -56,21 +58,21 @@ class DispenseForm(forms.ModelForm):
         return self.cleaned_data
 
     def validate_tablet(self):
-        if self.data['syrup_dose']:
+        if self.data['dose']:
             raise forms.ValidationError({
-                'syrup_dose': [
+                'dose': [
                     'You have selected dispense type tablet, you should NOT enter syrup dose']})
         if not self.data['number_of_tablets']:
             raise forms.ValidationError({
                 'number_of_tablets': [
                     'You have selected dispense type tablet, you should enter number of tablets']})
-        if self.data['total_dosage_volume']:
+        if self.data['total_volume']:
             raise forms.ValidationError({
-                'total_dosage_volume': [
+                'total_volume': [
                     'You have selected dispense type tablet, you should NOT enter total dosage volume']})
-        if self.data['iv_duration']:
+        if self.data['duration']:
             raise forms.ValidationError({
-                'iv_duration': [
+                'duration': [
                     'You have selected dispense type tablet, you should NOT enter IV duration']})
         if not self.data['total_number_of_tablets']:
             raise forms.ValidationError({
@@ -90,21 +92,21 @@ class DispenseForm(forms.ModelForm):
                     'Cannot have total number of tablets less than number of tablets by times per day']})
 
     def validate_capsules(self):
-        if self.data['syrup_dose']:
+        if self.data['dose']:
             raise forms.ValidationError({
-                'syrup_dose': [
+                'dose': [
                     'You have selected dispense type capsules, you should NOT enter syrup volume']})
         if not self.data['number_of_tablets']:
             raise forms.ValidationError({
                 'number_of_tablets': [
                     'You have selected dispense type capsules, you should enter number of tablets']})
-        if self.data['total_dosage_volume']:
+        if self.data['total_volume']:
             raise forms.ValidationError({
-                'total_dosage_volume': [
+                'total_volume': [
                     'You have selected dispense type capsules, you should NOT enter total dosage volume']})
-        if self.data['iv_duration']:
+        if self.data['duration']:
             raise forms.ValidationError({
-                'iv_duration': [
+                'duration': [
                     'You have selected dispense type capsules, you should NOT enter IV duration']})
         if not self.data['total_number_of_tablets']:
             raise forms.ValidationError({
@@ -124,21 +126,21 @@ class DispenseForm(forms.ModelForm):
                     'Cannot have total number of capsules less than number of capsules by times per day']})
 
     def validate_suppositories(self):
-        if self.data['syrup_dose']:
+        if self.data['dose']:
             raise forms.ValidationError({
-                'syrup_dose': [
+                'dose': [
                     'You have selected dispense type suppositories, you should NOT enter syrup dose']})
         if not self.data['number_of_tablets']:
             raise forms.ValidationError({
                 'number_of_tablets': [
                     'You have selected dispense type suppositories, you should enter number of suppositories']})
-        if self.data['total_dosage_volume']:
+        if self.data['total_volume']:
             raise forms.ValidationError({
-                'total_dosage_volume': [
+                'total_volume': [
                     'You have selected dispense type suppositories, you should NOT enter total dosage volume']})
-        if self.data['iv_duration']:
+        if self.data['duration']:
             raise forms.ValidationError({
-                'iv_duration': [
+                'duration': [
                     'You have selected dispense type suppositories, you should NOT enter IV duration']})
         if not self.data['total_number_of_tablets']:
             raise forms.ValidationError({
@@ -158,9 +160,9 @@ class DispenseForm(forms.ModelForm):
                     'Cannot have total number of suppositories less than number of suppositories by times per day']})
 
     def validate_syrup(self):
-        if not self.data['syrup_dose']:
+        if not self.data['dose']:
             raise forms.ValidationError({
-                'syrup_dose': [
+                'dose': [
                     'You have selected dispense type syrup, you should enter syrup dose']})
         if self.data['number_of_tablets']:
             raise forms.ValidationError({
@@ -170,13 +172,13 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'total_number_of_tablets': [
                     'You have selected dispense type syrup, you should NOT enter total number of tablets']})
-        if not self.data['total_dosage_volume']:
+        if not self.data['total_volume']:
             raise forms.ValidationError({
-                'total_dosage_volume': [
-                    'You have selected dispense type syrup, you should enter total dosage volume']})
-        if self.data['iv_duration']:
+                'total_volume': [
+                    'You have selected dispense type syrup, you should enter total volume']})
+        if self.data['duration']:
             raise forms.ValidationError({
-                'iv_duration': [
+                'duration': [
                     'You have selected dispense type syrup, you should NOT enter IV duration']})
         if self.data['concentration']:
             raise forms.ValidationError({
@@ -188,19 +190,19 @@ class DispenseForm(forms.ModelForm):
                     'You have selected dispense type syrup, you should enter times per day']})
 
     def validate_iv(self):
-        if self.data['syrup_dose']:
+        if self.data['dose']:
             raise forms.ValidationError({
-                'syrup_dose': [
+                'dose': [
                     'You have selected dispense type IV, you should NOT enter syrup dose']})
         if self.data['number_of_tablets']:
             raise forms.ValidationError({
                 'number_of_tablets': [
                     'You have selected dispense type IV, you should NOT enter number of tablets']})
-        if not self.data['total_dosage_volume']:
+        if not self.data['total_volume']:
             raise forms.ValidationError({
-                'total_dosage_volume': [
-                    'You have selected dispense type IV, you should enter total dosage volume']})
-        if not self.data['iv_duration']:
+                'total_volume': [
+                    'You have selected dispense type IV, you should enter total volume']})
+        if not self.data['duration']:
             raise forms.ValidationError({
                 'iv_duration': [
                     'You have selected dispense type IV, you should enter IV duration']})
@@ -218,25 +220,25 @@ class DispenseForm(forms.ModelForm):
                     'You have selected dispense type IV, you should NOT enter times per day']})
 
     def validate_im(self):
-        if self.data['syrup_dose']:
+        if self.data['dose']:
             raise forms.ValidationError({
-                'syrup_dose': [
+                'dose': [
                     'You have selected dispense type IM, you should NOT enter syrup dose']})
         if self.data['number_of_tablets']:
             raise forms.ValidationError({
                 'number_of_tablets': [
                     'You have selected dispense type IM, you should NOT enter number of tablets']})
-        if not self.data['total_dosage_volume']:
+        if not self.data['total_volume']:
             raise forms.ValidationError({
-                'total_dosage_volume': [
-                    'You have selected dispense type IM, you should enter total dosage volume']})
-        if not self.data['iv_duration']:
+                'total_volume': [
+                    'You have selected dispense type IM, you should enter total volume']})
+        if not self.data['duration']:
             raise forms.ValidationError({
-                'iv_duration': [
+                'duration': [
                     'You have selected dispense type IM, you should enter IM duration']})
         if not self.data['concentration']:
             raise forms.ValidationError({
-                'iv_concentration': [
+                'concentration': [
                     'You have selected dispense type IM, you should enter IM concentration']})
         if self.data['total_number_of_tablets']:
             raise forms.ValidationError({
@@ -246,6 +248,36 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'times_per_day': [
                     'You have selected dispense type IM, you should NOT enter times per day']})
+
+    def validate_solution(self):
+        if not self.data['dose']:
+            raise forms.ValidationError({
+                'dose': [
+                    'You have selected dispense type solution, you should enter syrup dose']})
+        if self.data['number_of_tablets']:
+            raise forms.ValidationError({
+                'number_of_tablets': [
+                    'You have selected dispense type solution, you should NOT enter number of tablets']})
+        if self.data['total_number_of_tablets']:
+            raise forms.ValidationError({
+                'total_number_of_tablets': [
+                    'You have selected dispense type solution, you should NOT enter total number of tablets']})
+        if not self.data['total_volume']:
+            raise forms.ValidationError({
+                'total_volume': [
+                    'You have selected dispense type solution, you should enter total volume']})
+        if self.data['duration']:
+            raise forms.ValidationError({
+                'duration': [
+                    'You have selected dispense type solution, you should NOT enter IV duration']})
+        if not self.data['concentration']:
+            raise forms.ValidationError({
+                'concentration': [
+                    'You have selected dispense type solution, you should enter concentration']})
+        if not self.data['times_per_day']:
+            raise forms.ValidationError({
+                'times_per_day': [
+                    'You have selected dispense type solution, you should enter times per day']})
 
     class Meta:
         model = Dispense

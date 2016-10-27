@@ -9,7 +9,7 @@ from edc_base.model.constants import DEFAULT_BASE_FIELDS
 from edc_base.views.edc_base_view_mixin import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 from edc_pharma.forms import PatientForm
-from edc_pharma.models import TABLET, SYRUP, IV
+from edc_pharma.models import TABLET, SYRUP, IV, SUPPOSITORY, CAPSULE
 
 from .models import Dispense, Patient
 
@@ -70,6 +70,10 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
             return 'dispense_label_syrup'
         elif name == IV:
             return 'dispense_label_iv'
+        elif name == CAPSULE:
+            return 'dispense_label_capsule'
+        elif name == SUPPOSITORY:
+            return 'dispense_label_suppository'
 
     @property
     def refill_query_string(self):

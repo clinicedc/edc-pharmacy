@@ -14,16 +14,16 @@ SYRUP = 'SYRUP'
 IV = 'IV'
 IM = 'IM'
 SOLUTION = 'SOLUTION'
-CAPSULES = 'CAPSULES'
-SUPPOSITORIES = 'SUPPOSITORIES'
+CAPSULE = 'CAPSULE'
+SUPPOSITORY = 'SUPPOSITORY'
 DISPENSE_TYPES = (
     (TABLET, 'TABLET'),
     (SYRUP, 'SYRUP'),
     (IV, 'IV'),
     (IM, 'IM'),
     (SOLUTION, 'SOLUTION'),
-    (CAPSULES, 'CAPSULES'),
-    (SUPPOSITORIES, 'SUPPOSITORIES'),
+    (CAPSULE, 'CAPSULE'),
+    (SUPPOSITORY, 'SUPPOSITORY'),
 )
 
 
@@ -130,11 +130,11 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type TABLET, CAPSULES and or SUPPOSITORIES is chosen")
 
-    syrup_dose = models.CharField(
+    dose = models.CharField(
         max_length=20,
         blank=True,
         null=True,
-        help_text="Only required if dispense type SYRUP is chosen")
+        help_text="Only required if dispense type SYRUP or SOLUTION is chosen")
 
     times_per_day = models.IntegerField(
         blank=True,
@@ -146,17 +146,11 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type TABLET,  is chosen")
 
-    total_dosage_volume = models.CharField(
-        max_length=10,
-        blank=True,
-        null=True,
-        help_text="Only required if dispense type SYRUP, IM, IV is chosen")
-
     total_volume = models.CharField(
         max_length=10,
         blank=True,
         null=True,
-        help_text="Only required if dispense type IV and or IM is chosen")
+        help_text="Only required if dispense type SYRUP or IV and or IM is chosen")
 
     concentration = models.CharField(
         max_length=60,
@@ -164,11 +158,11 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type IV, IM, CAPSULES, SOLUTION, SUPPOSITORIES, TABLET is chosen")
 
-    iv_duration = models.CharField(
+    duration = models.CharField(
         max_length=15,
         blank=True,
         null=True,
-        help_text="Only required if dispense type IV is chosen")
+        help_text="Only required if dispense type IV and IM is chosen")
 
     prepared_datetime = models.DateTimeField(default=datetime.now)
 
@@ -205,10 +199,10 @@ class Dispense(BaseUuidModel):
                         total_number_of_tablets=self.total_number_of_tablets))
         if self.dispense_type == SYRUP:
             prescription = (
-                '{medication} {syrup_dose} dose {times_per_day} times a day '
+                '{medication} {dose} dose {times_per_day} times a day '
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
-                    syrup_dose=self.syrup_dose,
+                    dose=self.dose,
                     times_per_day=self.times_per_day,
                     total_dosage_volume=self.total_dosage_volume))
         if self.dispense_type == IV:
@@ -216,20 +210,20 @@ class Dispense(BaseUuidModel):
                 '{medication} Intravenous {iv_concentration} {iv_duration} '
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
-                    iv_duration=self.iv_duration,
+                    duration=self.duration,
                     concentration=self.concentration,
                     times_per_day=self.times_per_day,
                     total_dosage_volume=self.total_dosage_volume))
         if self.dispense_type == IM:
             prescription = (
-                '{medication} IntraMuscular {im_concentration} {im_duration} '
+                '{medication} IntraMuscular {concentration} {duration} '
                 '({total_dosage_volume})'.format(
                     medication=self.medication.name,
-                    im_duration=self.im_duration,
+                    duration=self.duration,
                     concentration=self.concentration,
                     times_per_day=self.times_per_day,
                     total_dosage_volume=self.total_dosage_volume))
-        if self.dispense_type == SUPPOSITORIES:
+        if self.dispense_type == SUPPOSITORY:
             prescription = (
                 '{medication} {number_of_suppositories} suppositories {times_per_day} times per day '
                 '({total_number_of_suppositories} suppositories)'.format(
@@ -237,7 +231,7 @@ class Dispense(BaseUuidModel):
                     number_of_suppositories=self.number_of_suppositories,
                     times_per_day=self.times_per_day,
                     total_number_of_suppositories=self.total_number_of_suppositories))
-        if self.dispense_type == CAPSULES:
+        if self.dispense_type == CAPSULE:
             prescription = (
                 '{medication} {number_of_capsules} capsules {times_per_day} times per day '
                 '({total_number_of_capsules} capsules)'.format(
@@ -269,7 +263,7 @@ class Dispense(BaseUuidModel):
             })
         elif self.dispense_type == SYRUP:
             label_context.update({
-                'number_of_teaspoons': self.syrup_dose,
+                'number_of_teaspoons': self.dose,
                 'total_dosage_volume': self.total_dosage_volume,
             })
         elif self.dispense_type == IV:
@@ -287,12 +281,12 @@ class Dispense(BaseUuidModel):
                 'concentration': self.concentration,
                 'total_dosage_volume': self.total_dosage_volume
             })
-        elif self.dispense_type == CAPSULES:
+        elif self.dispense_type == CAPSULE:
             label_context.update({
                 'concentration': self.concentration,
                 'total_dosage_volume': self.total_dosage_volume
             })
-        elif self.dispense_type == SUPPOSITORIES:
+        elif self.dispense_type == SUPPOSITORY:
             label_context.update({
                 'concentration': self.concentration,
                 'total_dosage_volume': self.total_dosage_volume
