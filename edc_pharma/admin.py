@@ -51,23 +51,14 @@ class MedicationAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('name', 'storage_instructions',)
     list_filter = ('name', )
 
-    def response_add(self, request, obj, post_url_continue=None):
-        return HttpResponseRedirect("/")
-
 
 @admin.register(Site, site=edc_pharma_admin)
 class SiteAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('protocol', 'site_code', 'telephone_number',)
     list_filter = ('site_code',)
 
-    def response_add(self, request, obj, post_url_continue=None):
-        return HttpResponseRedirect("/")
-
 
 @admin.register(Protocol, site=edc_pharma_admin)
 class ProtocolAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('number', 'name',)
     list_filter = ('number',)
-
-    def response_add(self, request, obj, post_url_continue=None):
-        return HttpResponseRedirect("/")

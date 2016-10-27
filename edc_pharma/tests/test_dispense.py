@@ -37,6 +37,7 @@ class TestDispenseTabletForm(TestCase):
     def test_with_number_of_tablets(self):
         """Test when DISPENSE TYPE:TABLET is chosen with number of tablets included"""
         dispense_form = DispenseForm(data=self.data)
+        print(dispense_form.errors)
         self.assertNotIn(
             'You have selected dispense type tablet, you should enter number of tablets',
             dispense_form.errors.get('number_of_tablets', []))
@@ -413,9 +414,11 @@ class TestDispenseModel(TestCase):
  
     def test_refill_date_logic(self):
         """Test to verify whether the refill date method returns the right date"""
+        print('I am in test_refill_date')
         self.assertEqual(self.dispense.refill_date, date.today() + relativedelta(days=16))
  
     def test_unique_date_medication_patient(self):
         """Test to verify that unique integrity in fields: patient, medication, prepared_date is maintained"""
         form = DispenseForm(data=self.data)
+        print(form.errors)
         self.assertFalse(form.is_valid())
