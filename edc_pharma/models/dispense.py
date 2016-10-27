@@ -1,117 +1,18 @@
 from datetime import datetime, date
-from django.core.validators import RegexValidator
 from django.db import models
 from simple_history.models import HistoricalRecords
-
-from edc_base.model.models import BaseUuidModel
-from edc_constants.choices import GENDER
-from edc_base.model.validators.date import date_not_future
-from edc_base.utils.age import formatted_age
 from dateutil.relativedelta import relativedelta
 
-TABLET = 'TABLET'
-SYRUP = 'SYRUP'
-IV = 'IV'
-IM = 'IM'
-SOLUTION = 'SOLUTION'
-CAPSULE = 'CAPSULE'
-SUPPOSITORY = 'SUPPOSITORY'
-DISPENSE_TYPES = (
-    (TABLET, 'TABLET'),
-    (SYRUP, 'SYRUP'),
-    (IV, 'IV'),
-    (IM, 'IM'),
-    (SOLUTION, 'SOLUTION'),
-    (CAPSULE, 'CAPSULE'),
-    (SUPPOSITORY, 'SUPPOSITORY'),
-)
+from edc_base.model.models import BaseUuidModel
 
-
-class Protocol(BaseUuidModel):
-
-    number = models.CharField(max_length=30)
-
-    name = models.CharField(max_length=200, unique=True)
-
-    def __str__(self):
-        return self.number
-
-
-class Site(BaseUuidModel):
-
-    protocol = models.ForeignKey(Protocol)
-
-    site_code = models.CharField(
-        max_length=20,
-        validators=[RegexValidator('[\d]+', 'Invalid format.')])
-
-    telephone_number = models.CharField(
-        max_length=7,
-        validators=[RegexValidator('^[2-8]{1}[0-9]{6}$', 'Invalid format.')])
-
-    def __str__(self):
-        return self.site_code
-
-
-class Patient(BaseUuidModel):
-
-    subject_identifier = models.CharField(max_length=20, unique=True)
-
-    initials = models.CharField(
-        max_length=5,
-        validators=[RegexValidator('[A-Z]{2,3}', message='Use CAPS, 2-3 letters')],
-        help_text='Format is AA or AAA')
-
-    gender = models.CharField(
-        max_length=10,
-        choices=GENDER)
-
-    dob = models.DateField(
-        blank=True,
-        null=True,
-        validators=[date_not_future])
-
-    sid = models.CharField(
-        max_length=20,
-        validators=[RegexValidator('[\d]+', 'Invalid format.')],
-    )
-
-    consent_date = models.DateTimeField(default=date.today, editable=False)
-
-    site = models.ForeignKey(Site)
-
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return '{}, ({}), Site {}'.format(self.subject_identifier, self.initials, self.site.site_code)
-
-    @property
-    def born(self):
-        return self.dob.strftime('%Y-%m-%d')
-
-    @property
-    def age(self):
-        return formatted_age(self.dob, date.today())
-
-
-class Medication(BaseUuidModel):
-
-    name = models.CharField(max_length=200)
-
-    protocol = models.ForeignKey(Protocol)
-
-    storage_instructions = models.TextField(max_length=200)
-
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        app_label = 'edc_pharma'
+from edc_pharma.models.medication import Medication
+from edc_pharma.models.patient import Patient
+from edc_pharma.choices import DISPENSE_TYPES, TABLET, SYRUP, IM, IV, SUPPOSITORY, SOLUTION, CAPSULE
 
 
 class Dispense(BaseUuidModel):
+
+    history = HistoricalRecords()
 
     date_hierarchy = '-prepared_datetime'
 
@@ -130,11 +31,11 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type TABLET, CAPSULES and or SUPPOSITORIES is chosen")
 
-    dose = models.CharField(
+    syrup_dose = models.CharField(
         max_length=20,
         blank=True,
         null=True,
-        help_text="Only required if dispense type SYRUP or SOLUTION is chosen")
+        help_text="Only required if dispense type SYRUP is chosen")
 
     times_per_day = models.IntegerField(
         blank=True,
@@ -146,11 +47,17 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type TABLET or SUPPOSITORY  is chosen")
 
+    total_dosage_volume = models.CharField(
+        max_length=10,
+        blank=True,
+        null=True,
+        help_text="Only required if dispense type SYRUP, IM, IV is chosen")
+
     total_volume = models.CharField(
         max_length=10,
         blank=True,
         null=True,
-        help_text="Only required if dispense type SYRUP or IV and or IM is chosen")
+        help_text="Only required if dispense type IV and or IM is chosen")
 
     concentration = models.CharField(
         max_length=60,
@@ -158,11 +65,11 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if dispense type IV, IM, CAPSULES, SOLUTION, SUPPOSITORIES, TABLET is chosen")
 
-    duration = models.CharField(
+    iv_duration = models.CharField(
         max_length=15,
         blank=True,
         null=True,
-        help_text="Only required if dispense type IV and IM is chosen")
+        help_text="Only required if dispense type IV is chosen")
 
     prepared_datetime = models.DateTimeField(default=datetime.now)
 
@@ -202,7 +109,7 @@ class Dispense(BaseUuidModel):
                 '{medication} {dose} dose {times_per_day} times a day '
                 '({total_volume})'.format(
                     medication=self.medication.name,
-                    dose=self.dose,
+                    syrup_dose=self.syrup_dose,
                     times_per_day=self.times_per_day,
                     total_volume=self.total_volume))
         if self.dispense_type == IV:
@@ -210,7 +117,7 @@ class Dispense(BaseUuidModel):
                 '{medication} Intravenous {concentration} {duration} '
                 '({total_volume})'.format(
                     medication=self.medication.name,
-                    duration=self.duration,
+                    iv_duration=self.iv_duration,
                     concentration=self.concentration,
                     times_per_day=self.times_per_day,
                     total_volume=self.total_volume))
@@ -219,7 +126,7 @@ class Dispense(BaseUuidModel):
                 '{medication} IntraMuscular {concentration} {duration} '
                 '({total_volume})'.format(
                     medication=self.medication.name,
-                    duration=self.duration,
+                    im_duration=self.im_duration,
                     concentration=self.concentration,
                     times_per_day=self.times_per_day,
                     total_volume=self.total_volume))

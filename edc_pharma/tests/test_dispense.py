@@ -2,8 +2,8 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase
 
-from edc_pharma.models import TABLET, SYRUP, IV, IM, CAPSULES, SOLUTION
-from edc_pharma.forms import DispenseForm
+from edc_pharma.choices import TABLET, SYRUP, IV
+from edc_pharma.forms.dispense_form import DispenseForm
 from edc_pharma.tests.factories.factory import SiteFactory, PatientFactory, ProtocolFactory,\
     MedicationFactory, DispenseFactory
 
@@ -37,6 +37,7 @@ class TestDispenseTabletForm(TestCase):
     def test_with_number_of_tablets(self):
         """Test when DISPENSE TYPE:TABLET is chosen with number of tablets included"""
         dispense_form = DispenseForm(data=self.data)
+        print(dispense_form.errors)
         self.assertNotIn(
             'You have selected dispense type tablet, you should enter number of tablets',
             dispense_form.errors.get('number_of_tablets', []))
@@ -256,20 +257,20 @@ class TestDispenseSyrupForm(TestCase):
             'You have selected dispense type syrup, you should enter times per day',
             dispense_form.errors.get('times_per_day', []))
 
-#     def test_with_iv_concentration(self):
-#         """Test when DISPENSE TYPE:SYRUP is chosen with concentration not included"""
-#         self.data['concentration'] = '50mg/L'
-#         dispense_form = DispenseForm(data=self.data)
-#         self.assertIn(
-#             'You have selected dispense type syrup, you should NOT enter concentration',
-#             dispense_form.errors.get('concentration', []))
-# 
-#     def test_without_iv_concentration(self):
-#         """Test when DISPENSE TYPE:SYRUP is chosen with concentration not included"""
-#         dispense_form = DispenseForm(data=self.data)
-#         self.assertNotIn(
-#             'You have selected dispense type syrup, you should NOT enter concentration',
-#             dispense_form.errors.get('concentration', []))
+    def test_with_iv_concentration(self):
+        """Test when DISPENSE TYPE:SYRUP is chosen with concentration not included"""
+        self.data['concentration'] = '50mg/L'
+        dispense_form = DispenseForm(data=self.data)
+        self.assertIn(
+            'You have selected dispense type syrup, you should NOT enter concentration',
+            dispense_form.errors.get('concentration', []))
+
+    def test_without_iv_concentration(self):
+        """Test when DISPENSE TYPE:SYRUP is chosen with concentration not included"""
+        dispense_form = DispenseForm(data=self.data)
+        self.assertNotIn(
+            'You have selected dispense type syrup, you should NOT enter concentration',
+            dispense_form.errors.get('concentration', []))
 
 
 class TestDispenseIVForm(TestCase):
@@ -372,7 +373,7 @@ class TestDispenseIVForm(TestCase):
         self.assertIn(
             'You have selected dispense type IV, you should NOT enter times per day',
             dispense_form.errors.get('times_per_day', []))
- 
+
     def test_without_iv_concentration(self):
         """Test when DISPENSE TYPE:SYRUP is chosen with concentration not included"""
         self.data['concentration'] = None
@@ -380,15 +381,15 @@ class TestDispenseIVForm(TestCase):
         self.assertIn(
             'You have selected dispense type IV, you should enter IV concentration',
             dispense_form.errors.get('concentration', []))
- 
+
     def test_with_iv_concentration(self):
         """Test when DISPENSE TYPE:SYRUP is chosen with concentration included"""
         dispense_form = DispenseForm(data=self.data)
         self.assertNotIn(
             'You have selected dispense type IV, you should enter IV concentration',
             dispense_form.errors.get('concentration', []))
- 
- 
+
+
 class TestDispenseModel(TestCase):
     """Setup data with all required fields for DISPENSE TYPE: IV"""
     def setUp(self):
@@ -410,12 +411,14 @@ class TestDispenseModel(TestCase):
             'concentration': None,
             'prepared_date': date.today(),
             'prepared_datetime': datetime.now()}
- 
+
     def test_refill_date_logic(self):
         """Test to verify whether the refill date method returns the right date"""
+        print('I am in test_refill_date')
         self.assertEqual(self.dispense.refill_date, date.today() + relativedelta(days=16))
- 
+
     def test_unique_date_medication_patient(self):
         """Test to verify that unique integrity in fields: patient, medication, prepared_date is maintained"""
         form = DispenseForm(data=self.data)
+        print(form.errors)
         self.assertFalse(form.is_valid())

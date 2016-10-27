@@ -5,13 +5,14 @@ from django.core.paginator import Paginator, EmptyPage
 from django.urls.base import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
+
 from edc_base.model.constants import DEFAULT_BASE_FIELDS
 from edc_base.views.edc_base_view_mixin import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
-from edc_pharma.forms import PatientForm
-from edc_pharma.models import TABLET, SYRUP, IV, SUPPOSITORY, CAPSULE
 
-from .models import Dispense, Patient
+from edc_pharma.forms.patient_form import PatientForm
+from edc_pharma.choices import TABLET, SYRUP, IV, IM, SUPPOSITORY
+from edc_pharma.models.dispense import Dispense, Patient
 
 
 class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
@@ -42,7 +43,6 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         if self.kwargs.get('dispense_pk'):
-            print("hello")
             self.print_label()
         if not self.patient:
             try:
@@ -70,8 +70,8 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
             return 'dispense_label_syrup'
         elif name == IV:
             return 'dispense_label_iv'
-        elif name == CAPSULE:
-            return 'dispense_label_capsule'
+        elif name == IM:
+            return 'dispense_label_im'
         elif name == SUPPOSITORY:
             return 'dispense_label_suppository'
 

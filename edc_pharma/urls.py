@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from edc_base.views import LoginView, LogoutView
 from edc_pharma.admin_site import edc_pharma_admin
-from edc_pharma.views import HomeView
+from edc_pharma.views.home_view import HomeView
 
 urlpatterns = [
     url(r'login', LoginView.as_view(), name='login_url'),
