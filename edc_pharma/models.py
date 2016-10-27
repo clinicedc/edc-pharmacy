@@ -120,7 +120,7 @@ class Dispense(BaseUuidModel):
     medication = models.ForeignKey(Medication)
 
     dispense_type = models.CharField(
-        max_length=8,
+        max_length=15,
         choices=DISPENSE_TYPES,
         default=TABLET
     )
@@ -144,7 +144,7 @@ class Dispense(BaseUuidModel):
     total_number_of_tablets = models.IntegerField(
         blank=True,
         null=True,
-        help_text="Only required if dispense type TABLET,  is chosen")
+        help_text="Only required if dispense type TABLET or SUPPOSITORY  is chosen")
 
     total_volume = models.CharField(
         max_length=10,
@@ -200,45 +200,45 @@ class Dispense(BaseUuidModel):
         if self.dispense_type == SYRUP:
             prescription = (
                 '{medication} {dose} dose {times_per_day} times a day '
-                '({total_dosage_volume})'.format(
+                '({total_volume})'.format(
                     medication=self.medication.name,
                     dose=self.dose,
                     times_per_day=self.times_per_day,
-                    total_dosage_volume=self.total_dosage_volume))
+                    total_volume=self.total_volume))
         if self.dispense_type == IV:
             prescription = (
-                '{medication} Intravenous {iv_concentration} {iv_duration} '
-                '({total_dosage_volume})'.format(
+                '{medication} Intravenous {concentration} {duration} '
+                '({total_volume})'.format(
                     medication=self.medication.name,
                     duration=self.duration,
                     concentration=self.concentration,
                     times_per_day=self.times_per_day,
-                    total_dosage_volume=self.total_dosage_volume))
+                    total_volume=self.total_volume))
         if self.dispense_type == IM:
             prescription = (
                 '{medication} IntraMuscular {concentration} {duration} '
-                '({total_dosage_volume})'.format(
+                '({total_volume})'.format(
                     medication=self.medication.name,
                     duration=self.duration,
                     concentration=self.concentration,
                     times_per_day=self.times_per_day,
-                    total_dosage_volume=self.total_dosage_volume))
+                    total_volume=self.total_volume))
         if self.dispense_type == SUPPOSITORY:
             prescription = (
-                '{medication} {number_of_suppositories} suppositories {times_per_day} times per day '
-                '({total_number_of_suppositories} suppositories)'.format(
+                '{medication} {number_of_tablets} suppository {times_per_day} times per day '
+                '({total_number_of_tablets} suppository)'.format(
                     medication=self.medication.name,
-                    number_of_suppositories=self.number_of_suppositories,
+                    number_of_tablets=self.number_of_tablets,
                     times_per_day=self.times_per_day,
-                    total_number_of_suppositories=self.total_number_of_suppositories))
+                    total_number_of_tablets=self.total_number_of_tablets))
         if self.dispense_type == CAPSULE:
             prescription = (
-                '{medication} {number_of_capsules} capsules {times_per_day} times per day '
-                '({total_number_of_capsules} capsules)'.format(
+                '{medication} {number_of_tablets} capsules {times_per_day} times per day '
+                '({total_number_of_tablets} capsules)'.format(
                     medication=self.medication.name,
-                    number_of_capsules=self.number_of_capsules,
+                    number_of_tablets=self.number_of_tablets,
                     times_per_day=self.times_per_day,
-                    total_number_of_capsules=self.total_number_of_capsules))
+                    total_number_of_tablets=self.total_number_of_tablets))
         return prescription
 
     @property
@@ -264,32 +264,32 @@ class Dispense(BaseUuidModel):
         elif self.dispense_type == SYRUP:
             label_context.update({
                 'number_of_teaspoons': self.dose,
-                'total_dosage_volume': self.total_dosage_volume,
+                'total_volume': self.total_volume,
             })
         elif self.dispense_type == IV:
             label_context.update({
                 'concentration': self.concentration,
-                'total_dosage_volume': self.total_dosage_volume
+                'total_volume': self.total_volume
             })
         elif self.dispense_type == IM:
             label_context.update({
                 'concentration': self.concentration,
-                'total_dosage_volume': self.total_dosage_volume
+                'total_volume': self.total_volume
             })
         elif self.dispense_type == SOLUTION:
             label_context.update({
                 'concentration': self.concentration,
-                'total_dosage_volume': self.total_dosage_volume
+                'total_volume': self.total_volume
             })
         elif self.dispense_type == CAPSULE:
             label_context.update({
                 'concentration': self.concentration,
-                'total_dosage_volume': self.total_dosage_volume
+                'total_volume': self.total_volume
             })
         elif self.dispense_type == SUPPOSITORY:
             label_context.update({
                 'concentration': self.concentration,
-                'total_dosage_volume': self.total_dosage_volume
+                'total_volume': self.total_volume
             })
         return label_context
 
