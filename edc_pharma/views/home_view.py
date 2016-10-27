@@ -72,7 +72,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
         elif name == IV:
             return 'dispense_label_iv'
         elif name == IM:
-            return 'dispense_label_im'
+            return 'dispense_label_iv'
         elif name == SUPPOSITORY:
             return 'dispense_label_suppository'
         elif name == SOLUTION:
