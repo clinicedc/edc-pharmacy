@@ -66,6 +66,8 @@ class Dispense(BaseUuidModel):
         help_text="Only required if dispense type IV or IM is chosen")
 
     weight = models.DecimalField(
+        decimal_places=2,
+        max_digits=5,
         blank=True,
         null=True,
         help_text="Only required if IV or IM is chosen")
