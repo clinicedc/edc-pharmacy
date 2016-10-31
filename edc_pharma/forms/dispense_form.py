@@ -272,7 +272,7 @@ class DispenseForm(forms.ModelForm):
         if self.data['duration']:
             raise forms.ValidationError({
                 'duration': [
-                    'You have selected dispense type solution, you should NOT enter IV duration']})
+                    'You have selected dispense type solution, you should NOT enter duration']})
         if not self.data['concentration']:
             raise forms.ValidationError({
                 'concentration': [
@@ -281,6 +281,10 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'times_per_day': [
                     'You have selected dispense type solution, you should enter times per day']})
+        if self.data['weight']:
+            raise forms.ValidationError({
+                'weight': [
+                    'You have selected dispense type solution, you should NOT enter weight']})
 
     class Meta:
         model = Dispense
