@@ -26,7 +26,7 @@ class TestDispenseIMForm(TestCase):
             'duration': '2hours',
             'times_per_day': None,
             'concentration': '3mg/L',
-            'weight': None,
+            'weight': 2.6,
             'prepared_datetime': datetime.today()}
 
     def test_valid_form(self):
@@ -141,15 +141,15 @@ class TestDispenseIMForm(TestCase):
 
     def test_with_weight(self):
         """Test when DISPENSE TYPE:IM is chosen with weight included"""
-        self.data['weight'] = 2.6
         dispense_form = DispenseForm(data=self.data)
-        self.assertIn(
-            'You have selected dispense type IM, you should NOT enter weight',
+        self.assertNotIn(
+            'You have selected dispense type IM, you should enter weight',
             dispense_form.errors.get('weight', []))
 
     def test_without_weight(self):
         """Test when DISPENSE TYPE:IM is chosen with weight not included"""
+        self.data['weight'] = None
         dispense_form = DispenseForm(data=self.data)
-        self.assertNotIn(
-            'You have selected dispense type IM, you should NOT enter weight',
+        self.assertIn(
+            'You have selected dispense type IM, you should enter weight',
             dispense_form.errors.get('weight', []))

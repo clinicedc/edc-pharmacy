@@ -213,10 +213,10 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'times_per_day': [
                     'You have selected dispense type IV, you should NOT enter times per day']})
-        if self.data['weight']:
+        if not self.data['weight']:
             raise forms.ValidationError({
                 'weight': [
-                    'You have selected dispense type IV, you should NOT enter weight']})
+                    'You have selected dispense type IV, you should enter weight']})
 
     def validate_im(self):
         if self.data['dose']:
@@ -247,10 +247,10 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'times_per_day': [
                     'You have selected dispense type IM, you should NOT enter times per day']})
-        if self.data['weight']:
+        if not self.data['weight']:
             raise forms.ValidationError({
                 'weight': [
-                    'You have selected dispense type IM, you should NOT enter weight']})
+                    'You have selected dispense type IM, you should enter weight']})
 
     def validate_solution(self):
         if not self.data['dose']:

@@ -102,7 +102,7 @@ class TestDispenseTabletForm(TestCase):
         self.data['total_volume'] = '300mL'
         dispense_form = DispenseForm(data=self.data)
         self.assertIn(
-            'You have selected dispense type tablet, you should NOT enter total dosage volume',
+            'You have selected dispense type tablet, you should NOT enter total volume',
             dispense_form.errors.get('total_volume', []))
 
     def test_without_total_volume(self):
