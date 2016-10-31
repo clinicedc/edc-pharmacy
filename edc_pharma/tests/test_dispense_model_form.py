@@ -22,12 +22,13 @@ class TestDispenseModel(TestCase):
             'dispense_type': TABLET,
             'number_of_tablets': 1,
             'total_number_of_tablets': 30,
-            'syrup_dose': None,
-            'total_dosage_volume': None,
-            'iv_duration': None,
+            'dose': None,
+            'total_volume': None,
+            'duration': None,
             'times_per_day': 1,
             'concentration': None,
             'prepared_date': date.today(),
+            'weight': None,
             'prepared_datetime': datetime.now()}
 
     def test_refill_date_logic(self):
