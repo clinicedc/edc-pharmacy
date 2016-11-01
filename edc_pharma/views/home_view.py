@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
 
 from edc_base.model.constants import DEFAULT_BASE_FIELDS
-from edc_base.views.edc_base_view_mixin import EdcBaseViewMixin
+from edc_base.view_mixins import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 
 from edc_pharma.forms.patient_form import PatientForm
