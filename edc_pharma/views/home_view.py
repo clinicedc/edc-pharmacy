@@ -76,7 +76,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
         elif name == SUPPOSITORY:
             return 'dispense_label_suppository'
         elif name == SOLUTION:
-            return 'dispense_label_solution'
+            return 'dispense_label_syrup'
         elif name == CAPSULE:
             return 'dispense_label_capsule'
 
