@@ -1,11 +1,11 @@
 ^XA
-^FO70,65^A0N,20,25^FDBOTSWANA HARVARD PARTNERSHIP 			SITE: ${site}^FS
-^FO70,90^A0N,20,25^FDPRIVATE BAG BO 320, GABORONE  		TELEPHONE: ${telephone_number}^FS
-^FO70,95^FS
-^FO70,115^A0N,20,25^FDPID: ${patient}  	        	   SID: ${sid}               INITIALS: ${initials}^FS
-^FO70,155^A0N,20,25^FDDrug Name/Strength: ${drug_name}         ^FS
-^FO70,185^A0N,15,25^FDDosage: ${number_of_teaspoons} Teaspoons(s) 	${times_per_day} Time(s) a Day with or  without food^FS
-^FO70,225^A0N,20,25^FDDate of Prep.: ${prepared_datetime}  Prep. By: ${prepared_by}  Qnty Disp: ${total_volume}^FS
-^FO70,255^A0N,30,35^FDStorage instructions: ${storage_instructions} ^FS
-^FO70,285^A0N,35,30^FDFOR INVESTIGATIONAL USE ONLY (PROTOCOL NUMBER ${protocol})^FS
+^FO90,65^A0N,20,20^FDBOTSWANA HARVARD PARTNERSHIP 			SITE: ${site}^FS
+^FO90,90^A0N,20,20^FDPRIVATE BAG BO 320, GABORONE  		TELEPHONE: ${telephone_number}^FS
+^FO90,95^FS
+^FO90,115^A0N,20,20^FDPID: ${patient}  	        	   SID: ${sid}               INITIALS: ${initials}^FS
+^FO90,155^A0N,20,20^FDDrug Name/Strength: ${drug_name}         ^FS
+^FO90,185^A0N,15,20^FDDosage: ${number_of_teaspoons} Teaspoons(s) 	${times_per_day} Time(s) a Day with or  without food^FS
+^FO90,225^A0N,20,20^FDDate of Prep.: ${prepared_datetime}  Prep. By: ${prepared_by}  Qnty Disp: ${total_volume}^FS
+^FO90,255^A0N,30,23^FDStorage instructions: ${storage_instructions} ^FS
+^FO90,285^A0N,35,25^FDFOR INVESTIGATIONAL USE ONLY (PROTOCOL NUMBER ${protocol})^FS
 ^XZ
