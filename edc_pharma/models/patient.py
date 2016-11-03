@@ -17,7 +17,7 @@ class Patient(BaseUuidModel):
 
     initials = models.CharField(
         max_length=5,
-        validators=[RegexValidator('[A-Z]{2,3}', message='Use CAPS, 2-3 letters')],
+        validators=[RegexValidator(r'^[A-Z]{2,3}$', message='Use CAPS, 2-3 letters')],
         help_text='Format is AA or AAA')
 
     gender = models.CharField(
