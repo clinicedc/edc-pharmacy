@@ -27,6 +27,10 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('patient', 'medication', 'prepared_datetime',)
     list_filter = ('prepared_datetime', 'medication',)
     inlines = []
+    search_fields = ('patient', 'medication')
+    #list_display_links = ('dashboard', )
+    #list_display = ('dashboard', 'subject_identifier', 'report_datetime', 'age', 'slh_identifier', 'cm_identifier')
+    #list_filter = ('report_datetime', )
 
     radio_fields = {'dispense_type': admin.VERTICAL}
 
@@ -44,6 +48,7 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('initials', 'consent_date',)
     list_filter = ('consent_date',)
     inlines = []
+    search_fields = ('initials', 'consent_date')
 
     radio_fields = {'gender': admin.VERTICAL}
 
@@ -57,6 +62,7 @@ class MedicationAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('name', 'storage_instructions',)
     list_filter = ('name', )
     inlines = []
+    search_fields = ('name', 'protocol')
 
 
 @admin.register(Site, site=edc_pharma_admin)
@@ -64,6 +70,7 @@ class SiteAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('protocol', 'site_code', 'telephone_number',)
     list_filter = ('site_code',)
     inlines = []
+    search_fields = ('protocol', 'site-code')
 
 
 @admin.register(Protocol, site=edc_pharma_admin)
@@ -71,6 +78,7 @@ class ProtocolAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('number', 'name',)
     list_filter = ('number',)
     inlines = []
+    search_fields = ('number', 'name')
 
 
 admin.site.register(Patient, SimpleHistoryAdmin)
