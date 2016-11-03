@@ -28,6 +28,8 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_filter = ('prepared_datetime', 'medication',)
     inlines = []
 
+    radio_fields = {'dispense_type': admin.VERTICAL}
+
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(
             reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
@@ -42,6 +44,8 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('initials', 'consent_date',)
     list_filter = ('consent_date',)
     inlines = []
+
+    radio_fields = {'gender': admin.VERTICAL}
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(
