@@ -53,7 +53,10 @@
             </div>
 			{% else %}
             <div class="panel panel-success"> 
-              <div class="panel-heading"><b>Patient:</b> <a title="Edit patient information" href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}">{{ patient.subject_identifier }}</a> <b>Intials:</b> {{ patient.initials }} <b>Gender:</b> {{ patient.get_gender_display }}</div>
+              <div class="panel-heading"><b>Patient:</b> <a title="Edit patient information" href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}">{{ patient.subject_identifier }}</a> <b>Intials:</b> {{ patient.initials }} <b>Gender:</b> {{ patient.get_gender_display }}
+              <a href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}" class="btn btn-sm btn-default pull-right" role="button">Edit</a>
+              </div>
+             
             </div>
 			{% endif %}
             <div class="panel panel-default"> 
