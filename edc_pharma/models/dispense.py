@@ -195,6 +195,7 @@ class Dispense(BaseUuidModel):
             })
         elif self.dispense_type == SOLUTION:
             label_context.update({
+                'number_of_teaspoons': self.dose,
                 'concentration': self.concentration,
                 'total_volume': self.total_volume
             })
