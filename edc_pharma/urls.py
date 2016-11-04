@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^(?P<subject_identifier>[-\w]+)/(?P<page>\d+)/$', HomeView.as_view(), name='home_url'),
     url(r'^(?P<subject_identifier>[-\w]+)/$', HomeView.as_view(), name='home_url'),
     url(r'^', HomeView.as_view(), name='home_url'),
+    url(r'^patient_record/(?P<dispense_pk>[-\w]+)/$', PatientRecordView.as_view(), name='patient_url'),
 ]
