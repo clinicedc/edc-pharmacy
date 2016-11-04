@@ -4,93 +4,46 @@
   {% load crispy_forms_tags %}
 
   {% block extra-scripts %}
-    <script type="text/javascript" src="{% static "edc_pharma/js/edc_pharma.js" %}"></script>
+    <script type="text/javascript" src="{% static "" %}"></script>
   {% endblock extra-scripts %}
 
   {% block main %}
 
    <div class="container">
-      
-   {% if not patient %}
+   
       <div class="col-md-12">
-   {% else %}   
-      <div class="col-md-3">
-   {% endif %}
-          <div class="panel-group">
+        <div class="panel-group">
           <div class="panel panel-default">
-            <div class="panel-body">{% crispy form %}
-            <a href="{% url 'edc_pharma_admin:edc_pharma_patient_add' %}" class="btn btn-sm btn-default" role="button">Add Patient</a>
+            <div class="panel-body"> {% crispy form %}
+				<a href="{% url 'edc_pharma_admin:edc_pharma_patient_add' %}" class="btn btn-sm btn-default" role="button">Add Patient</a>
             </div>
-
-          </div>
-          
-            <div class="panel panel-warning">
-              <div class="panel-heading">Administration</div>
-                  <div class="panel-body">
-                      <ul id="nav-pill-home" class="nav nav-pills nav-stacked">
-                         <li><a href="{% url 'edc_pharma_admin:index' %}">Admin<span class="glyphicon glyphicon-wrench pull-right" aria-hidden="true"></span></a></li>
-                         <li><a href="{% url 'edc-label:home_url' %}">Label Printers and Templates</a></li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
+          </div>          
+        </div>
       </div>
 
-
-   {% if not patient %}
       <div class="col-md-12">
-   {% else %}   
-      <div class="col-md-9">
-   {% endif %}
-
-        <div class="panel-group">
-          {% if patient %}
-          	{% if patient.age %}
-            <div class="panel panel-success"> 
-              <div class="panel-heading"><b>Patient:</b> <a title="Edit patient information" href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}">{{ patient.subject_identifier }}</a> <b>Intials:</b> {{ patient.initials }} <b>Gender:</b> {{ patient.get_gender_display }} <b>DOB:</b> {{ patient.born }}  <b>Age:</b> {{ patient.age }}
-                 <a href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}" class="btn btn-sm btn-default pull-right" role="button">Edit</a>
-            </div>
-            </div>
-			{% else %}
-            <div class="panel panel-success"> 
-              <div class="panel-heading"><b>Patient:</b> <a title="Edit patient information" href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}">{{ patient.subject_identifier }}</a> <b>Intials:</b> {{ patient.initials }} <b>Gender:</b> {{ patient.get_gender_display }}
-              <a href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}" class="btn btn-sm btn-default pull-right" role="button">Edit</a>
-              </div>
-             
-            </div>
-			{% endif %}
-            <div class="panel panel-default"> 
-              <div class="panel-heading clearfix">Dispensing history
-                <a href="{% url 'edc_pharma_admin:edc_pharma_dispense_add' %}?patient={{ patient.pk }}" class="btn btn-sm btn-default pull-right" role="button">Add</a>
-                {% if dispenses %}
-                   <a href="{% url 'edc_pharma_admin:edc_pharma_dispense_add' %}?{{ recent_dispense_querystring }}" class="btn btn-sm btn-default pull-right" role="button">Refill</a>
-                {% endif %}
-              </div>
+        <div class="panel panel-success">
+          <div class="panel-heading"> Registered Subjects </div>
             <div class="panel-body">
-              <table id="tbl-dispense-data" class="table table-striped table-responsive">
-                <thead><th>Prepared Date</th><th>Prescription</th><th>Refill On</th><th></th></thead>
-                <tbody>
-                {% if not dispenses %}
-                  <tr><td colspan=3><i>No history</i></td></tr>
-                {% endif %}
-                {% for dispense in dispenses %}
-                  <tr> 
-                    <td><a href="{% url 'edc_pharma_admin:edc_pharma_dispense_change' dispense.pk %}">{{ dispense.prepared_datetime|date:"Y-m-d H:i"}}</a></td>
-                    <td>{{ dispense.prescription }}</td>
-                    <td>{{ dispense.refill_date|date:"D, d M Y" }}</td>
-                    <td><a href="{% url 'home_url' dispense.pk %}" class="btn btn-sm btn-default">Print</a></td>                            
-                    </tr>
-                {% endfor %}
-                </tbody>
-              </table>
+                <table id="tbl-dispense-data" class="table table-striped table-responsive">
+        			<thead><th> Subject Identifier </th><th> Initials </th> <th> Gender </th> <th> Age </th> <th> Consent date </th> <th></th></thead>
+        				<tbody>
+      							{% for patient in patients %}
+          					<tr> 
+            					<td><a href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}">{{ patient.subject_identifier }}</a></td>
+            					<td>{{ patient.initials }}</td>
+            					<td>{{ patient.gender }}</td>
+            					<td> {% if patient.age %} {{ patient.age }} {% endif %}</td>
+            					<td>{{ patient.consent_date }}</td>
+            					<td> <a href="{% url 'patient_url' patient.subject_identifier %}" class="btn btn-sm btn-default" role="button"> Dispense Record</a> </td>                    
+            				</tr>
+     							{% endfor %}
+     					<t/body>
+     			</table>
             </div>
-            {% if dispenses %}
-              <div class="text-center">{% include 'edc_pharma/paginator_row.html' %}</div>
-            {% endif %}           
-            </div>
-          {% endif %} <!--- end if patient --->
-        </div>                        
-      </div>  
+        </div>
+      </div>
 
-  </div> <!-- container -->
+  </div>
+
 {% endblock main %}
