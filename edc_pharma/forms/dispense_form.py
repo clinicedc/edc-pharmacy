@@ -217,6 +217,10 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'weight': [
                     'You have selected dispense type IV, you should enter weight']})
+        if not self.data['infusion']:
+            raise forms.ValidationError({
+                'infusion': [
+                    'You have selected dispense type IV, you should enter infusion']})
 
     def validate_im(self):
         if self.data['dose']:
