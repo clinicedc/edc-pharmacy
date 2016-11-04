@@ -12,7 +12,7 @@
   <div class="container">
   	<div class="panel panel-info">
     	<div class="panel-heading">
-    	  {% if dispenses %}
+    	 {% if dispenses %}
     	 	<a href="{% url 'edc_pharma_admin:edc_pharma_dispense_add' %}?{{ recent_dispense_querystring }}" class="btn btn-sm btn-default pull-right" role="button">Refill</a>
     	 {% endif %}
     	 <a href="{% url 'edc_pharma_admin:edc_pharma_dispense_add' %}?patient={{ patient.pk }}" class="btn btn-sm btn-default pull-right" role="button">Add</a>

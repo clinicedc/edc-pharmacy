@@ -28,7 +28,10 @@ class PatientRecordView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(PatientRecordView, self).get_context_data(**kwargs)
-        self.patient = Patient.objects.get(subject_identifier=kwargs['subject_identifier'])
+        try:
+            self.patient = Patient.objects.get(subject_identifier=kwargs['subject_identifier'])
+        except Patient.DoesNotExist:
+            pass
         dispenses = Dispense.objects.filter(patient=self.patient).order_by('-prepared_datetime')
         if dispenses:
             context.update({'dispenses': self.dispenses})
