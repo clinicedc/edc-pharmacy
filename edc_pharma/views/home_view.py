@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage
 from django.urls.base import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
@@ -8,7 +7,6 @@ from edc_base.view_mixins import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 
 from edc_pharma.forms.patient_form import PatientForm
-
 from edc_pharma.models.dispense import Patient
 
 
