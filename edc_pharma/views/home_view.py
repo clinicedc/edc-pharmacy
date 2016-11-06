@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage
 from django.urls.base import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
@@ -11,10 +12,9 @@ from edc_pharma.models.dispense import Patient
 
 
 class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
-
     template_name = 'edc_pharma/home.html'
     form_class = PatientForm
-    paginate_by = 2
+    paginate_by = 4
 
     def __init__(self, **kwargs):
         self.patient = Patient.objects.all().order_by('-consent_date')
@@ -36,8 +36,18 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context.update({
-            'patients': self.patient})
+            'patients': self.patients})
         return context
+
+    def patients(self):
+        """Returns a patients queryset after pagination."""
+        patients = self.patient
+        paginator = Paginator(patients, self.paginate_by)
+        try:
+            patients = paginator.page(self.kwargs.get('page', 1))
+        except EmptyPage:
+            patients = paginator.page(paginator.num_pages)
+        return patients
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

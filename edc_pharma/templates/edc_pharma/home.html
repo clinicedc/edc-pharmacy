@@ -44,6 +44,44 @@
         </div>
       </div>
       
+    <div class="paginator" style="text-align:center">
+     <span class="step-links">
+     	{% if patients %}
+    	 <a href="{% url 'home_url' page=1 %}" class="btn btn-sm btn-default"><<</a>
+    	{% else %}
+    	<a class="btn btn-sm disabled btn-default"><<</a>
+    	{% endif %}
+    	
+        {% if patients.has_previous %}
+            <a href="{% url 'home_url' page=patients.previous_page_number %}" class="btn btn-sm btn-default"><</a>
+        {% else %}
+        	<a class="btn btn-sm disabled btn-default"><</a>
+        {% endif %}
+
+		{% if patients %}
+        	<span class="text small">
+            	Page {{ patients.number }} of {{ patients.paginator.num_pages }}
+        	</span>
+        {% else %}
+        	<span class="text small">
+            	Page 1 of 1
+        	</span>        
+        {% endif %}
+        
+        {% if patients.has_next %}
+            <a href="{% url 'home_url' page=patients.next_page_number %}" class="btn btn-sm btn-default">></a>
+        {% else %}
+        	<a class="btn btn-sm disabled btn-default">></a>
+        {% endif %}
+        
+        {% if patients %}
+        	<a href="{% url 'home_url' page=patients.paginator.num_pages %}" class="btn btn-sm btn-default">>></a>
+        {% else %}
+        	<a class="btn btn-sm disabled btn-default">>></a>
+        {% endif %}       
+    </span>
+    </div>
+      
   </div>
 
 {% endblock main %}
