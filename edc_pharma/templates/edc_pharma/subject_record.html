@@ -10,6 +10,7 @@
   {% block main %}
 
   <div class="container">
+  
   	<div class="panel panel-info">
     	<div class="panel-heading">
     	 {% if dispenses %}
@@ -37,12 +38,50 @@
                     	<td>{{ dispense.prescription }}</td>
                     	<td>{{ dispense.refill_date|date:"D, d M Y" }}</td>
                    	 	<td><a href="{% url 'patient_url' dispense.pk %}" class="btn btn-sm btn-default">Print</a></td>                         
-                    </tr>        		
-        				{% endfor %}
+                    </tr>   
+                    	{% endfor %}     		
         			</tbody>
         	</table>
         </div>
     </div>
+    
+    <div class="paginator">
+     <span class="step-links">
+     	{% if dispenses %}
+    	 <a href="{% url 'patient' subject_identifier=patient.subject_identifier page=1 %}" class="btn btn-sm btn-default"><<</a>
+    	{% else %}
+    	<a class="btn btn-sm disabled btn-default"><<</a>
+    	{% endif %}
+    	
+        {% if dispenses.has_previous %}
+            <a href="{% url 'patient' subject_identifier=patient.subject_identifier page=dispenses.previous_page_number %}" class="btn btn-sm btn-default"><</a>
+        {% else %}
+        	<a class="btn btn-sm disabled btn-default"><</a>
+        {% endif %}
 
+		{% if dispenses %}
+        	<span class="text small">
+            	Page {{ dispenses.number }} of {{ dispenses.paginator.num_pages }}
+        	</span>
+        {% else %}
+        	<span class="text small">
+            	Page 1 of 1
+        	</span>        
+        {% endif %}
+        
+        {% if dispenses.has_next %}
+            <a href="{% url 'patient' subject_identifier=patient.subject_identifier page=dispenses.next_page_number %}" class="btn btn-sm btn-default">></a>
+        {% else %}
+        	<a class="btn btn-sm disabled btn-default">></a>
+        {% endif %}
+        
+        {% if dispenses %}
+        	<a href="{% url 'patient' subject_identifier=patient.subject_identifier page=dispenses.paginator.num_pages %}" class="btn btn-sm btn-default">>></a>
+        {% else %}
+        	<a class="btn btn-sm disabled btn-default">>></a>
+        {% endif %}       
+    </span>
+    </div>
+    
   </div> <!-- container -->
 {% endblock main %}

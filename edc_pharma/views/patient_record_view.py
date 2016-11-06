@@ -1,7 +1,8 @@
 from urllib.parse import urlencode
 
-from django.urls.base import reverse
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from edc_base.model.constants import DEFAULT_BASE_FIELDS
@@ -16,11 +17,7 @@ from edc_pharma.models.patient import Patient
 
 class PatientRecordView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
     template_name = 'edc_pharma/subject_record.html'
-    paginate_by = 2
-    #paginator_template = 'edc_pharma/paginator_row.html'
-
-#     def get_success_url(self):
-#         return reverse('patient_url')
+    paginate_by = 5
 
     def __init__(self, **kwargs):
         self.patient = None
@@ -89,3 +86,7 @@ class PatientRecordView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
         except AttributeError:
             query_string = ''
         return query_string
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PatientRecordView, self).dispatch(*args, **kwargs)

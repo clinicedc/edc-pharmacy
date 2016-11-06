@@ -15,8 +15,6 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
     template_name = 'edc_pharma/home.html'
     form_class = PatientForm
     paginate_by = 2
-    paginator_template = 'edc_pharma/paginator_row.html'
-    number_of_copies = 1
 
     def __init__(self, **kwargs):
         self.patient = Patient.objects.all().order_by('-consent_date')
