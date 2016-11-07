@@ -25,6 +25,8 @@ class PatientRecordView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(PatientRecordView, self).get_context_data(**kwargs)
+        if self.kwargs.get('dispense_pk'):
+            self.print_label()
         try:
             self.patient = Patient.objects.get(subject_identifier=kwargs['subject_identifier'])
         except Patient.DoesNotExist:
