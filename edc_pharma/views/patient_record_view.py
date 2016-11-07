@@ -18,6 +18,7 @@ from edc_pharma.models.patient import Patient
 class PatientRecordView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
     template_name = 'edc_pharma/subject_record.html'
     paginate_by = 5
+    number_of_copies = 1
 
     def __init__(self, **kwargs):
         self.patient = None
@@ -25,6 +26,8 @@ class PatientRecordView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(PatientRecordView, self).get_context_data(**kwargs)
+        if kwargs.get('dispense_pk'):
+            self.print_label(kwargs['dispense_pk'])
         try:
             self.patient = Patient.objects.get(subject_identifier=kwargs['subject_identifier'])
         except Patient.DoesNotExist:
@@ -37,8 +40,8 @@ class PatientRecordView(EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
             'patient': self.patient})
         return context
 
-    def print_label(self):
-        dispense = Dispense.objects.get(pk=self.kwargs['dispense_pk'])
+    def print_label(self, dispense_pk):
+        dispense = Dispense.objects.get(pk=dispense_pk)
         label_name = self.label_name(dispense.dispense_type)
         super(PatientRecordView, self).print_label(
             label_name, copies=self.number_of_copies, context=dispense.label_context)
