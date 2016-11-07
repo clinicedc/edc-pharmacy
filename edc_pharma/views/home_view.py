@@ -7,13 +7,13 @@ from django.views.generic.edit import FormView
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 
-from edc_pharma.forms.patient_form import PatientForm
+from edc_pharma.forms.patient_search_form import PatientSearchForm
 from edc_pharma.models.dispense import Patient
 
 
 class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
     template_name = 'edc_pharma/home.html'
-    form_class = PatientForm
+    form_class = PatientSearchForm
     paginate_by = 4
 
     def __init__(self, **kwargs):

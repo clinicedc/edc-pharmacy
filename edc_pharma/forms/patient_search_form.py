@@ -5,14 +5,14 @@ from django import forms
 from django.urls.base import reverse
 
 
-class PatientForm(forms.Form):
+class PatientSearchForm(forms.Form):
 
     subject_identifier = forms.CharField(
         label='Patient Identifier',
         max_length=36)
 
     def __init__(self, *args, **kwargs):
-        super(PatientForm, self).__init__(*args, **kwargs)
+        super(PatientSearchForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper = FormHelper()
         self.helper.form_action = reverse('home_url')

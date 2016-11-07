@@ -28,7 +28,6 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_filter = ('prepared_datetime', 'medication',)
     inlines = []
     search_fields = ('medication__name', )
-
     radio_fields = {'dispense_type': admin.VERTICAL}
 
     def response_add(self, request, obj, post_url_continue=None):

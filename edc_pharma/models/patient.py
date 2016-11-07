@@ -1,14 +1,30 @@
 from datetime import date
+from dateutil.relativedelta import relativedelta
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 
 from simple_history.models import HistoricalRecords
 from edc_base.model.models import BaseUuidModel
 from edc_constants.choices import GENDER
-from edc_base.model.validators.date import date_not_future
 from edc_base.utils.age import formatted_age
 
 from edc_pharma.models.site import Site
+
+
+def validate_dob(value):
+    if value:
+        age_in_years = relativedelta(date.today(), value).years
+        if age_in_years <= 18:
+            raise ValidationError(
+                ('Mininum age is 18 years, got %(age_in_years)s.'),
+                params={'age_in_years': age_in_years},
+            )
+        if age_in_years >= 65:
+            raise ValidationError(
+                ('Maximum age is 65, got %(age_in_years)s.'),
+                params={'age_in_years': age_in_years},
+            )
 
 
 class Patient(BaseUuidModel):
@@ -27,7 +43,7 @@ class Patient(BaseUuidModel):
     dob = models.DateField(
         blank=True,
         null=True,
-        validators=[date_not_future])
+        validators=[validate_dob])
 
     sid = models.CharField(
         max_length=20,
