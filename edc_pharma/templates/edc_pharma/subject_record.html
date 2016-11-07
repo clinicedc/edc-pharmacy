@@ -18,7 +18,7 @@
     	 {% endif %}
     	 <a href="{% url 'edc_pharma_admin:edc_pharma_dispense_add' %}?patient={{ patient.pk }}" class="btn btn-sm btn-default pull-right" role="button">Add</a>
     	 <a href="{% url 'home_url' %}" class="btn btn-sm btn-default pull-right" role="button">Back</a>
-    	 <b>Subject Identifier</b>: {{ patient.subject_identifier }} 
+    	 <b>Subject Identifier</b>: <a href="{% url 'edc_pharma_admin:edc_pharma_patient_change' patient.pk %}"> {{ patient.subject_identifier }} </a>
     	 <b>Initials</b>: {{ patient.initials }}
     	 <b>Gender</b>: {{ patient.gender }}
     	 {% if patient.age %}
