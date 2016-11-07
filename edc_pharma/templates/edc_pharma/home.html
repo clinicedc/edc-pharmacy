@@ -34,7 +34,7 @@
             					<td>{{ patient.initials }}</td>
             					<td>{{ patient.gender }}</td>
             					<td> {% if patient.age %} {{ patient.age }} {% endif %}</td>
-            					<td>{{ patient.consent_date }}</td>
+            					<td>{{ patient.consent_date|date:"D, d M Y" }}</td>
             					<td> <a href="{% url 'patient_url' patient.subject_identifier %}" class="btn btn-sm btn-default" role="button"> Dispense Record</a> </td>                    
             				</tr>
      							{% endfor %}
