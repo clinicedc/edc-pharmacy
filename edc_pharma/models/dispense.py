@@ -86,7 +86,6 @@ class Dispense(BaseUuidModel):
         if self.dispense_type == TABLET:
             days = self.total_number_of_tablets / (self.times_per_day * self.number_of_tablets)
             refill_date = date.today() + relativedelta(days=days + 1)
-            #refill_date.date() not datetime.today().date()
         return refill_date
 
     @property
