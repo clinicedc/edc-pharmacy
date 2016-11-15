@@ -32,11 +32,11 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(
-            reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
+            reverse('patient_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
 
     def response_change(self, request, obj):
         return HttpResponseRedirect(
-            reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
+            reverse('patient_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
 
 
 @admin.register(Patient, site=edc_pharma_admin)

@@ -201,7 +201,7 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'times_per_day': [
                     'You have selected dispense type IV, you should NOT enter times per day']})
-        if not self.data['infusion']:
+        if not self.data['infusion_number']:
             raise forms.ValidationError({
                 'infusion_number': [
                     'You have selected dispense type IV, you should enter infusion']})
@@ -235,7 +235,7 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'times_per_day': [
                     'You have selected dispense type IM, you should NOT enter times per day']})
-        if not self.data['infusion']:
+        if not self.data['infusion_number']:
             raise forms.ValidationError({
                 'infusion_number': [
                     'You have selected dispense type IV, you should enter infusion']})
