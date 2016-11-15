@@ -1,14 +1,11 @@
 import factory
 
 from datetime import date
+
 from edc_constants.constants import FEMALE
 
-from edc_pharma.models.patient import Patient
-from edc_pharma.models.site import Site
-from edc_pharma.models.protocol import Protocol
-from edc_pharma.models.medication import Medication
-from edc_pharma.models.dispense import Dispense
-from edc_pharma.choices import TABLET
+from ..choices import TABLET
+from ..models import Patient, Site, Protocol, Medication, Dispense
 
 
 class ProtocolFactory(factory.DjangoModelFactory):

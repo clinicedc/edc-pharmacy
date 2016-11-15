@@ -1,18 +1,130 @@
-from datetime import datetime, date
-from django.db import models
-from simple_history.models import HistoricalRecords
+from datetime import date
 from dateutil.relativedelta import relativedelta
 
-from edc_base.model.models import BaseUuidModel
+from django.core.validators import RegexValidator
+from django.db import models
+from django.utils import timezone
 
-from edc_pharma.models.medication import Medication
-from edc_pharma.models.patient import Patient
-from edc_pharma.choices import DISPENSE_TYPES, TABLET, SYRUP, IM, IV, SUPPOSITORY, SOLUTION, CAPSULE
+from simple_history.models import HistoricalRecords
+
+from edc_base.model.models import BaseUuidModel
+from edc_base.model.validators import date_not_future
+from edc_base.utils import formatted_age
+from edc_constants.choices import GENDER
+
+from .choices import DISPENSE_TYPES
+from .constants import TABLET, SYRUP, IM, IV, SUPPOSITORY, SOLUTION, CAPSULE
+
+
+class Protocol(BaseUuidModel):
+
+    number = models.CharField(max_length=30)
+
+    name = models.CharField(max_length=200, unique=True)
+
+    objects = models.Manager()
+
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return self.number
+
+    class Meta:
+        app_label = 'edc_pharma'
+
+
+class Site(BaseUuidModel):
+
+    protocol = models.ForeignKey(Protocol)
+
+    site_code = models.CharField(
+        max_length=20,
+        validators=[RegexValidator('[\d]+', 'Invalid format.')])
+
+    telephone_number = models.CharField(
+        max_length=7,
+        validators=[RegexValidator('^[2-8]{1}[0-9]{6}$', 'Invalid format.')])
+
+    objects = models.Manager()
+
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return '{}, Protocol: {}'.format(self.site_code, self.protocol)
+
+    class Meta:
+        app_label = 'edc_pharma'
+
+
+class Medication(BaseUuidModel):
+
+    name = models.CharField(max_length=200)
+
+    protocol = models.ForeignKey(Protocol)
+
+    storage_instructions = models.TextField(max_length=200)
+
+    objects = models.Manager()
+
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        app_label = 'edc_pharma'
+
+
+class Patient(BaseUuidModel):
+
+    subject_identifier = models.CharField(
+        max_length=20,
+        unique=True)
+
+    initials = models.CharField(
+        max_length=5,
+        validators=[RegexValidator('[A-Z]{2,3}', message='Use CAPS, 2-3 letters')],
+        help_text='Format is AA or AAA')
+
+    gender = models.CharField(
+        max_length=10,
+        choices=GENDER)
+
+    dob = models.DateField(
+        blank=True,
+        null=True,
+        validators=[date_not_future])
+
+    sid = models.CharField(
+        max_length=20,
+        validators=[RegexValidator('[\d]+', 'Invalid format.')])
+
+    consent_date = models.DateTimeField(
+        default=date.today,
+        editable=False)
+
+    site = models.ForeignKey(Site)
+
+    objects = models.Manager()
+
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return '{}, ({}), Site {}'.format(self.subject_identifier, self.initials, self.site.site_code)
+
+    @property
+    def born(self):
+        return self.dob.strftime('%Y-%m-%d')
+
+    @property
+    def age(self):
+        return formatted_age(self.dob, date.today())
+
+    class Meta:
+        app_label = 'edc_pharma'
 
 
 class Dispense(BaseUuidModel):
-
-    history = HistoricalRecords()
 
     date_hierarchy = '-prepared_datetime'
 
@@ -73,9 +185,13 @@ class Dispense(BaseUuidModel):
         null=True,
         help_text="Only required if IV or IM is chosen")
 
-    prepared_datetime = models.DateTimeField(default=datetime.now)
+    prepared_datetime = models.DateTimeField(default=timezone.now)
 
     prepared_date = models.DateTimeField(default=date.today, editable=False)
+
+    objects = models.Manager()
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return str(self.patient)
@@ -211,4 +327,5 @@ class Dispense(BaseUuidModel):
         return label_context
 
     class Meta:
+        app_label = 'edc_pharma'
         unique_together = (('patient', 'medication', 'prepared_date'), )

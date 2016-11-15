@@ -1,10 +1,10 @@
 from datetime import datetime
 from django.test import TestCase
 
-from edc_pharma.choices import CAPSULE
-from edc_pharma.forms.dispense_form import DispenseForm
-from edc_pharma.tests.factories.factory import SiteFactory, PatientFactory, ProtocolFactory,\
-    MedicationFactory
+from ..choices import CAPSULE
+from ..forms import DispenseForm
+
+from .factories import SiteFactory, PatientFactory, ProtocolFactory, MedicationFactory
 
 
 class TestDispenseCapsuleForm(TestCase):

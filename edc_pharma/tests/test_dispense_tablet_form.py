@@ -1,10 +1,10 @@
-from datetime import datetime
 from django.test import TestCase
+from django.utils import timezone
 
-from edc_pharma.choices import TABLET
-from edc_pharma.forms.dispense_form import DispenseForm
-from edc_pharma.tests.factories.factory import SiteFactory, PatientFactory, ProtocolFactory,\
-    MedicationFactory
+from ..constants import TABLET
+from ..forms import DispenseForm
+
+from .factories import SiteFactory, PatientFactory, ProtocolFactory, MedicationFactory
 
 
 class TestDispenseTabletForm(TestCase):
@@ -27,7 +27,7 @@ class TestDispenseTabletForm(TestCase):
             'times_per_day': 3,
             'concentration': '3.5mg/mL',
             'weight': None,
-            'prepared_datetime': datetime.today()}
+            'prepared_datetime': timezone.now()}
 
     def test_valid_form(self):
         """Test to verify whether form will submit"""

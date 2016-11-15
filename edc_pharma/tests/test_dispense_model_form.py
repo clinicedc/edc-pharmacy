@@ -1,11 +1,13 @@
-from datetime import datetime, date
+from datetime import date
 from dateutil.relativedelta import relativedelta
-from django.test import TestCase
 
-from edc_pharma.choices import TABLET
-from edc_pharma.forms.dispense_form import DispenseForm
-from edc_pharma.tests.factories.factory import SiteFactory, PatientFactory, ProtocolFactory,\
-    MedicationFactory, DispenseFactory
+from django.test import TestCase
+from django.utils import timezone
+
+from ..choices import TABLET
+from ..forms import DispenseForm
+
+from .factories import SiteFactory, PatientFactory, ProtocolFactory, MedicationFactory, DispenseFactory
 
 
 class TestDispenseModel(TestCase):
@@ -29,7 +31,7 @@ class TestDispenseModel(TestCase):
             'concentration': None,
             'prepared_date': date.today(),
             'weight': None,
-            'prepared_datetime': datetime.now()}
+            'prepared_datetime': timezone.now()}
 
     def test_refill_date_logic(self):
         """Test to verify whether the refill date method returns the right date"""

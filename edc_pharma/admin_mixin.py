@@ -1,9 +1,9 @@
-import json
+from django.apps import apps as django_apps
 
-from django.http.response import HttpResponse
-
-from edc_label.label import app_config, Label
+from edc_label.label import Label
 from edc_label.print_server import PrintServer
+
+app_config = django_apps.get_app_config('edc_label')
 
 
 class PrintButtonAdminMixin:

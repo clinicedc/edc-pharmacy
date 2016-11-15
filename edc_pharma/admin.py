@@ -3,17 +3,14 @@ from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
 
 from simple_history.admin import SimpleHistoryAdmin
+
 from edc_base.modeladmin.mixins import (
     ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
     ModelAdminFormInstructionsMixin)
 
-from edc_pharma.admin_site import edc_pharma_admin
-from edc_pharma.forms.dispense_form import DispenseForm
-from edc_pharma.models.dispense import Dispense
-from edc_pharma.models.medication import Medication
-from edc_pharma.models.patient import Patient
-from edc_pharma.models.protocol import Protocol
-from edc_pharma.models.site import Site
+from .admin_site import edc_pharma_admin
+from .forms import DispenseForm
+from .models import Dispense, Medication, Patient, Protocol, Site
 
 
 class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminFormInstructionsMixin,
@@ -24,9 +21,8 @@ class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelA
 @admin.register(Dispense, site=edc_pharma_admin)
 class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
     form = DispenseForm
-    list_display = ('patient', 'medication', 'prepared_datetime',)
-    list_filter = ('prepared_datetime', 'medication',)
-    inlines = []
+    list_display = ('patient', 'medication', 'prepared_datetime', )
+    list_filter = ('prepared_datetime', 'medication', )
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(
@@ -40,8 +36,7 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
 @admin.register(Patient, site=edc_pharma_admin)
 class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('initials', 'consent_date',)
-    list_filter = ('consent_date',)
-    inlines = []
+    list_filter = ('consent_date', )
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(
@@ -52,21 +47,18 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
 class MedicationAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('name', 'storage_instructions',)
     list_filter = ('name', )
-    inlines = []
 
 
 @admin.register(Site, site=edc_pharma_admin)
 class SiteAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('protocol', 'site_code', 'telephone_number',)
-    list_filter = ('site_code',)
-    inlines = []
+    list_filter = ('site_code', )
 
 
 @admin.register(Protocol, site=edc_pharma_admin)
 class ProtocolAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ('number', 'name',)
     list_filter = ('number',)
-    inlines = []
 
 
 admin.site.register(Patient, SimpleHistoryAdmin)

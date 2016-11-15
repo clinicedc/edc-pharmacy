@@ -10,19 +10,18 @@ from edc_base.model.constants import DEFAULT_BASE_FIELDS
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 
-from edc_pharma.forms.patient_form import PatientForm
-from edc_pharma.choices import TABLET, SYRUP, IV, IM, SUPPOSITORY, SOLUTION,\
-    CAPSULE
-from edc_pharma.models.dispense import Dispense, Patient
+from .constants import TABLET, SYRUP, IV, IM, SUPPOSITORY, SOLUTION, CAPSULE
+from .forms import PatientForm
+from .models import Dispense, Patient
 
 
 class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
 
-    template_name = 'edc_pharma/home.html'
     form_class = PatientForm
+    number_of_copies = 1
     paginate_by = 2
     paginator_template = 'edc_pharma/paginator_row.html'
-    number_of_copies = 1
+    template_name = 'edc_pharma/home.html'
 
     def __init__(self, **kwargs):
         self.patient = None

@@ -1,9 +1,33 @@
 from datetime import date
-from django import forms
 
+from django import forms
 from django.db.models import Q
-from edc_pharma.choices import TABLET, SYRUP, IV, CAPSULE, SOLUTION, IM, SUPPOSITORY
-from edc_pharma.models.dispense import Dispense
+from django.urls.base import reverse
+
+from crispy_forms.bootstrap import FieldWithButtons, StrictButton
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
+
+from .constants import TABLET, SYRUP, IV, CAPSULE, SOLUTION, IM, SUPPOSITORY
+from .models import Dispense
+
+
+class PatientForm(forms.Form):
+
+    subject_identifier = forms.CharField(
+        label='Patient Identifier',
+        max_length=36)
+
+    def __init__(self, *args, **kwargs):
+        super(PatientForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper = FormHelper()
+        self.helper.form_action = reverse('home_url')
+        self.helper.form_id = 'form-patient-search'
+        self.helper.form_method = 'post'
+        self.helper.html5_required = True
+        self.helper.layout = Layout(
+            FieldWithButtons('subject_identifier', StrictButton('Search', type='submit')))
 
 
 class DispenseForm(forms.ModelForm):
