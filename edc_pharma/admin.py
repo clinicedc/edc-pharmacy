@@ -41,10 +41,10 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
 
 @admin.register(Patient, site=edc_pharma_admin)
 class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('initials', 'consent_date',)
-    list_filter = ('consent_date',)
+    list_display = ('subject_identifier', 'initials', 'gender')
+    list_filter = ('subject_identifier', 'gender')
     inlines = []
-    search_fields = ('initials', 'consent_date')
+    search_fields = ('subject_identifier', 'initials',)
 
     radio_fields = {'gender': admin.VERTICAL}
 
