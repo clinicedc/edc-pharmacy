@@ -20,23 +20,30 @@ class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelA
 
 @admin.register(Dispense, site=edc_pharma_admin)
 class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
+
     form = DispenseForm
     list_display = ('patient', 'medication', 'prepared_datetime', )
     list_filter = ('prepared_datetime', 'medication', )
+    search_fields = ('medication__name', )
+    radio_fields = {'dispense_type': admin.VERTICAL}
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(
-            reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
+            reverse('patient_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
 
     def response_change(self, request, obj):
         return HttpResponseRedirect(
-            reverse('home_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
+            reverse('patient_url', kwargs={'subject_identifier': str(obj.patient.subject_identifier)}))
 
 
 @admin.register(Patient, site=edc_pharma_admin)
 class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('initials', 'consent_date',)
-    list_filter = ('consent_date', )
+
+    list_display = ('subject_identifier', 'sid', 'initials', 'gender')
+    list_filter = ('subject_identifier', 'sid', 'gender', )
+    search_fields = ('subject_identifier', 'initials', )
+
+    radio_fields = {'gender': admin.VERTICAL}
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(
@@ -45,20 +52,26 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
 
 @admin.register(Medication, site=edc_pharma_admin)
 class MedicationAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('name', 'storage_instructions',)
-    list_filter = ('name', )
+
+    list_display = ('name', 'protocol',)
+    list_filter = ('protocol',)
+    search_fields = ('name', )
 
 
 @admin.register(Site, site=edc_pharma_admin)
 class SiteAdmin(BaseModelAdmin, admin.ModelAdmin):
+
     list_display = ('protocol', 'site_code', 'telephone_number',)
     list_filter = ('site_code', )
+    search_fields = ('site_code', 'telephone_number')
 
 
 @admin.register(Protocol, site=edc_pharma_admin)
 class ProtocolAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('number', 'name',)
+
+    list_display = ('name', 'number',)
     list_filter = ('number',)
+    search_fields = ('name', 'number')
 
 
 admin.site.register(Patient, SimpleHistoryAdmin)

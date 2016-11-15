@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ' '
+SECRET_KEY = 'w30a*vldb5m5_!6z5ls0shizm8p()738y8mhxb3k+8379sa&eh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,19 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'simple_history',
     'crispy_forms',
-    'django_nose',
+    #'django_nose',
     'django_revision.apps.AppConfig',
     'edc_pharma.apps.AppConfig',
     'edc_pharma.apps.EdcLabelAppConfig',
     'edc_pharma.apps.EdcBaseAppConfig',
 ]
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=edc_pharma',
-]
+# NOSE_ARGS = [
+#     '--with-coverage',
+#     '--cover-package=edc_pharma',
+# ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -95,7 +95,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators

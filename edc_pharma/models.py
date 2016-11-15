@@ -1,6 +1,8 @@
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
+from django.apps import apps as django_apps
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
@@ -8,12 +10,13 @@ from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import date_not_future
 from edc_base.utils import formatted_age
 from edc_constants.choices import GENDER
 
 from .choices import DISPENSE_TYPES
 from .constants import TABLET, SYRUP, IM, IV, SUPPOSITORY, SOLUTION, CAPSULE
+
+app_config = django_apps.get_app_config('edc_pharma')
 
 
 class Protocol(BaseUuidModel):
@@ -75,15 +78,28 @@ class Medication(BaseUuidModel):
         app_label = 'edc_pharma'
 
 
+def validate_dob(value):
+    if value:
+        age_in_years = relativedelta(date.today(), value).years
+        if age_in_years <= 18:
+            raise ValidationError(
+                ('Mininum age is 18 years, got %(age_in_years)s.'),
+                params={'age_in_years': age_in_years},
+            )
+        if age_in_years >= 65:
+            raise ValidationError(
+                ('Maximum age is 65, got %(age_in_years)s.'),
+                params={'age_in_years': age_in_years},
+            )
+
+
 class Patient(BaseUuidModel):
 
-    subject_identifier = models.CharField(
-        max_length=20,
-        unique=True)
+    subject_identifier = models.CharField(max_length=20, unique=True)
 
     initials = models.CharField(
-        max_length=5,
-        validators=[RegexValidator('[A-Z]{2,3}', message='Use CAPS, 2-3 letters')],
+        max_length=3,
+        validators=[RegexValidator(r'^[A-Z]{2,3}$', message='Use CAPS, 2-3 letters')],
         help_text='Format is AA or AAA')
 
     gender = models.CharField(
@@ -93,15 +109,14 @@ class Patient(BaseUuidModel):
     dob = models.DateField(
         blank=True,
         null=True,
-        validators=[date_not_future])
+        validators=[validate_dob])
 
     sid = models.CharField(
         max_length=20,
-        validators=[RegexValidator('[\d]+', 'Invalid format.')])
+        validators=[RegexValidator('[\d]+', 'Invalid format.')],
+    )
 
-    consent_date = models.DateTimeField(
-        default=date.today,
-        editable=False)
+    consent_date = models.DateTimeField(default=date.today, editable=False)
 
     site = models.ForeignKey(Site)
 
@@ -138,10 +153,15 @@ class Dispense(BaseUuidModel):
         default=TABLET
     )
 
+    infusion_number = models.IntegerField(
+        blank=True,
+        null=True,
+        help_text="Only required if dispense type IV or IM is chosen")
+
     number_of_tablets = models.IntegerField(
         blank=True,
         null=True,
-        help_text="Only required if dispense type TABLET, CAPSULES and or SUPPOSITORIES is chosen")
+        help_text="Only required if dispense type TABLET, CAPSULES, SUPPOSITORIES is chosen")
 
     dose = models.CharField(
         max_length=20,
@@ -152,7 +172,7 @@ class Dispense(BaseUuidModel):
     times_per_day = models.IntegerField(
         blank=True,
         null=True,
-        help_text="Only required if dispense type TABLET, CAPSULES, SUPPOSITORIES,and or SYRUP is chosen")
+        help_text="Only required if dispense type TABLET, CAPSULES, SUPPOSITORIES, SYRUP is chosen")
 
     total_number_of_tablets = models.IntegerField(
         blank=True,
@@ -178,7 +198,7 @@ class Dispense(BaseUuidModel):
         help_text="Only required if dispense type IV or IM is chosen")
 
     weight = models.DecimalField(
-        verbose_name='Weight in mg',
+        verbose_name='Weight in kg',
         decimal_places=2,
         max_digits=5,
         blank=True,
@@ -217,7 +237,7 @@ class Dispense(BaseUuidModel):
                         total_number_of_tablets=self.total_number_of_tablets))
             else:
                 prescription = (
-                    '{medication} 1 tablet {times_per_day} times per day '
+                    '{medication} 1 tablet {times_per_day} time per day '
                     '({total_number_of_tablets} tablets)'.format(
                         medication=self.medication.name,
                         times_per_day=self.times_per_day,
@@ -285,9 +305,10 @@ class Dispense(BaseUuidModel):
             'times_per_day': self.times_per_day,
             'drug_name': self.medication,
             'prepared_datetime': self.prepared_datetime.strftime("%d-%m-%y %H:%M"),
-            'prepared_by': self.user_created,
+            'prepared_by': app_config.user_initials[self.user_created],
             'storage_instructions': self.medication.storage_instructions,
             'protocol': self.medication.protocol,
+            'weight': self.weight,
         }
         if self.dispense_type == TABLET:
             label_context.update({
@@ -302,15 +323,18 @@ class Dispense(BaseUuidModel):
         elif self.dispense_type == IV:
             label_context.update({
                 'concentration': self.concentration,
-                'total_volume': self.total_volume
+                'total_volume': self.total_volume,
+                'infusion': self.infusion_number,
             })
         elif self.dispense_type == IM:
             label_context.update({
                 'concentration': self.concentration,
-                'total_volume': self.total_volume
+                'total_volume': self.total_volume,
+                'infusion': self.infusion_number,
             })
         elif self.dispense_type == SOLUTION:
             label_context.update({
+                'number_of_teaspoons': self.dose,
                 'concentration': self.concentration,
                 'total_volume': self.total_volume
             })

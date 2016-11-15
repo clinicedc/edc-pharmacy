@@ -1,8 +1,3 @@
-# http://cheng.logdown.com/posts/2015/01/29/deploy-django-nginx-gunicorn-on-mac-osx-part-2
-# cd /home/django/source/edc-pharma/
-# gunicorn -c gunicorn.conf.py edc-pharma.wsgi --pid /home/django/source/edc-pharma/logs/gunicorn.pid --daemon
-#
-
 import os
 
 SOURCE_ROOT = os.path.expanduser('~/source')
