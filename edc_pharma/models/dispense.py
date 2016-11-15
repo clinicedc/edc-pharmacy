@@ -107,7 +107,7 @@ class Dispense(BaseUuidModel):
                         total_number_of_tablets=self.total_number_of_tablets))
             else:
                 prescription = (
-                    '{medication} 1 tablet {times_per_day} times per day '
+                    '{medication} 1 tablet {times_per_day} time per day '
                     '({total_number_of_tablets} tablets)'.format(
                         medication=self.medication.name,
                         times_per_day=self.times_per_day,
