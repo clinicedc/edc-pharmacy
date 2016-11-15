@@ -8,4 +8,5 @@
 ^FO90,225^A0N,20,20^FDDate of Prep.: ${prepared_datetime}  Prep. By: ${prepared_by}  Qnty Disp: ${total_number_of_tablets} tablets^FS
 ^FO90,255^A0N,30,23^FDStorage instructions: ${storage_instructions} ^FS
 ^FO90,285^A0N,35,25^FDFOR INVESTIGATIONAL USE ONLY (PROTOCOL NUMBER ${protocol})^FS
+^FO90,315^A0N,20,20^FDExpiry Date:________________ ^FS
 ^XZ

@@ -26,6 +26,11 @@ class Dispense(BaseUuidModel):
         default=TABLET
     )
 
+    infusion = models.IntegerField(
+        blank=True,
+        null=True,
+        help_text="Only required if dispense type IV or IM is chosen")
+
     number_of_tablets = models.IntegerField(
         blank=True,
         null=True,
@@ -66,7 +71,7 @@ class Dispense(BaseUuidModel):
         help_text="Only required if dispense type IV or IM is chosen")
 
     weight = models.DecimalField(
-        verbose_name='Weight in mg',
+        verbose_name='Weight in kg',
         decimal_places=2,
         max_digits=5,
         blank=True,
@@ -172,6 +177,7 @@ class Dispense(BaseUuidModel):
             'prepared_by': self.user_created,
             'storage_instructions': self.medication.storage_instructions,
             'protocol': self.medication.protocol,
+            'weight': self.weight,
         }
         if self.dispense_type == TABLET:
             label_context.update({
