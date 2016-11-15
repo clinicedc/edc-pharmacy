@@ -9,6 +9,11 @@ from edc_label.apps import AppConfig as EdcLabelAppConfigParent
 
 class AppConfig(DjangoAppConfig):
     name = 'edc_pharma'
+    user_initials = {
+        'omasala': 'OTDL',
+        'opule': 'ODP',
+        'tfrank': 'TTF',
+        'mrabantetse': 'MR'}
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):
@@ -18,5 +23,5 @@ class EdcBaseAppConfig(EdcBaseAppConfigParent):
 
 class EdcLabelAppConfig(EdcLabelAppConfigParent):
     default_cups_server_ip = None
-    default_printer_label = 'testing'
+    default_printer_label = 'mytest'
     extra_templates_folder = os.path.join(settings.STATIC_ROOT, 'edc_pharma', 'label_templates')

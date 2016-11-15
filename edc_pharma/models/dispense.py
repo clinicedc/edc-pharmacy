@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 
 from edc_base.model.models import BaseUuidModel
 
+from edc_pharma.apps import AppConfig
 from edc_pharma.models.medication import Medication
 from edc_pharma.models.patient import Patient
 from edc_pharma.choices import DISPENSE_TYPES, TABLET, SYRUP, IM, IV, SUPPOSITORY, SOLUTION, CAPSULE
@@ -174,7 +175,7 @@ class Dispense(BaseUuidModel):
             'times_per_day': self.times_per_day,
             'drug_name': self.medication,
             'prepared_datetime': self.prepared_datetime.strftime("%d-%m-%y %H:%M"),
-            'prepared_by': self.user_created,
+            'prepared_by': AppConfig.user_initials[self.user_created],
             'storage_instructions': self.medication.storage_instructions,
             'protocol': self.medication.protocol,
             'weight': self.weight,
