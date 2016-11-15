@@ -4,7 +4,7 @@
 ^FO100,60^FS
 ^FO100,90^A0N,20,20^FDPID: ${patient}                   SID: ${sid}              INITIALS: ${initials}
 ^FO100,80^FS 
-^FO100,105^A0N,20,20^FDWEIGHT(kg): ${weight}      INFUSION (#): {infusion}^FS
+^FO100,105^A0N,20,20^FDWEIGHT(kg): ${weight}      INFUSION (#): ${infusion}^FS
 ^FO100,130^A0N,20,20^FDDrug Name/Concentration: ${drug_name}^FS
 ^FO100,155^A0N,20,20^FDTotal Volume: ${total_volume}       Concentration: ${concentration} ^FS
 ^FO100,190^A0N,20,20^FD   PHARMACY                                                          CLINIC ^FS

@@ -41,8 +41,8 @@ class DispenseAdmin(BaseModelAdmin, admin.ModelAdmin):
 
 @admin.register(Patient, site=edc_pharma_admin)
 class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
-    list_display = ('subject_identifier', 'initials', 'gender')
-    list_filter = ('subject_identifier', 'gender')
+    list_display = ('subject_identifier', 'sid', 'initials', 'gender')
+    list_filter = ('subject_identifier', 'sid', 'gender',)
     inlines = []
     search_fields = ('subject_identifier', 'initials',)
 
