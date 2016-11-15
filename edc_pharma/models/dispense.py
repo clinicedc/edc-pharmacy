@@ -27,7 +27,7 @@ class Dispense(BaseUuidModel):
         default=TABLET
     )
 
-    infusion = models.IntegerField(
+    infusion_number = models.IntegerField(
         blank=True,
         null=True,
         help_text="Only required if dispense type IV or IM is chosen")
@@ -35,7 +35,7 @@ class Dispense(BaseUuidModel):
     number_of_tablets = models.IntegerField(
         blank=True,
         null=True,
-        help_text="Only required if dispense type TABLET, CAPSULES and or SUPPOSITORIES is chosen")
+        help_text="Only required if dispense type TABLET, CAPSULES, SUPPOSITORIES is chosen")
 
     dose = models.CharField(
         max_length=20,
@@ -46,7 +46,7 @@ class Dispense(BaseUuidModel):
     times_per_day = models.IntegerField(
         blank=True,
         null=True,
-        help_text="Only required if dispense type TABLET, CAPSULES, SUPPOSITORIES,and or SYRUP is chosen")
+        help_text="Only required if dispense type TABLET, CAPSULES, SUPPOSITORIES, SYRUP is chosen")
 
     total_number_of_tablets = models.IntegerField(
         blank=True,
@@ -193,12 +193,14 @@ class Dispense(BaseUuidModel):
         elif self.dispense_type == IV:
             label_context.update({
                 'concentration': self.concentration,
-                'total_volume': self.total_volume
+                'total_volume': self.total_volume,
+                'infusion': self.infusion_number,
             })
         elif self.dispense_type == IM:
             label_context.update({
                 'concentration': self.concentration,
-                'total_volume': self.total_volume
+                'total_volume': self.total_volume,
+                'infusion': self.infusion_number,
             })
         elif self.dispense_type == SOLUTION:
             label_context.update({
