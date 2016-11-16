@@ -23,6 +23,7 @@ class TestDispenseIMForm(TestCase):
             'total_number_of_tablets': None,
             'dose': None,
             'total_volume': '3000mL',
+            'infusion_number': None,
             'duration': '2hours',
             'times_per_day': None,
             'concentration': '3mg/L',

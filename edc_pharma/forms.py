@@ -73,10 +73,6 @@ class DispenseForm(forms.ModelForm):
             raise forms.ValidationError({
                 'total_volume': [
                     'You have selected dispense type tablet, you should NOT enter total volume']})
-        if self.data['weight']:
-            raise forms.ValidationError({
-                'weight': [
-                    'You have selected dispense type tablet, you should NOT enter weight']})
         if self.data['duration']:
             raise forms.ValidationError({
                 'duration': [
