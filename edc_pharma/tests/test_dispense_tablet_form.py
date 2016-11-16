@@ -128,11 +128,3 @@ class TestDispenseTabletForm(TestCase):
         self.assertIn(
             'You have selected dispense type tablet, you should enter times per day',
             dispense_form.errors.get('times_per_day', []))
-
-    def test_with_weight(self):
-        """Test when DISPENSE TYPE: TABLET is chosen and weight is included"""
-        self.data['weight'] = 2.6
-        dispense_form = DispenseForm(data=self.data)
-        self.assertIn(
-            'You have selected dispense type tablet, you should NOT enter weight',
-            dispense_form.errors.get('weight', []))
