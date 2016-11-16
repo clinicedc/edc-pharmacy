@@ -16,8 +16,6 @@ from edc_constants.choices import GENDER
 from .choices import DISPENSE_TYPES
 from .constants import TABLET, SYRUP, IM, IV, SUPPOSITORY, SOLUTION, CAPSULE
 
-app_config = django_apps.get_app_config('edc_pharma')
-
 
 class Protocol(BaseUuidModel):
 
@@ -296,6 +294,7 @@ class Dispense(BaseUuidModel):
 
     @property
     def label_context(self):
+        app_config = django_apps.get_app_config('edc_pharma')
         label_context = {
             'site': self.patient.site,
             'telephone_number': self.patient.site.telephone_number,
