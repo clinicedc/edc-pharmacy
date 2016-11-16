@@ -23,6 +23,7 @@ class TestDispenseIVForm(TestCase):
             'total_number_of_tablets': None,
             'dose': None,
             'total_volume': '3000mL',
+            'infusion_number': None,
             'duration': '2hours',
             'times_per_day': None,
             'concentration': '3mg/L',
@@ -138,18 +139,3 @@ class TestDispenseIVForm(TestCase):
         self.assertNotIn(
             'You have selected dispense type IV, you should NOT enter dose',
             dispense_form.errors.get('dose', []))
-
-    def test_with_weight(self):
-        """Test when DISPENSE TYPE:IV is chosen with weight included"""
-        dispense_form = DispenseForm(data=self.data)
-        self.assertNotIn(
-            'You have selected dispense type IV, you should enter weight',
-            dispense_form.errors.get('weight', []))
-
-    def test_without_weight(self):
-        """Test when DISPENSE TYPE:IV is chosen with weight not included"""
-        self.data['weight'] = None
-        dispense_form = DispenseForm(data=self.data)
-        self.assertIn(
-            'You have selected dispense type IV, you should enter weight',
-            dispense_form.errors.get('weight', []))

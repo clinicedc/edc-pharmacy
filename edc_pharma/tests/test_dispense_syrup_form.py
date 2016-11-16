@@ -133,11 +133,3 @@ class TestDispenseSyrupForm(TestCase):
         self.assertIn(
             'You have selected dispense type syrup, you should enter concentration',
             dispense_form.errors.get('concentration', []))
-
-    def test_with_weight(self):
-        """Test when DISPENSE TYPE: SYRUP is chosen and weight is included"""
-        self.data['weight'] = 2.6
-        dispense_form = DispenseForm(data=self.data)
-        self.assertIn(
-            'You have selected dispense type syrup, you should NOT enter weight',
-            dispense_form.errors.get('weight', []))
