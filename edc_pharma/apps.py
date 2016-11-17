@@ -9,12 +9,6 @@ from edc_label.apps import AppConfig as EdcLabelAppConfigParent
 
 class AppConfig(DjangoAppConfig):
     name = 'edc_pharma'
-    # get this from the user profile
-    user_initials = {
-        'omasala': 'OTDL',
-        'opule': 'ODP',
-        'tfrank': 'TTF',
-        'mrabantetse': 'MR'}
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):

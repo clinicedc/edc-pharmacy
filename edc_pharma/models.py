@@ -2,6 +2,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from django.apps import apps as django_apps
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
@@ -304,7 +305,7 @@ class Dispense(BaseUuidModel):
             'times_per_day': self.times_per_day,
             'drug_name': self.medication,
             'prepared_datetime': self.prepared_datetime.strftime("%d-%m-%y %H:%M"),
-            'prepared_by': app_config.user_initials[self.user_created],
+            'prepared_by': Profile.objects.get(user__username=self.user_created).initials,
             'storage_instructions': self.medication.storage_instructions,
             'protocol': self.medication.protocol,
             'weight': self.weight,
@@ -352,3 +353,10 @@ class Dispense(BaseUuidModel):
     class Meta:
         app_label = 'edc_pharma'
         unique_together = (('patient', 'medication', 'prepared_date'), )
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    initials = models.CharField(
+        max_length=4,
+        validators=[RegexValidator(r'^[A-Z]{2,3}$', message='Use CAPS, 2-4 letters')],)
