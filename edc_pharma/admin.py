@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
 
@@ -10,7 +12,7 @@ from edc_base.modeladmin.mixins import (
 
 from .admin_site import edc_pharma_admin
 from .forms import DispenseForm
-from .models import Dispense, Medication, Patient, Protocol, Site
+from .models import Dispense, Medication, Patient, Protocol, Site, Profile
 
 
 class BaseModelAdmin(ModelAdminBasicMixin, ModelAdminFormAutoNumberMixin, ModelAdminFormInstructionsMixin,
@@ -47,7 +49,7 @@ class PatientAdmin(BaseModelAdmin, admin.ModelAdmin):
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect(
-            reverse('home_url', kwargs={'subject_identifier': str(obj.subject_identifier)}))
+            reverse('patient_url', kwargs={'subject_identifier': str(obj.subject_identifier)}))
 
 
 @admin.register(Medication, site=edc_pharma_admin)
@@ -74,5 +76,15 @@ class ProtocolAdmin(BaseModelAdmin, admin.ModelAdmin):
     search_fields = ('name', 'number')
 
 
+class ProfileInline(admin.StackedInline):
+    model = Profile
+
+
+class UserAdmin(BaseUserAdmin):
+    inlines = (ProfileInline, )
+
+
 admin.site.register(Patient, SimpleHistoryAdmin)
 admin.site.register(Medication, SimpleHistoryAdmin)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
