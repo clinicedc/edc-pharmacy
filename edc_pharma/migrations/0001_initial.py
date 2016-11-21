@@ -8,6 +8,7 @@ import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
 import django_extensions.db.fields
+from django.utils import timezone
 import django_revision.revision_field
 import edc_base.model.fields.hostname_modification_field
 import edc_base.model.fields.userfield
@@ -44,8 +45,8 @@ class Migration(migrations.Migration):
                 ('concentration', models.CharField(blank=True, help_text='Only required if dispense type IV, IM, CAPSULES, SOLUTION, SUPPOSITORIES, TABLET is chosen', max_length=60, null=True)),
                 ('duration', models.CharField(blank=True, help_text='Only required if dispense type IV or IM is chosen', max_length=15, null=True)),
                 ('weight', models.DecimalField(blank=True, decimal_places=2, help_text='Only required if IV or IM is chosen', max_digits=5, null=True, verbose_name='Weight in mg')),
-                ('prepared_datetime', models.DateTimeField(default=datetime.datetime.now)),
-                ('prepared_date', models.DateTimeField(default=datetime.date.today, editable=False)),
+                ('prepared_datetime', models.DateTimeField(default=timezone.now)),
+                ('prepared_date', models.DateTimeField(default=timezone.now, editable=False)),
             ],
         ),
         migrations.CreateModel(
@@ -68,8 +69,8 @@ class Migration(migrations.Migration):
                 ('concentration', models.CharField(blank=True, help_text='Only required if dispense type IV, IM, CAPSULES, SOLUTION, SUPPOSITORIES, TABLET is chosen', max_length=60, null=True)),
                 ('duration', models.CharField(blank=True, help_text='Only required if dispense type IV or IM is chosen', max_length=15, null=True)),
                 ('weight', models.DecimalField(blank=True, decimal_places=2, help_text='Only required if IV or IM is chosen', max_digits=5, null=True, verbose_name='Weight in mg')),
-                ('prepared_datetime', models.DateTimeField(default=datetime.datetime.now)),
-                ('prepared_date', models.DateTimeField(default=datetime.date.today, editable=False)),
+                ('prepared_datetime', models.DateTimeField(default=timezone.now)),
+                ('prepared_date', models.DateTimeField(default=timezone.now, editable=False)),
                 ('history_id', models.AutoField(primary_key=True, serialize=False)),
                 ('history_date', models.DateTimeField()),
                 ('history_type', models.CharField(choices=[('+', 'Created'), ('~', 'Changed'), ('-', 'Deleted')], max_length=1)),

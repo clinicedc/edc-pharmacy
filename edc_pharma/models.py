@@ -1,4 +1,5 @@
-from datetime import date
+import pytz
+from datetime import time, datetime
 from dateutil.relativedelta import relativedelta
 
 from django.apps import apps as django_apps
@@ -79,7 +80,11 @@ class Medication(BaseUuidModel):
 
 def validate_dob(value):
     if value:
-        age_in_years = relativedelta(date.today(), value).years
+        try:
+            value = timezone.make_aware(datetime.combine(value, time(0)), timezone=pytz.timezone("UTC"))
+        except ValueError:
+            pass
+        age_in_years = relativedelta(timezone.now(), value).years
         if age_in_years <= 18:
             raise ValidationError(
                 ('Mininum age is 18 years, got %(age_in_years)s.'),
@@ -115,7 +120,7 @@ class Patient(BaseUuidModel):
         validators=[RegexValidator('[\d]+', 'Invalid format.')],
     )
 
-    consent_date = models.DateTimeField(default=date.today, editable=False)
+    consent_datetime = models.DateTimeField(default=timezone.now(), editable=False)
 
     site = models.ForeignKey(Site)
 
@@ -132,7 +137,7 @@ class Patient(BaseUuidModel):
 
     @property
     def age(self):
-        return formatted_age(self.dob, date.today())
+        return formatted_age(self.dob, self.created)
 
     class Meta:
         app_label = 'edc_pharma'
@@ -206,22 +211,30 @@ class Dispense(BaseUuidModel):
 
     prepared_datetime = models.DateTimeField(default=timezone.now)
 
-    prepared_date = models.DateTimeField(default=date.today, editable=False)
+    prepared_date = models.DateTimeField(
+        null=True,
+        editable=False,
+        help_text="readonly prepared_datetime with 0 time.")
 
     objects = models.Manager()
 
     history = HistoricalRecords()
 
+    def save(self, *args, **kwargs):
+        self.prepared_date = timezone.make_aware(
+            datetime.combine(self.prepared_datetime.date(), time(0, 0, 0)), timezone=pytz.timezone('UTC'))
+        super(Dispense, self).save(*args, **kwargs)
+
     def __str__(self):
         return str(self.patient)
 
     @property
-    def refill_date(self):
-        refill_date = None
+    def refill_datetime(self):
+        refill_datetime = None
         if self.dispense_type == TABLET:
             days = self.total_number_of_tablets / (self.times_per_day * self.number_of_tablets)
-            refill_date = date.today() + relativedelta(days=days + 1)
-        return refill_date
+            refill_datetime = timezone.now() + relativedelta(days=days + 1)
+        return refill_datetime
 
     @property
     def prescription(self):
@@ -295,7 +308,6 @@ class Dispense(BaseUuidModel):
 
     @property
     def label_context(self):
-        app_config = django_apps.get_app_config('edc_pharma')
         label_context = {
             'site': self.patient.site,
             'telephone_number': self.patient.site.telephone_number,

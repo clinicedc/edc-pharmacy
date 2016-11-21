@@ -1,11 +1,13 @@
 import factory
+import pytz
 
-from datetime import date
+from datetime import datetime, time, date
 
 from edc_constants.constants import FEMALE
 
 from ..choices import TABLET
 from ..models import Patient, Site, Protocol, Medication, Dispense
+from django.utils import timezone
 
 
 class ProtocolFactory(factory.DjangoModelFactory):
@@ -47,7 +49,7 @@ class PatientFactory(factory.DjangoModelFactory):
     gender = FEMALE
     dob = date(1988, 7, 7)
     sid = 'A2345'
-    consent_date = date.today()
+    consent_datetime = timezone.now()
     site = factory.SubFactory(SiteFactory)
 
 
@@ -62,4 +64,4 @@ class DispenseFactory(factory.DjangoModelFactory):
     number_of_tablets = 1
     times_per_day = 3
     total_number_of_tablets = 45
-    prepared_date = date.today()
+    prepared_date = timezone.make_aware(datetime.combine(timezone.now(), time(0, 0, 0)), timezone=pytz.timezone('UTC'))

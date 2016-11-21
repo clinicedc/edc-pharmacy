@@ -36,7 +36,7 @@
                   	<tr> 
                     	<td><a href="{% url 'edc_pharma_admin:edc_pharma_dispense_change' dispense.pk %}">{{ dispense.prepared_datetime|date:"Y-m-d H:i"}}</a></td>
                     	<td>{{ dispense.prescription }}</td>
-                    	<td>{{ dispense.refill_date|date:"D, d M Y" }}</td>
+                    	<td>{{ dispense.refill_datetime|date:"D, d M Y" }}</td>
                    	 	<td><a href="{% url 'print_url' subject_identifier=patient.subject_identifier dispense_pk=dispense.pk %}" class="btn btn-sm btn-default">Print</a></td>                         
                     </tr>   
                     	{% endfor %}     		

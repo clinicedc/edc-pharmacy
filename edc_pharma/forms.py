@@ -1,8 +1,11 @@
-from datetime import date
+import pytz
+
+from datetime import datetime, time
 
 from django import forms
 from django.db.models import Q
 from django.urls.base import reverse
+from django.utils import timezone
 
 from crispy_forms.bootstrap import FieldWithButtons, StrictButton
 from crispy_forms.helper import FormHelper
@@ -53,10 +56,11 @@ class DispenseForm(forms.ModelForm):
         return self.cleaned_data
 
     def catch_unique_integrity_error(self):
+        now = timezone.make_aware(datetime.combine(timezone.now(), time(0, 0, 0)), timezone=pytz.timezone('UTC'))
         if Dispense.objects.filter(
                 Q(patient=self.cleaned_data['patient']) &
                 Q(medication=self.cleaned_data['medication']) &
-                Q(prepared_date=date.today())):
+                Q(prepared_date=now)):
             raise forms.ValidationError('Dispense record of this medication on this date already exists for this patient')
         return self.cleaned_data
 

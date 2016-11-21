@@ -1,4 +1,6 @@
-from datetime import date
+import pytz
+
+from datetime import datetime, time, date
 from dateutil.relativedelta import relativedelta
 
 from django.test import TestCase
@@ -18,6 +20,7 @@ class TestDispenseModel(TestCase):
         self.patient = PatientFactory()
         self.medication = MedicationFactory()
         self.dispense = DispenseFactory(patient=self.patient, medication=self.medication)
+        now = timezone.make_aware(datetime.combine(timezone.now(), time(0, 0, 0)), timezone=pytz.timezone('UTC'))
         self.data = {
             'patient': self.patient.id,
             'medication': self.medication.id,
@@ -29,13 +32,13 @@ class TestDispenseModel(TestCase):
             'duration': None,
             'times_per_day': 1,
             'concentration': None,
-            'prepared_date': date.today(),
+            'prepared_date': now,
             'weight': None,
             'prepared_datetime': timezone.now()}
 
     def test_refill_date_logic(self):
         """Test to verify whether the refill date method returns the right date"""
-        self.assertEqual(self.dispense.refill_date, date.today() + relativedelta(days=16))
+        self.assertEqual(self.dispense.refill_datetime, timezone.now() + relativedelta(days=16))
 
     def test_unique_date_medication_patient(self):
         """Test to verify that unique integrity in fields: patient, medication, prepared_date is maintained"""
