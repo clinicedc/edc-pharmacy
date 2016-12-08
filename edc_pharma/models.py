@@ -120,7 +120,7 @@ class Patient(BaseUuidModel):
         validators=[RegexValidator('[\d]+', 'Invalid format.')],
     )
 
-    consent_datetime = models.DateTimeField(default=timezone.now(), editable=False)
+    consent_datetime = models.DateTimeField(default=timezone.now())
 
     site = models.ForeignKey(Site)
 

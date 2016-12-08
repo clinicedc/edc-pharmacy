@@ -21,7 +21,7 @@ class HomeView(EdcBaseViewMixin, EdcLabelViewMixin, FormView):
     paginate_by = 4
 
     def __init__(self, **kwargs):
-        self.patient = Patient.objects.all().order_by('-consent_date')
+        self.patient = Patient.objects.all().order_by('-consent_datetime')
         super(HomeView, self).__init__(**kwargs)
 
     def get_success_url(self):
