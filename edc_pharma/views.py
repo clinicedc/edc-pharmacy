@@ -6,7 +6,7 @@ from django.urls.base import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView, TemplateView
 
-from edc_base.model.constants import DEFAULT_BASE_FIELDS
+from edc_base.model_mixins.constants import DEFAULT_BASE_FIELDS
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_label.view_mixins import EdcLabelViewMixin
 

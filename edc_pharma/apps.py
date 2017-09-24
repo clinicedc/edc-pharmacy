@@ -9,6 +9,7 @@ from edc_label.apps import AppConfig as EdcLabelAppConfigParent
 
 class AppConfig(DjangoAppConfig):
     name = 'edc_pharma'
+    country = 'botswana'
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):
