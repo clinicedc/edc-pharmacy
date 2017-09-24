@@ -32,7 +32,7 @@ class Period:
         self.estimate()
         if self.start_date and self.end_date:
             self.timepoints = self.period_timepoint_cls(
-                start_date=self.start_date, end_date=self.end_date).timepoints
+                period=self).timepoints
 
     def estimate(self):
         if self.days:
