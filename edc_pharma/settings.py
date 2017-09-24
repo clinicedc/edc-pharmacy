@@ -11,15 +11,15 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+APP_NAME = 'edc_pharma'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'w30a*vldb5m5_!6z5ls0shizm8p()738y8mhxb3k+8379sa&eh'
 
@@ -40,14 +40,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'simple_history',
     'crispy_forms',
-    #'django_nose',
+    # 'django_nose',
     'django_revision.apps.AppConfig',
+    'django_crypto_fields.apps.AppConfig',
+    'edc_protocol.apps.AppConfig',
+    'edc_identifier.apps.AppConfig',
+    'edc_registration.apps.AppConfig',
     'edc_pharma.apps.AppConfig',
     'edc_pharma.apps.EdcLabelAppConfig',
     'edc_pharma.apps.EdcBaseAppConfig',
 ]
 
-#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # NOSE_ARGS = [
 #     '--with-coverage',
@@ -136,3 +140,19 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'edc_pharma', 'static')
 GIT_DIR = BASE_DIR
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+
+if 'test' in sys.argv:
+
+    class DisableMigrations:
+
+        def __contains__(self, item):
+            return True
+
+        def __getitem__(self, item):
+            return None
+
+    MIGRATION_MODULES = DisableMigrations()
+    PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
+    DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
