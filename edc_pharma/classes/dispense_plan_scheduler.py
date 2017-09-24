@@ -1,5 +1,4 @@
 from ..classes import ScheduleCollection
-from ..plan import dispense_plan
 from ..classes import Period
 from ..classes import Schedule as SchedulePlan
 
@@ -7,6 +6,10 @@ from ..models import DispenseSchedule, DispenseryPlan
 
 
 class DispensePlanSchedulerException(Exception):
+    pass
+
+
+class InvalidSchedulePlanConfig(Exception):
     pass
 
 
@@ -18,16 +21,18 @@ class DispensePlanScheduler:
 
     schedule_collection_cls = ScheduleCollection
 
-    def __init__(self, enrolled_subject, *args, **kwargs):
+    def __init__(self, enrolled_subject, dispense_plan=None, *args, **kwargs):
         self.enrolled_subject = enrolled_subject
+        self.dispense_plan = dispense_plan
 
     @property
     def subject_schedules(self):
         """Returns schedules calculated against a given dispense plan.
         """
         schedules = self.schedule_collection_cls()
-        for schedule_name in dispense_plan:
-            schedule_details = dispense_plan.get(schedule_name)
+        for schedule_name in self.dispense_plan or {}:
+            self.validate_dispense_plan(dispense_plan=self.dispense_plan)
+            schedule_details = self.dispense_plan.get(schedule_name)
             schedule_period = Period(
                 timepoint=schedules.next_timepoint or self.enrolled_subject.report_datetime,
                 duration=schedule_details.get('duration'),
@@ -38,6 +43,16 @@ class DispensePlanScheduler:
                 period=schedule_period)
             schedules.add(schedule=schedule)
         return schedules
+
+    def validate_dispense_plan(self, dispense_plan):
+        for item in dispense_plan or {}:
+            try:
+                plan = dispense_plan.get(item)
+                plan['unit']
+                plan['duration']
+                plan['number_of_visits']
+            except KeyError as e:
+                raise InvalidSchedulePlanConfig(f'Missing expected key {e}')
 
     def create_dispense_plan(self, **options):
         visits = options.get('plan').visits
