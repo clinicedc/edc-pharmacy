@@ -1,6 +1,6 @@
 from django.test import tag, TestCase
 
-from datetime import datetime
+from datetime import datetime, date
 
 from ..classes import DispensePlanScheduler
 from ..models import DispenseSchedule, DispenseryPlan
@@ -16,63 +16,63 @@ class RandomizedSubjectDummy:
 @tag('dispense_scheduler')
 class TestDispensePlanScheduler(TestCase):
 
-    def test_schudule_subject(self):
-        randomized_subject = RandomizedSubjectDummy(
+    def test_schedule_subject(self):
+        """Assert that calculated subject_schedules equals
+        number of specified in a plan."""
+        enrolled_subject = RandomizedSubjectDummy(
             report_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispensePlanScheduler(
-            enrolled_subject=randomized_subject)
+            enrolled_subject=enrolled_subject)
         self.assertEqual(len(dispense.subject_schedules), 2)
 
-    def test_schudule_subject1(self):
-        randomized_subject = RandomizedSubjectDummy(
-            report_datetime=datetime(2017, 8, 24),
-            subject_identifier='1111')
-        dispense = DispensePlanScheduler(
-            enrolled_subject=randomized_subject)
-        last_schedule = dispense.subject_schedules.last()
-        self.assertEqual(
-            last_schedule.period.start_date.date(),
-            datetime(2017, 9, 8).date())
-        self.assertEqual(
-            last_schedule.period.end_date.date(),
-            datetime(2017, 11, 3).date())
+    def test_last_schedule(self):
+        """Assert that last schedule are calculated """
+        enrolled_subject = RandomizedSubjectDummy(
+            report_datetime=datetime(2017, 8, 24), subject_identifier='1111')
+        scheduller = DispensePlanScheduler(enrolled_subject=enrolled_subject)
+        last_schedule = scheduller.subject_schedules.last()
 
-    def test_schudule_subject2(self):
-        randomized_subject = RandomizedSubjectDummy(
+        self.assertEqual(
+            last_schedule.period.start_date.date(), date(2017, 9, 8))
+        self.assertEqual(
+            last_schedule.period.end_date.date(), date(2017, 11, 3))
+
+    def test_schedule_subject2(self):
+        enrolled_subject = RandomizedSubjectDummy(
             report_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispensePlanScheduler(
-            enrolled_subject=randomized_subject)
+            enrolled_subject=enrolled_subject)
         dispense.prepare()
         self.assertEqual(DispenseSchedule.objects.all().count(), 2)
 
     def test_schudule_subject3(self):
-        randomized_subject = RandomizedSubjectDummy(
+        enrolled_subject = RandomizedSubjectDummy(
             report_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispensePlanScheduler(
-            enrolled_subject=randomized_subject)
+            enrolled_subject=enrolled_subject)
         dispense.prepare()
         schedule = DispenseSchedule.objects.all().first()
         self.assertEqual(
             DispenseryPlan.objects.filter(schedule=schedule).count(), 2)
 
-    def test_schudule_subject4(self):
-        randomized_subject = RandomizedSubjectDummy(
+    def test_schedule_subject4(self):
+        enrolled_subject = RandomizedSubjectDummy(
             report_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispensePlanScheduler(
-            enrolled_subject=randomized_subject)
+            enrolled_subject=enrolled_subject)
         dispense.prepare()
         self.assertEqual(DispenseryPlan.objects.all().count(), 4)
 
-    def test_schudule_subject5(self):
-        randomized_subject = RandomizedSubjectDummy(
+    def test_schedule_subject5(self):
+        enrolled_subject = RandomizedSubjectDummy(
             report_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispensePlanScheduler(
-            enrolled_subject=randomized_subject)
+            enrolled_subject=enrolled_subject)
         dispense.prepare()
         schedule = DispenseSchedule.objects.all().first()
         p1, p2 = DispenseryPlan.objects.filter(schedule=schedule)

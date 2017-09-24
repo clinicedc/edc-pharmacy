@@ -12,25 +12,32 @@ class DispensePlanSchedulerException(Exception):
 
 class DispensePlanScheduler:
 
-    schedule_collection = ScheduleCollection
+    """Given enrolled subject, calculates the dispense schedules and create
+    records for the subject.
+    """
+
+    schedule_collection_cls = ScheduleCollection
 
     def __init__(self, enrolled_subject, *args, **kwargs):
         self.enrolled_subject = enrolled_subject
 
     @property
     def subject_schedules(self):
-        collection = self.schedule_collection()
-        for name in dispense_plan:
-            schedule_details = dispense_plan.get(name)
-            period = Period(
-                timepoint=collection.next_timepoint or self.enrolled_subject.report_datetime,
-                weeks=schedule_details.get('duration'),)
+        """Returns schedules calculated against a given dispense plan.
+        """
+        schedules = self.schedule_collection_cls()
+        for schedule_name in dispense_plan:
+            schedule_details = dispense_plan.get(schedule_name)
+            schedule_period = Period(
+                timepoint=schedules.next_timepoint or self.enrolled_subject.report_datetime,
+                duration=schedule_details.get('duration'),
+                unit=schedule_details.get('unit'))
             schedule = SchedulePlan(
-                name=name,
+                name=schedule_name,
                 number_of_visits=schedule_details.get('number_of_visits'),
-                period=period)
-            collection.add(schedule=schedule)
-        return collection
+                period=schedule_period)
+            schedules.add(schedule=schedule)
+        return schedules
 
     def create_dispense_plan(self, **options):
         visits = options.get('plan').visits

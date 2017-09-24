@@ -2,6 +2,7 @@ from datetime import datetime, date
 from django.test import TestCase, tag
 
 from ..classes import Period
+from ..constants import WEEKS
 
 
 @tag('period')
@@ -11,6 +12,13 @@ class TestPeriod(TestCase):
     def test_of_days(self):
         period = Period(timepoint=datetime(2017, 9, 25))
         period.of_days(days=1)
+        self.assertEqual(period.start_date.date(), date(2017, 9, 25))
+        self.assertEqual(period.end_date.date(), date(2017, 9, 25))
+
+    @tag('period.1')
+    def test_of_days2(self):
+        period = Period(
+            duration=1, unit='days', timepoint=datetime(2017, 9, 25))
         self.assertEqual(period.start_date.date(), date(2017, 9, 25))
         self.assertEqual(period.end_date.date(), date(2017, 9, 25))
 
@@ -37,3 +45,10 @@ class TestPeriod(TestCase):
         period.of_months(months=1)
         self.assertEqual(period.start_date.date(), datetime(2017, 8, 24).date())
         self.assertEqual(period.end_date.date(), datetime(2017, 9, 25).date())
+
+    @tag('period.1')
+    def test_period_unit(self):
+        period = Period(
+            duration=1, timepoint=datetime(2017, 8, 24), unit=WEEKS)
+        self.assertEqual(period.start_date.date(), datetime(2017, 8, 24).date())
+        self.assertEqual(period.end_date.date(), datetime(2017, 8, 31).date())

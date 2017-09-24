@@ -30,6 +30,7 @@ class Visit:
 
 
 class Schedule:
+
     """A class that represents a "schedule" of medication plan.
     Is contained by a "schedules".
     """

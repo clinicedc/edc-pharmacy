@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from ..classes.exclude_days import ExcludeDays
 from ..classes.period_timepoint import PeriodTimepoint
 from ..classes.timepoint_selector import TimepointSelector
+from edc_pharma.constants import WEEKS, MONTHS, DAYS
 
 
 class Period:
@@ -18,29 +19,28 @@ class Period:
     period_timepoint_cls = PeriodTimepoint
     timepoint_selector_cls = TimepointSelector
 
-    def __init__(self, timepoint=None, days=None, months=None, weeks=None,
-                 weekends=None, holidays=None, *args, **kwargs):
+    def __init__(self, timepoint=None, duration=None, weekends=None,
+                 holidays=None, unit=None, *args, **kwargs):
 
         self.timepoint = timepoint
         self.start_date = None
         self.end_date = None
-        self.days = days
-        self.months = months
-        self.weeks = weeks
+        self.duration = duration or 0
         self.weekends = weekends
         self.holidays = holidays
+        self.unit = unit
         self.estimate()
         if self.start_date and self.end_date:
             self.timepoints = self.period_timepoint_cls(
                 period=self).timepoints
 
     def estimate(self):
-        if self.days:
-            self.of_days(self.days)
-        if self.months:
-            self.of_months(self.months)
-        if self.weeks:
-            self.of_weeks(self.weeks)
+        if self.unit == DAYS:
+            self.of_days(self.duration)
+        elif self.unit == MONTHS:
+            self.of_months(self.duration)
+        elif self.unit == WEEKS:
+            self.of_weeks(self.duration)
 
     def __repr__(self):
         return f'{self.start_date.date()}, {self.end_date.date()}'
