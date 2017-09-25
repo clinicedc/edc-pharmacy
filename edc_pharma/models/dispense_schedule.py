@@ -9,6 +9,8 @@ class DispenseSchedule(models.Model):
 
     duration = models.CharField(max_length=100,)
 
+    description = models.CharField(max_length=100,)
+
     start_date = models.DateField()
 
     end_date = models.DateField()

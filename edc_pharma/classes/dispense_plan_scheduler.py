@@ -69,6 +69,7 @@ class DispensePlanScheduler:
 
     def prepare(self):
         for seq, schedule_name in enumerate(self.subject_schedules):
+            seq = seq + 1
             try:
                 schedule = self.subject_schedules.get(schedule_name)
                 options = {
@@ -76,6 +77,7 @@ class DispensePlanScheduler:
                     'plan': schedule}
                 obj = DispenseSchedule.objects.get(
                     name=schedule_name,
+                    description=f'Day {seq}',
                     start_date=schedule.period.start_date.date(),
                     end_date=schedule.period.end_date.date())
                 options.update({'schedule': obj})
