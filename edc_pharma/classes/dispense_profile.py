@@ -5,9 +5,11 @@ class DispenseProfile:
     """A container class for medication type.
     """
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, profile_type=None):
         self.name = name
+        self.profile_type = profile_type
         self.medication_types = {}
+        self.label = f'{self.name}.{self.profile_type}'
 
     def __repr__(self):
         return f'{self.__class__.__name__}(name={self.name})'

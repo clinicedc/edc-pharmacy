@@ -1,8 +1,8 @@
-from ..classes import ScheduleCollection
 from ..classes import Period
 from ..classes import Schedule as SchedulePlan
+from ..classes import ScheduleCollection
 
-from ..models import DispenseSchedule, DispenseryPlan
+from .creators import DispenseScheduleCreator, DispenseTimepointCreator
 
 
 class DispensePlanSchedulerException(Exception):
@@ -20,10 +20,14 @@ class DispensePlanScheduler:
     """
 
     schedule_collection_cls = ScheduleCollection
+    dispense_timepoint_cls = DispenseTimepointCreator
+    dispense_schedule_creator_cls = DispenseScheduleCreator
 
-    def __init__(self, enrolled_subject, dispense_plan=None, *args, **kwargs):
+    def __init__(self, enrolled_subject, dispense_plan=None, profile_selector=None,
+                 *args, **kwargs):
         self.enrolled_subject = enrolled_subject
         self.dispense_plan = dispense_plan
+        self.profile_selector = profile_selector
 
     @property
     def subject_schedules(self):
@@ -51,41 +55,22 @@ class DispensePlanScheduler:
                 plan['unit']
                 plan['duration']
                 plan['number_of_visits']
+                plan['dispense_profile']
             except KeyError as e:
                 raise InvalidSchedulePlanConfig(f'Missing expected key {e}')
 
-    def create_dispense_plan(self, **options):
-        visits = options.get('plan').visits
-        del options['plan']
-        for code in visits:
-            visit = visits.get(code)
-            try:
-                DispenseryPlan.objects.get(
-                    timepoint=visit.timepoint_datetime,
-                    **options)
-            except DispenseryPlan.DoesNotExist:
-                DispenseryPlan.objects.create(
-                    timepoint=visit.timepoint_datetime, **options)
-
     def prepare(self):
-        for seq, schedule_name in enumerate(self.subject_schedules):
-            seq = seq + 1
-            try:
-                schedule = self.subject_schedules.get(schedule_name)
-                options = {
-                    'subject_identifier': self.enrolled_subject.subject_identifier,
-                    'plan': schedule}
-                obj = DispenseSchedule.objects.get(
-                    name=schedule_name,
-                    description=f'Day {seq}',
-                    start_date=schedule.period.start_date.date(),
-                    end_date=schedule.period.end_date.date())
-                options.update({'schedule': obj})
-            except DispenseSchedule.DoesNotExist:
-                obj = DispenseSchedule.objects.create(
-                    name=schedule_name,
-                    sequence=seq,
-                    start_date=schedule.period.start_date.date(),
-                    end_date=schedule.period.end_date.date())
-                options.update({'schedule': obj})
-            self.create_dispense_plan(**options)
+        for sequence, schedule_name in enumerate(self.subject_schedules):
+            sequence = sequence + 1
+            schedule = self.subject_schedules.get(schedule_name)
+            schedule_obj = self.dispense_schedule_creator_cls(
+                schedule=schedule,
+                subject_identifier=self.enrolled_subject.subject_identifier,
+                sequence=sequence).create()
+            schedule_plan = self.dispense_plan.get(schedule_name)
+
+            self.dispense_timepoint_cls(
+                schedule_name=schedule_name, schedule_plan=schedule_plan,
+                schedule=schedule_obj,
+                timepoints=schedule.visits,
+            ).create()

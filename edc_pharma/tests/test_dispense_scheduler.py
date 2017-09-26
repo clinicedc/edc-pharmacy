@@ -3,8 +3,10 @@ from django.test import tag, TestCase
 from datetime import datetime, date
 
 from ..classes import DispensePlanScheduler, InvalidSchedulePlanConfig
-from ..models import DispenseSchedule, DispenseryPlan
+from ..models import DispenseSchedule, DispenseTimepoint
 from ..constants import WEEKS
+
+from ..site_dispense_profiles import site_profiles
 
 
 class RandomizedSubjectDummy:
@@ -19,8 +21,18 @@ class TestDispensePlanScheduler(TestCase):
 
     def setUp(self):
         self.dispense_plan = {
-            'schedule1': {'number_of_visits': 2, 'duration': 2, 'unit': WEEKS},
-            'schedule2': {'number_of_visits': 2, 'duration': 8, 'unit': WEEKS}}
+            'schedule1': {
+                'number_of_visits': 2, 'duration': 2, 'unit': WEEKS,
+                'dispense_profile': {
+                    'enrollment': site_profiles.get(name='enrollment.control_arm'),
+                    'followup': site_profiles.get(name='followup.control_arm'),
+                }},
+            'schedule2': {
+                'number_of_visits': 2, 'duration': 8, 'unit': WEEKS,
+                'dispense_profile': {
+                    'enrollment': site_profiles.get(name='enrollment.control_arm'),
+                    'followup': site_profiles.get(name='followup.control_arm'),
+                }}}
 
     def test_schedule_subject_empty(self):
         """Assert that calculated subject_schedules equals
@@ -108,7 +120,7 @@ class TestDispensePlanScheduler(TestCase):
         dispense.prepare()
         schedule = DispenseSchedule.objects.all().first()
         self.assertEqual(
-            DispenseryPlan.objects.filter(schedule=schedule).count(), 2)
+            DispenseTimepoint.objects.filter(schedule=schedule).count(), 2)
 
     def test_schedule_subject4(self):
         enrolled_subject = RandomizedSubjectDummy(
@@ -118,7 +130,7 @@ class TestDispensePlanScheduler(TestCase):
             enrolled_subject=enrolled_subject,
             dispense_plan=self.dispense_plan)
         dispense.prepare()
-        self.assertEqual(DispenseryPlan.objects.all().count(), 4)
+        self.assertEqual(DispenseTimepoint.objects.all().count(), 4)
 
     def test_schedule_subject5(self):
         enrolled_subject = RandomizedSubjectDummy(
@@ -129,6 +141,6 @@ class TestDispensePlanScheduler(TestCase):
             dispense_plan=self.dispense_plan)
         dispense.prepare()
         schedule = DispenseSchedule.objects.all().first()
-        p1, p2 = DispenseryPlan.objects.filter(schedule=schedule)
+        p1, p2 = DispenseTimepoint.objects.filter(schedule=schedule)
         self.assertEqual(p1.timepoint, datetime(2017, 8, 24).date())
         self.assertEqual(p2.timepoint, datetime(2017, 9, 1).date())
