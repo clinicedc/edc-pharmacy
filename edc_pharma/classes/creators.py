@@ -57,6 +57,7 @@ class DispenseScheduleCreator:
                 end_date=self.schedule.period.end_date.date())
         except DispenseSchedule.DoesNotExist:
             obj = DispenseSchedule.objects.create(
+                subject_identifier=self.subject_identifier,
                 name=self.schedule.name,
                 sequence=self.sequence,
                 description=f'Day {self.sequence}',

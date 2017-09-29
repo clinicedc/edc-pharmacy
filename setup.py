@@ -1,8 +1,9 @@
 import os
-from setuptools import setup
 from setuptools import find_packages
+from setuptools import setup
 
-with open(os.path.join(os.path.dirname(__file__), 'READ.md')) as readme:
+
+with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
 
 # allow setup.py to be run from any path
@@ -19,6 +20,7 @@ setup(
     long_description=README,
     zip_safe=False,
     keywords='edc edc-pharma',
+    install_requires=['holidays'],
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',

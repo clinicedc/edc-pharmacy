@@ -1,11 +1,10 @@
-from django.test import tag, TestCase
-
 from datetime import datetime, date
 
-from ..classes import DispensePlanScheduler, InvalidSchedulePlanConfig
-from ..models import DispenseSchedule, DispenseTimepoint
-from ..constants import WEEKS
+from django.test import tag, TestCase
 
+from ..classes import DispensePlanScheduler, InvalidSchedulePlanConfig
+from ..constants import WEEKS
+from ..models import DispenseSchedule, DispenseTimepoint
 from ..site_dispense_profiles import site_profiles
 
 
@@ -53,7 +52,8 @@ class TestDispensePlanScheduler(TestCase):
             subject_identifier='1111')
         dispense = DispensePlanScheduler(
             enrolled_subject=enrolled_subject, dispense_plan=self.dispense_plan)
-        self.assertEqual(len(dispense.subject_schedules), len(self.dispense_plan))
+        self.assertEqual(len(dispense.subject_schedules),
+                         len(self.dispense_plan))
 
     @tag('dispense_scheduler.1')
     def test_schedule_subject1(self):
@@ -107,7 +107,7 @@ class TestDispensePlanScheduler(TestCase):
         dispense = DispensePlanScheduler(
             enrolled_subject=enrolled_subject,
             dispense_plan=self.dispense_plan)
-        dispense.prepare()
+        dispense.create_schedules()
         self.assertEqual(DispenseSchedule.objects.all().count(), 2)
 
     def test_schudule_subject3(self):
@@ -117,7 +117,7 @@ class TestDispensePlanScheduler(TestCase):
         dispense = DispensePlanScheduler(
             enrolled_subject=enrolled_subject,
             dispense_plan=self.dispense_plan)
-        dispense.prepare()
+        dispense.create_schedules()
         schedule = DispenseSchedule.objects.all().first()
         self.assertEqual(
             DispenseTimepoint.objects.filter(schedule=schedule).count(), 2)
@@ -129,7 +129,7 @@ class TestDispensePlanScheduler(TestCase):
         dispense = DispensePlanScheduler(
             enrolled_subject=enrolled_subject,
             dispense_plan=self.dispense_plan)
-        dispense.prepare()
+        dispense.create_schedules()
         self.assertEqual(DispenseTimepoint.objects.all().count(), 4)
 
     def test_schedule_subject5(self):
@@ -139,7 +139,7 @@ class TestDispensePlanScheduler(TestCase):
         dispense = DispensePlanScheduler(
             enrolled_subject=enrolled_subject,
             dispense_plan=self.dispense_plan)
-        dispense.prepare()
+        dispense.create_schedules()
         schedule = DispenseSchedule.objects.all().first()
         p1, p2 = DispenseTimepoint.objects.filter(schedule=schedule)
         self.assertEqual(p1.timepoint, datetime(2017, 8, 24).date())

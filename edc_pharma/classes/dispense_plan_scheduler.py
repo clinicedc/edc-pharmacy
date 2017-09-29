@@ -1,7 +1,8 @@
+from edc_pharma.dispense_plan import dispense_plans
+
 from ..classes import Period
 from ..classes import Schedule as SchedulePlan
 from ..classes import ScheduleCollection
-
 from .creators import DispenseScheduleCreator, DispenseTimepointCreator
 
 
@@ -23,11 +24,10 @@ class DispensePlanScheduler:
     dispense_timepoint_cls = DispenseTimepointCreator
     dispense_schedule_creator_cls = DispenseScheduleCreator
 
-    def __init__(self, enrolled_subject, dispense_plan=None, profile_selector=None,
-                 *args, **kwargs):
+    def __init__(self, enrolled_subject, dispense_plan=None,
+                 arm=None, *args, **kwargs):
         self.enrolled_subject = enrolled_subject
-        self.dispense_plan = dispense_plan
-        self.profile_selector = profile_selector
+        self.dispense_plan = dispense_plan or dispense_plans.get(arm)
 
     @property
     def subject_schedules(self):
@@ -38,7 +38,7 @@ class DispensePlanScheduler:
             self.validate_dispense_plan(dispense_plan=self.dispense_plan)
             schedule_details = self.dispense_plan.get(schedule_name)
             schedule_period = Period(
-                timepoint=schedules.next_timepoint or self.enrolled_subject.report_datetime,
+                timepoint=schedules.next_timepoint or self.enrolled_subject.randomization_datetime,
                 duration=schedule_details.get('duration'),
                 unit=schedule_details.get('unit'))
             schedule = SchedulePlan(
@@ -59,7 +59,7 @@ class DispensePlanScheduler:
             except KeyError as e:
                 raise InvalidSchedulePlanConfig(f'Missing expected key {e}')
 
-    def prepare(self):
+    def create_schedules(self):
         for sequence, schedule_name in enumerate(self.subject_schedules):
             sequence = sequence + 1
             schedule = self.subject_schedules.get(schedule_name)
@@ -73,4 +73,5 @@ class DispensePlanScheduler:
                 schedule_name=schedule_name, schedule_plan=schedule_plan,
                 schedule=schedule_obj,
                 timepoints=schedule.visits,
+                subject_identifier=self.enrolled_subject.subject_identifier
             ).create()

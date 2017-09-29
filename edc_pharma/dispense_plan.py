@@ -3,6 +3,7 @@ import collections
 from .constants import WEEKS
 from .site_dispense_profiles import site_profiles
 
+dispense_plans = collections.OrderedDict()
 dispense_plan_control = collections.OrderedDict()
 dispense_plan_control.update(
     {'schedule1': {
@@ -46,3 +47,6 @@ dispense_plan_singledose.update(
             'followup': site_profiles.get(name='followup.single_dose'),
         }
     }})
+
+dispense_plans.update({'control_arm': dispense_plan_control})
+dispense_plans.update({'single_dose': dispense_plan_singledose})

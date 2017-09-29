@@ -9,7 +9,7 @@ from ..models import DispenseSchedule, DispenseTimepoint
 class RandomizedSubjectDummy:
 
     def __init__(self, report_datetime=None, subject_identifier=None):
-        self.report_datetime = report_datetime or datetime.today()
+        self.randomization_datetime = report_datetime or datetime.today()
         self.subject_identifier = subject_identifier
 
 
@@ -18,7 +18,7 @@ class TestDispenseProfileSelector(TestCase):
 
     def setUp(self):
         self.enrolled_subject = RandomizedSubjectDummy(
-            report_datetime=datetime(2017, 8, 24), subject_identifier='1111')
+            randomization_datetime=datetime(2017, 8, 24), subject_identifier='1111')
         self.schedule = DispenseSchedule.objects.create(
             subject_identifier=self.enrolled_subject.subject_identifier,
             name='schedule1', sequence=1, duration='2',
