@@ -1,8 +1,9 @@
-from django.test import TestCase, tag
 from datetime import datetime
 
-from ..classes.period import Period
+from django.test import TestCase, tag
+
 from ..constants import DAYS
+from ..scheduler import Period
 
 
 @tag('timepoint')

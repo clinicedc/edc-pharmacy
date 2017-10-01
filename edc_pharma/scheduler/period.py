@@ -1,10 +1,10 @@
 from datetime import datetime
+from edc_pharma.constants import WEEKS, MONTHS, DAYS
 
 from dateutil.relativedelta import relativedelta
-from ..classes.exclude_days import ExcludeDays
-from ..classes.period_timepoint import PeriodTimepoint
-from ..classes.timepoint_selector import TimepointSelector
-from edc_pharma.constants import WEEKS, MONTHS, DAYS
+
+from ..holidays import ExcludeDays
+from ..scheduler import PeriodTimepoint, TimepointSelector
 
 
 class Period:

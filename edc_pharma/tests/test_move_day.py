@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.test import TestCase
 
-from ..classes.move_day import MoveDayError, MoveDay
+from ..holidays.move_day import MoveDayError, MoveDay
 
 
 class TestMoveDay(TestCase):

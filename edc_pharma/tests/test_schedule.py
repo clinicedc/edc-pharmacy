@@ -1,12 +1,13 @@
 from datetime import datetime
+from edc_pharma.constants import MONTHS
 
 from django.test import TestCase, tag
 
-from ..classes import Schedule, ScheduleCollection
-from ..classes.period import Period
 from ..classes import DispensePlanScheduleOverlapError
 from ..constants import WEEKS
-from edc_pharma.constants import MONTHS
+from ..scheduler import Schedule, ScheduleCollection
+from ..scheduler.period import Period
+
 
 dispense_plan = {
     'schedule1': {
@@ -43,7 +44,6 @@ class TestDispenseSchedule(TestCase):
             schedule.visits.get('visit0').timepoint_datetime.date(),
             datetime(2017, 8, 24).date())
 
-    @tag('schedule.1')
     def test_schedule_with_visit1(self):
         period = Period(
             timepoint=datetime(2017, 8, 24), unit=WEEKS, duration=2)
@@ -56,7 +56,6 @@ class TestDispenseSchedule(TestCase):
             schedule.visits.get('visit1').timepoint_datetime.date(),
             datetime(2017, 9, 1).date())
 
-    @tag('schedule.1')
     def test_schedule_with_visit3(self):
         period = Period(
             timepoint=datetime(2017, 8, 24),
@@ -108,7 +107,6 @@ class TestDispenseSchedule(TestCase):
             DispensePlanScheduleOverlapError, schedules.add,
             schedule=schedule2)
 
-    @tag('scheduller')
     def test_get_last_schedule(self):
         schedules = ScheduleCollection()
         enrollment_plan = dispense_plan.get('schedule1')
@@ -133,7 +131,6 @@ class TestDispenseSchedule(TestCase):
         schedules.add(schedule=schedule2)
         self.assertTrue(schedule2.name, schedules.last().name)
 
-    @tag('scheduller')
     def test_next_schedule_timepoint(self):
         schedules = ScheduleCollection()
         enrollment_plan = dispense_plan.get('schedule1')
@@ -148,7 +145,6 @@ class TestDispenseSchedule(TestCase):
         schedules.add(schedule=schedule)
         self.assertEqual(schedules.next_timepoint, datetime(2017, 9, 8))
 
-    @tag('selector')
     def test_schedule_with_visit_selector(self):
         period = Period(
             timepoint=datetime(2017, 8, 24),
@@ -159,7 +155,6 @@ class TestDispenseSchedule(TestCase):
             period=period)
         self.assertEqual(len(schedule.selector.selected_timepoints), 1)
 
-    @tag('selector')
     def test_schedule_with_visit_selector1(self):
         period = Period(
             timepoint=datetime(2017, 8, 24),
@@ -170,7 +165,6 @@ class TestDispenseSchedule(TestCase):
             period=period)
         self.assertEqual(len(schedule.selector.selected_timepoints), 2)
 
-    @tag('selector')
     def test_schedule_with_visit_selector2(self):
         period = Period(
             timepoint=datetime(2017, 8, 24), duration=2, unit=WEEKS)
@@ -196,7 +190,6 @@ class TestDispenseSchedule(TestCase):
         self.assertEqual(next_timepoint.date(), datetime(2017, 8, 29).date())
         self.assertEqual(third_timepoint.date(), datetime(2017, 9, 1).date())
 
-    @tag('selector')
     def test_schedule_with_visit_selector4(self):
         period = Period(
             timepoint=datetime(2017, 8, 24), unit=MONTHS, duration=2)
@@ -207,7 +200,6 @@ class TestDispenseSchedule(TestCase):
         self.assertEqual(first_day.date(), datetime(2017, 8, 24).date())
         self.assertEqual(next_timepoint.date(), datetime(2017, 9, 25).date())
 
-    @tag('selector')
     def test_schedule_with_visit_selector5(self):
         period = Period(
             timepoint=datetime(2017, 8, 24),

@@ -1,5 +1,5 @@
 from ..models import DispenseSchedule, DispenseTimepoint
-from .dispense_profile_selector import DispenseProfileSelector
+from ..print_profile import DispenseProfileSelector
 
 
 class DispenseTimepointCreator:

@@ -1,5 +1,5 @@
 from dateutil.relativedelta import relativedelta
-from ..classes.exclude_days import ExcludeDays
+from ..holidays import ExcludeDays
 
 
 class PeriodTimepoint:

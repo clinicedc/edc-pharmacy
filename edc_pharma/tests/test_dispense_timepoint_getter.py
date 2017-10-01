@@ -1,12 +1,12 @@
 from datetime import datetime, date
-from edc_pharma.models.dispense_schedule import DispenseSchedule
 
 from django.test import tag, TestCase
 
-from ..classes import DispensePlanScheduler
 from ..constants import WEEKS
 from ..models import DispenseTimepoint
-from ..site_dispense_profiles import site_profiles
+from ..models.dispense_schedule import DispenseSchedule
+from ..print_profile import site_profiles
+from ..scheduler import DispensePlanScheduler
 
 
 class RandomizedSubjectDummy:
@@ -134,11 +134,3 @@ class TestDispenseTimepointGetter(TestCase):
             is_dispensed=False
         ).order_by('created').first()
         self.assertTrue(dispense_timepoint.profile_medications)
-
-    @tag('getter.profile')
-    def test_schedule_description(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
-            is_dispensed=False
-        ).order_by('created').first()
-        print(dispense_timepoint.schedule.description, "<<<<<<<<<<<<<<<<<")

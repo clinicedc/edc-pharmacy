@@ -1,5 +1,5 @@
-from edc_pharma.classes.dispense_profile import DispenseProfile
-from edc_pharma.classes.medication_type import MedicationType
+from ..medication import MedicationType
+from ..print_profile import DispenseProfile
 
 
 class SiteDispenseProfiles:
