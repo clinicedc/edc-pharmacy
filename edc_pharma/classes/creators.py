@@ -42,11 +42,12 @@ class DispenseScheduleCreator:
     """
 
     def __init__(self, schedule=None, schedule_plan=None, subject_identifier=None,
-                 sequence=None):
+                 sequence=None, arm=None):
         self.schedule = schedule
         self.schedule_plan = schedule_plan
         self.subject_identifier = subject_identifier
         self.sequence = sequence
+        self.arm = arm
 
     def create(self):
         try:
@@ -60,7 +61,8 @@ class DispenseScheduleCreator:
                 subject_identifier=self.subject_identifier,
                 name=self.schedule.name,
                 sequence=self.sequence,
-                description=f'Day {self.sequence}',
+                description=self.schedule.description,
+                arm=self.arm,
                 start_date=self.schedule.period.start_date.date(),
                 end_date=self.schedule.period.end_date.date())
         return obj

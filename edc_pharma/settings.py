@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'edc_protocol.apps.AppConfig',
     'edc_identifier.apps.AppConfig',
     'edc_registration.apps.AppConfig',
+    'edc_device.apps.AppConfig',
     'edc_pharma.apps.AppConfig',
     'edc_pharma.apps.EdcLabelAppConfig',
     'edc_pharma.apps.EdcBaseAppConfig',
@@ -140,8 +141,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'edc_pharma', 'static')
 GIT_DIR = BASE_DIR
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+EDC_PHARMA_DISPENSE_MODEL = None
 
 KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+
 
 if 'test' in sys.argv:
 

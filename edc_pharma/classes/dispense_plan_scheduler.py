@@ -1,9 +1,9 @@
 from edc_pharma.dispense_plan import dispense_plans
 
-from ..classes import Period
-from ..classes import Schedule as SchedulePlan
-from ..classes import ScheduleCollection
 from .creators import DispenseScheduleCreator, DispenseTimepointCreator
+from .period import Period
+from .schedule_collection import Schedule as SchedulePlan
+from .schedule_collection import ScheduleCollection
 
 
 class DispensePlanSchedulerException(Exception):
@@ -27,6 +27,7 @@ class DispensePlanScheduler:
     def __init__(self, enrolled_subject, dispense_plan=None,
                  arm=None, *args, **kwargs):
         self.enrolled_subject = enrolled_subject
+        self.arm = arm
         self.dispense_plan = dispense_plan or dispense_plans.get(arm)
 
     @property
@@ -44,7 +45,8 @@ class DispensePlanScheduler:
             schedule = SchedulePlan(
                 name=schedule_name,
                 number_of_visits=schedule_details.get('number_of_visits'),
-                period=schedule_period)
+                period=schedule_period,
+                description=schedule_details.get('description'))
             schedules.add(schedule=schedule)
         return schedules
 
@@ -64,6 +66,7 @@ class DispensePlanScheduler:
             sequence = sequence + 1
             schedule = self.subject_schedules.get(schedule_name)
             schedule_obj = self.dispense_schedule_creator_cls(
+                arm=self.arm,
                 schedule=schedule,
                 subject_identifier=self.enrolled_subject.subject_identifier,
                 sequence=sequence).create()
