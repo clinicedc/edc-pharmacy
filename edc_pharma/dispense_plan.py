@@ -1,7 +1,7 @@
 import collections
 
 from .constants import WEEKS
-from .site_dispense_profiles import site_profiles
+from .print_profile import site_profiles
 
 dispense_plans = collections.OrderedDict()
 dispense_plan_control = collections.OrderedDict()

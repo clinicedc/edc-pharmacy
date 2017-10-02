@@ -6,6 +6,7 @@ from .holidays_collection import holidays_collection
 class CountryHolidays:
     """Returns holidays for given country.
     """
+
     def __init__(self, country=None):
         self.country = country
 

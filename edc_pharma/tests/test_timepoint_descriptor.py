@@ -2,12 +2,11 @@ from datetime import datetime, date
 
 from django.test import tag, TestCase
 
-from edc_pharma.classes.timepoint_descriptor import TimepointDescriptor
-
-from ..classes import DispensePlanScheduler
 from ..constants import WEEKS
 from ..models import DispenseTimepoint
-from ..site_dispense_profiles import site_profiles
+from ..print_profile import site_profiles
+from ..scheduler import DispensePlanScheduler
+from ..timepoint_descriptor import TimepointDescriptor
 
 
 class RandomizedSubjectDummy:

@@ -1,8 +1,8 @@
-from django.test import TestCase, tag
-
 from datetime import datetime
 
-from ..classes import is_weekend_day
+from django.test import TestCase, tag
+
+from ..utils import is_weekend_day
 
 
 @tag('TestWeekend')

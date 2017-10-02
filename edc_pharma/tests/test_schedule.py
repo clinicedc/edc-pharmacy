@@ -1,11 +1,12 @@
 from datetime import datetime
-from edc_pharma.constants import MONTHS
 
 from django.test import TestCase, tag
 
-from ..classes import DispensePlanScheduleOverlapError
+from ..constants import MONTHS
 from ..constants import WEEKS
-from ..scheduler import Schedule, ScheduleCollection
+from ..scheduler import DispensePlanScheduleOverlapError
+from ..scheduler import Schedule
+from ..scheduler import ScheduleCollection
 from ..scheduler.period import Period
 
 

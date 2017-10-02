@@ -1,6 +1,7 @@
 from collections import OrderedDict
+from edc_pharma.scheduler.timepoint_selector import TimepointSelector
+
 from dateutil.relativedelta import relativedelta
-from ..classes.timepoint_selector import TimepointSelector
 
 
 class DispensePlanScheduleOverlapError(Exception):

@@ -1,15 +1,16 @@
 from datetime import datetime, date
+
 from django.test import TestCase, tag
 
-from ..classes import DispenseProfileSelector
 from ..dispense_plan import dispense_plan_control
 from ..models import DispenseSchedule, DispenseTimepoint
+from ..print_profile import DispenseProfileSelector
 
 
 class RandomizedSubjectDummy:
 
-    def __init__(self, report_datetime=None, subject_identifier=None):
-        self.randomization_datetime = report_datetime or datetime.today()
+    def __init__(self, randomization_datetime=None, subject_identifier=None):
+        self.randomization_datetime = randomization_datetime or datetime.today()
         self.subject_identifier = subject_identifier
 
 

@@ -1,6 +1,7 @@
 from django.test import TestCase, tag
 
-from ..classes import DispenseProfile, MedicationType
+from ..medication import MedicationType
+from ..print_profile import DispenseProfile
 
 
 @tag('DispenseProfile')

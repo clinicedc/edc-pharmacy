@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.test import TestCase
 
-from ..classes.exclude_days import ExcludeDays
+from ..holidays import ExcludeDays
 
 
 class TestExcludeDays(TestCase):

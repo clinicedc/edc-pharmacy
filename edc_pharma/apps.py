@@ -1,16 +1,16 @@
+from edc_base.apps import AppConfig as EdcBaseAppConfigParent
+from edc_label.apps import AppConfig as EdcLabelAppConfigParent
 import os
 
 from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
-
-from edc_base.apps import AppConfig as EdcBaseAppConfigParent
-from edc_label.apps import AppConfig as EdcLabelAppConfigParent
 
 
 class AppConfig(DjangoAppConfig):
     name = 'edc_pharma'
     country = 'botswana'
     dispense_model = None
+    template_name = None
     try:
         dispense_model = settings.EDC_PHARMA_DISPENSE_MODEL
     except AttributeError:

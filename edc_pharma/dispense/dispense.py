@@ -1,27 +1,31 @@
+from django.apps import apps as django_apps
+
+from edc_pharma.dispense.labels.print_label import PrintLabel
+
 from ..models.dispense_timepoint import DispenseTimepoint
 
-from .dispense_history_creator import DispenseHistoryCreator
-from .dispense_instruction import DispenseInstruction
+edc_pharma_app_config = django_apps.get_app_config('edc_pharma')
 
 
 class Dispense:
 
     """Print dispense labels and update dispense history.
     """
-    dispense_instruction_cls = DispenseInstruction
-    dispense_history_creator_cls = DispenseHistoryCreator
     print_label_cls = PrintLabel
 
-    def __init__(self, subject_identifier=None, timepoint_id=None):
+    def __init__(self, subject_identifier=None, timepoint=None):
         self.subject_identifier = subject_identifier
-        self.timepoint_id = timepoint_id
+        self.timepoint = timepoint
 
+    @property
     def dispense_timepoint(self):
         """Returns dispense timepoint."""
         return DispenseTimepoint.objects.get(
             schedule__subject_identifier=self.subject_identifier,
-            id=self.timepoint_id)
+            timepoint=self.timepoint)
 
     def print_labels(self):
         """Print labels using dispense profile. """
-        self.print_label_cls(label=None, label_data=self.label_data)
+        self.print_label_cls(
+            dispense_timepoint=self.dispense_timepoint,
+            copies=1, template_name=edc_pharma_app_config.template_name)

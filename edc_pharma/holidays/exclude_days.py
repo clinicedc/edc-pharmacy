@@ -1,6 +1,6 @@
-from ..classes.country_holidays import CountryHolidays
-from ..classes.utils import is_weekend_day
-from ..classes.move_day import MoveDay
+from ..utils import is_weekend_day
+from .country_holidays import CountryHolidays
+from .move_day import MoveDay
 
 
 class ExcludeDays:
