@@ -11,27 +11,29 @@ class DispenseHistoryCreator:
         self.dispense_timepoint = dispense_timepoint
 
     def create_or_update(self):
+        model_obj = self.dispense_history
+        model_obj.save()
         for medication in self.dispense_timepoint.profile_medications:
             try:
-                self.dispense_history.medications.get(
-                    name=medication.name)
+                model_obj.medications.get(name=medication.name)
             except Medication.DoesNotExist:
-                self.dispense_history.medications.add(
-                    medication)
+                model_obj.medications.create(**{'name': medication.name})
 
     def save_or_update(self):
         self.create_or_update()
-        self.validate()
         self.dispense_history.save()
+        self.dispense_timepoint.is_dispensed = True
+        self.dispense_timepoint.save()
 
     @property
     def dispense_history(self):
         try:
-            self.dispense_history = DispenseHistory.objects.get(
+            dispense_history = DispenseHistory.objects.get(
                 dispense_timepoint=self.dispense_timepoint
             )
         except DispenseHistory.DoesNotExist:
-            self.dispense_history = DispenseHistory(
+            dispense_history = DispenseHistory(
                 dispense_timepoint=self.dispense_timepoint,
                 dispense_datetime=datetime.today()
             )
+        return dispense_history
