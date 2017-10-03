@@ -44,11 +44,10 @@ class TestDispense(TestCase):
         dispense.create_schedules()
 
     def test_print_label(self):
-        dispense = Dispense(
+        Dispense(
             subject_identifier=self.enrolled_subject.subject_identifier,
             timepoint=date(2017, 8, 24))
-        dispense.print_labels()
         self.assertEqual(DispenseHistory.objects.filter(
             dispense_timepoint__schedule__subject_identifier=self.enrolled_subject.subject_identifier,
             dispense_timepoint__timepoint=date(2017, 8, 24),
-        ))
+        ).count(), 1)

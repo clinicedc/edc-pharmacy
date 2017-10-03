@@ -144,7 +144,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 EDC_PHARMA_DISPENSE_MODEL = None
 
 KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
-
+LABEL_PRINTER = 'test_label_printer_ambition'
 
 if 'test' in sys.argv:
 

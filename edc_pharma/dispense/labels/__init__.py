@@ -1,2 +1,2 @@
-from .label_context import LabelContext
-from .print_label import PrintLabel
+from .dispense_label import DispenseLabel
+from .dispense_label_context import DispenseLabelContext

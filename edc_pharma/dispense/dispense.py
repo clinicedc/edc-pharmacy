@@ -1,6 +1,6 @@
 from django.apps import apps as django_apps
 
-from edc_pharma.dispense.labels.print_label import PrintLabel
+from ..dispense.labels import DispenseLabel
 
 from ..models.dispense_timepoint import DispenseTimepoint
 
@@ -11,11 +11,12 @@ class Dispense:
 
     """Print dispense labels and update dispense history.
     """
-    print_label_cls = PrintLabel
+    print_label_cls = DispenseLabel
 
     def __init__(self, subject_identifier=None, timepoint=None):
         self.subject_identifier = subject_identifier
         self.timepoint = timepoint
+        self.print_labels()
 
     @property
     def dispense_timepoint(self):
