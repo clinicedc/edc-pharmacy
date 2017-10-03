@@ -1,13 +1,11 @@
-from datetime import datetime, date
+from datetime import datetime
 from edc_pharma.dispense.dispense_history_creator import DispenseHistoryCreator
+from edc_pharma.models.dispense_history import DispenseHistory
 from edc_pharma.models.dispense_timepoint import DispenseTimepoint
 
 from django.test import tag, TestCase
 
-from edc_pharma.models.dispense_history import DispenseHistory
-
 from ..constants import WEEKS
-from ..dispense import Dispense
 from ..print_profile import site_profiles
 from ..scheduler import DispensePlanScheduler
 
@@ -79,3 +77,21 @@ class TestDispenseCreator(TestCase):
             is_dispensed=True
         )
         self.assertEqual(dispense_timepoint.count(), 1)
+
+    @tag('creator_3')
+    def test_dispense_history_creator_3(self):
+        dispense_timepoint = DispenseTimepoint.objects.filter(
+            schedule__subject_identifier=self.enrolled_subject.subject_identifier
+        ).order_by('created').first()
+        creator = DispenseHistoryCreator(
+            dispense_timepoint=dispense_timepoint)
+        creator.save_or_update()
+        dispense_timepoint = dispense_timepoint.next()
+        creator = DispenseHistoryCreator(
+            dispense_timepoint=dispense_timepoint)
+        creator.save_or_update()
+        dispense_timepoint = DispenseTimepoint.objects.filter(
+            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            is_dispensed=True
+        )
+        self.assertEqual(dispense_timepoint.count(), 2)

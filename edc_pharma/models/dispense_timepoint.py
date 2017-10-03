@@ -5,16 +5,7 @@ from django.db import models
 from .dispense_schedule import DispenseSchedule
 
 
-# from ..classes import DispenseTimepointMixin
-class DispenseTimepoint(BaseUuidModel):
-
-    timepoint = models.DateField()
-
-    is_dispensed = models.BooleanField(default=False)
-
-    schedule = models.ForeignKey(DispenseSchedule)
-
-    profile_label = models.CharField(max_length=100)
+class DispenseTimepointMixin:
 
     def previous(self):
         return self.__class__.objects.filter(
@@ -51,6 +42,17 @@ class DispenseTimepoint(BaseUuidModel):
         for _, value in self.print_profile.medication_types.items():
             medications.append(value)
         return medications
+
+
+class DispenseTimepoint(DispenseTimepointMixin, BaseUuidModel):
+
+    timepoint = models.DateField()
+
+    is_dispensed = models.BooleanField(default=False)
+
+    schedule = models.ForeignKey(DispenseSchedule)
+
+    profile_label = models.CharField(max_length=100)
 
     def __str__(self):
         return (f'{self.timepoint} - {self.profile_label}')

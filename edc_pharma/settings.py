@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'simple_history',
     'crispy_forms',
-    # 'django_nose',
+    'schedule',
+    'djangobower',
     'django_revision.apps.AppConfig',
     'django_crypto_fields.apps.AppConfig',
     'edc_protocol.apps.AppConfig',
@@ -159,3 +160,20 @@ if 'test' in sys.argv:
     MIGRATION_MODULES = DisableMigrations()
     PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
     DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
+
+BOWER_INSTALLED_APPS = (
+    'jquery',
+    'jquery-ui',
+    'bootstrap',
+    'fullcalendar'
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'djangobower.finders.BowerFinder',
+)
+
+STATICFILES_FINDERS = [
+    'djangobower.finders.BowerFinder',
+]

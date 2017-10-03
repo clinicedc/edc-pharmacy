@@ -2,7 +2,7 @@ from edc_base.model_mixins import BaseUuidModel
 
 from django.db import models
 
-from .list_models import Medication
+from .medication import Medication
 
 
 from.dispense_timepoint import DispenseTimepoint

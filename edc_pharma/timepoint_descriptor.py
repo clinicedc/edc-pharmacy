@@ -18,8 +18,6 @@ class TimepointDescriptor:
 
     @property
     def start_day(self):
-        """
-        """
         if not self.dispense_timepoint.previous():
             return 'Day 1'
         else:

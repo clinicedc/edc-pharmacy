@@ -53,3 +53,14 @@ class TestDispense(TestCase):
             dispense_timepoint__schedule__subject_identifier=self.enrolled_subject.subject_identifier,
             dispense_timepoint__timepoint=date(2017, 8, 24),
         ).count(), 1)
+
+    def test_print_label1(self):
+        dispense_timepoint = DispenseTimepoint.objects.all().order_by(
+            'created').first()
+        Dispense(
+            subject_identifier=self.enrolled_subject.subject_identifier,
+            timepoint_id=dispense_timepoint.id)
+        self.assertEqual(DispenseHistory.objects.filter(
+            dispense_timepoint__schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            dispense_timepoint__timepoint=date(2017, 8, 24),
+        ).count(), 1)

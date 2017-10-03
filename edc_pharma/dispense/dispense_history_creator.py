@@ -1,7 +1,10 @@
 from datetime import datetime
 
-from edc_pharma.models.dispense_history import DispenseHistory
-from edc_pharma.models.list_models import Medication
+
+from django.core.exceptions import ObjectDoesNotExist
+
+from ..models import Medication
+from ..models.dispense_history import DispenseHistory
 
 
 class DispenseHistoryCreator:
@@ -15,9 +18,15 @@ class DispenseHistoryCreator:
         model_obj.save()
         for medication in self.dispense_timepoint.profile_medications:
             try:
-                model_obj.medications.get(name=medication.name)
-            except Medication.DoesNotExist:
-                model_obj.medications.create(**{'name': medication.name})
+                medication_obj = Medication.objects.get(
+                    name=medication.name,
+                    description=medication.description)
+            except ObjectDoesNotExist:
+                medication_obj = Medication.objects.create(
+                    name=medication.name,
+                    description=medication.description,
+                    storage_instructions=medication.instruction)
+            model_obj.medications.add(medication_obj)
 
     def save_or_update(self):
         self.create_or_update()

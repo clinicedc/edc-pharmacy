@@ -16,7 +16,7 @@ class Dispense:
     def __init__(self, subject_identifier=None, timepoint_id=None):
         self.subject_identifier = subject_identifier
         self.timepoint_id = timepoint_id
-        self.print_labels()
+        self.printed_labels = self.print_labels()
 
     @property
     def dispense_timepoint(self):
@@ -27,10 +27,7 @@ class Dispense:
 
     def print_labels(self):
         """Print labels using dispense profile. """
-        self.print_label_cls(
+        printer = self.print_label_cls(
             dispense_timepoint=self.dispense_timepoint,
             copies=1, template_name=edc_pharma_app_config.template_name)
-
-
-# 092-40990001-3
-# ''
+        return printer.print_labels

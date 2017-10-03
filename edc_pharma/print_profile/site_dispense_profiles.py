@@ -1,4 +1,5 @@
-from ..medication import MedicationType
+from edc_pharma.import_medication_list import medications
+
 from ..print_profile import DispenseProfile
 
 
@@ -36,45 +37,27 @@ class SiteDispenseProfiles:
 
 site_profiles = SiteDispenseProfiles()
 
-ambisome = MedicationType(
-    name='Ambisome',
-    description='Ambisome 10 mg/kg/day',
-    unit='10 mg/kg')
-fluconazole = MedicationType(
-    name='Fluconazole',
-    description='fluconazole 1200mg/day',
-    unit='1200mg')
-flucytosine = MedicationType(
-    name='Flucytosine',
-    description='flucytosine 100mg',
-    unit='100mg')
-amphotericin = MedicationType(
-    name='Amphotericin B',
-    description='amphotericin B 1 mg/kg',
-    unit='1 mg/kg')
-
-
 single_dose_enrollment = DispenseProfile(
     name='enrollment', profile_type='single_dose')
-single_dose_enrollment.add_medication_type(ambisome)
-single_dose_enrollment.add_medication_type(fluconazole)
-single_dose_enrollment.add_medication_type(flucytosine)
+single_dose_enrollment.add_medication_type(medications.get('ambisome'))
+single_dose_enrollment.add_medication_type(medications.get('fluconazole'))
+single_dose_enrollment.add_medication_type(medications.get('flucytosine'))
 site_profiles.register(single_dose_enrollment)
 
 single_dose_followup = DispenseProfile(
     name='followup', profile_type='single_dose')
-single_dose_followup.add_medication_type(fluconazole)
-single_dose_followup.add_medication_type(flucytosine)
+single_dose_followup.add_medication_type(medications.get('fluconazole'))
+single_dose_followup.add_medication_type(medications.get('flucytosine'))
 site_profiles.register(single_dose_followup)
 
 control_arm_enrollemnt = DispenseProfile(
     name='enrollment', profile_type='control_arm')
-control_arm_enrollemnt.add_medication_type(amphotericin)
-control_arm_enrollemnt.add_medication_type(flucytosine)
+control_arm_enrollemnt.add_medication_type(medications.get('amphotericin'))
+control_arm_enrollemnt.add_medication_type(medications.get('flucytosine'))
 site_profiles.register(control_arm_enrollemnt)
 
 control_followup_profile = DispenseProfile(
     name='followup', profile_type='control_arm')
-control_followup_profile.add_medication_type(amphotericin)
-control_followup_profile.add_medication_type(flucytosine)
+control_followup_profile.add_medication_type(medications.get('amphotericin'))
+control_followup_profile.add_medication_type(medications.get('flucytosine'))
 site_profiles.register(control_followup_profile)
