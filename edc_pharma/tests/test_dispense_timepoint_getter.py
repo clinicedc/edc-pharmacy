@@ -134,3 +134,13 @@ class TestDispenseTimepointGetter(TestCase):
             is_dispensed=False
         ).order_by('created').first()
         self.assertTrue(dispense_timepoint.profile_medications)
+        self.assertTrue(len(dispense_timepoint.profile_medications), 2)
+
+    @tag('getter.profile')
+    def test_dispense_profile_medications_1(self):
+        dispense_timepoint = DispenseTimepoint.objects.filter(
+            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            is_dispensed=False
+        ).order_by('created').first()
+        dispense_timepoint = dispense_timepoint.next()
+        self.assertTrue(len(dispense_timepoint.profile_medications), 2)

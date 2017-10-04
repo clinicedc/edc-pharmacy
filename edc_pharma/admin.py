@@ -7,9 +7,6 @@ from edc_pharma.models.dispense_timepoint import DispenseTimepoint
 
 from django.contrib import admin
 
-from edc_visit_tracking.modeladmin_mixins import (
-    CrfModelAdminMixin as VisitTrackingCrfModelAdminMixin)
-
 from .admin_site import edc_pharma_admin
 from .forms import DispenseTimepointForm
 

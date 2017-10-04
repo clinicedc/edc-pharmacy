@@ -1,46 +1,54 @@
-from django.test import TestCase, tag
+from edc_pharma.print_profile import site_profiles
 
-from ..medication import MedicationType
-from ..print_profile import DispenseProfile
+from django.test import TestCase, tag
 
 
 @tag('DispenseProfile')
 class TestDispenseProfile(TestCase):
 
-    def test_dispense_profile(self):
-        dispense_profile = DispenseProfile(name='enrollment_profile')
-        self.assertTrue(dispense_profile)
+    def test_site_profiles(self):
+        self.assertTrue(site_profiles)
 
-    def test_add_medication_type(self):
-        dispense_profile = DispenseProfile(name='enrollment_profile')
-        medication_type = MedicationType(
-            name='med1', description='med1-desc', unit='1000ML')
-        dispense_profile.add_medication_type(medication_type)
-        self.assertEqual(len(dispense_profile.medication_types), 1)
+    def test_site_profiles_single_dose(self):
+        single_dose_profile = site_profiles.get(
+            'enrollment.single_dose')
+        self.assertTrue(single_dose_profile)
+        self.assertTrue(len(single_dose_profile.medication_types), 3)
 
-    def test_add_medication_type_more(self):
-        """ Assert that more one medication type can be added to dispense profile.
-        """
-        dispense_profile = DispenseProfile(name='enrollment_profile')
-        medication_type1 = MedicationType(
-            name='med1', description='med1-desc', unit='1000ML')
-        medication_type2 = MedicationType(
-            name='med2', description='med2 description', unit='1000ML')
-        dispense_profile.add_medication_type(medication_type1)
-        dispense_profile.add_medication_type(medication_type2)
-        self.assertEqual(len(dispense_profile.medication_types), 2)
+    def test_site_profiles_single_dose1(self):
+        single_dose_profile = site_profiles.get(
+            'enrollment.single_dose')
+        self.assertTrue(single_dose_profile)
+        self.assertEqual(single_dose_profile.medication_types.get(
+            'ambisome').name, 'ambisome')
+        self.assertEqual(single_dose_profile.medication_types.get(
+            'fluconazole').name, 'fluconazole')
+        self.assertEqual(single_dose_profile.medication_types.get(
+            'flucytosine').name, 'flucytosine')
 
-    def test_update_medication_type(self):
-        """ Assert that adding same medication type twice just update existing
-        medication type.
-        """
-        dispense_profile = DispenseProfile(name='enrollment_profile')
-        medication_type1 = MedicationType(
-            name='med1', description='med1-desc', unit='1000ML')
-        dispense_profile.add_medication_type(medication_type1)
-        medication_type2 = MedicationType(
-            name='med1', description='med1 description', unit='2000ML')
-        dispense_profile.add_medication_type(medication_type2)
-        med_type = dispense_profile.get_medication_type(name='med1')
-        self.assertEqual(med_type.unit, '2000ML')
-        self.assertEqual(med_type.description, 'med1 description')
+    def test_site_profiles_single_dose2(self):
+        single_dose_profile = site_profiles.get(
+            'followup.single_dose')
+        self.assertTrue(len(single_dose_profile.medication_types), 2)
+        self.assertEqual(single_dose_profile.medication_types.get(
+            'fluconazole').name, 'fluconazole')
+        self.assertEqual(single_dose_profile.medication_types.get(
+            'flucytosine').name, 'flucytosine')
+
+    def test_site_profiles_control_arm(self):
+        control_arm = site_profiles.get(
+            'enrollment.control_arm')
+        self.assertTrue(len(control_arm.medication_types), 2)
+        self.assertEqual(control_arm.medication_types.get(
+            'amphotericin').name, 'amphotericin')
+        self.assertEqual(control_arm.medication_types.get(
+            'flucytosine').name, 'flucytosine')
+
+    def test_site_profiles_control_arm_followup(self):
+        control_arm = site_profiles.get(
+            'followup.control_arm')
+        self.assertTrue(len(control_arm.medication_types), 2)
+        self.assertEqual(control_arm.medication_types.get(
+            'amphotericin').name, 'amphotericin')
+        self.assertEqual(control_arm.medication_types.get(
+            'flucytosine').name, 'flucytosine')

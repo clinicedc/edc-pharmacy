@@ -22,7 +22,7 @@ flucytosine = Medication(
     description='Flucytosine 100mg',
     unit='100mg',
     instruction='NA')
-medications.update({'flucytosine': fluconazole})
+medications.update({'flucytosine': flucytosine})
 
 amphotericin = Medication(
     name='amphotericin',
