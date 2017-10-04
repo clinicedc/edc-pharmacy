@@ -10,6 +10,7 @@ class AppConfig(DjangoAppConfig):
     name = 'edc_pharma'
     country = 'botswana'
     dispense_model = None
+    dispensetimepoint_model = 'edc_pharma.dispensetimepoint'
     template_name = None
     try:
         dispense_model = settings.EDC_PHARMA_DISPENSE_MODEL
