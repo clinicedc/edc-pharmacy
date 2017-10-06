@@ -1,4 +1,7 @@
+from copy import deepcopy
+
 from django.apps import apps as django_apps
+
 
 edc_pharma_app_config = django_apps.get_app_config('edc_pharma')
 
@@ -36,8 +39,8 @@ class DispenseLabelContext:
     @property
     def context_list(self):
         context_list = []
-        context = self.context
         for medication in self.dispense_appointment.profile_medications:
+            context = deepcopy(self.context)
             context.update({
                 'medication': medication.description})
             context_list.append(context)

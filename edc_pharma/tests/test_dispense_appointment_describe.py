@@ -1,4 +1,5 @@
 from datetime import datetime
+from edc_pharma import DispenseAppointmentDescibe
 
 from django.test import tag, TestCase
 
@@ -6,7 +7,6 @@ from ..constants import WEEKS
 from ..models import DispenseAppointment
 from ..print_profile import site_profiles
 from ..scheduler import DispensePlanScheduler
-from ..timepoint_descriptor import TimepointDescriptor
 
 
 class RandomizedSubjectDummy:
@@ -17,7 +17,7 @@ class RandomizedSubjectDummy:
 
 
 @tag('descriptor')
-class TestTimepointDescriptor(TestCase):
+class TestDispenseAppointmentDescribe(TestCase):
 
     def setUp(self):
         self.dispense_plan = {
@@ -44,58 +44,58 @@ class TestTimepointDescriptor(TestCase):
             arm='control_arm')
         dispense.create_schedules()
 
-    def test_dispense_timepoint_start_day(self):
-        dispense_timepoint = DispenseAppointment.objects.filter(
+    def test_dispense_appointment_start_day(self):
+        dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        descriptor = TimepointDescriptor(
-            dispense_timepoint=dispense_timepoint)
-        self.assertTrue(descriptor.human_readiable())
-        self.assertEqual('Day 1', descriptor.start_day)
+        describe = DispenseAppointmentDescibe(
+            dispense_appointment=dispense_appointment)
+        self.assertTrue(describe.human_readiable())
+        self.assertEqual('Day 1', describe.start_day)
 
-    def test_dispense_timepoint_human_readiable_days_7(self):
-        dispense_timepoint = DispenseAppointment.objects.filter(
+    def test_dispense_appointment_human_readiable_days_7(self):
+        dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        dispense_timepoint = dispense_timepoint.next()
-        descriptor = TimepointDescriptor(
-            dispense_timepoint=dispense_timepoint)
-        self.assertTrue(descriptor.human_readiable())
-        self.assertIn('Day 8', descriptor.start_day)
-        self.assertEqual('Day 14', descriptor.end_day)
+        dispense_appointment = dispense_appointment.next()
+        appt_describe = DispenseAppointmentDescibe(
+            dispense_appointment=dispense_appointment)
+        self.assertTrue(appt_describe.human_readiable())
+        self.assertIn('Day 8', appt_describe.start_day)
+        self.assertEqual('Day 14', appt_describe.end_day)
 
-    def test_dispense_timepoint_human_readiable_days_3(self):
-        dispense_timepoint = DispenseAppointment.objects.filter(
+    def test_dispense_appointment_human_readiable_days_3(self):
+        dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        descriptor = TimepointDescriptor(
-            dispense_timepoint=dispense_timepoint)
-        self.assertTrue(descriptor.human_readiable())
-        self.assertEqual('Day 1', descriptor.start_day)
-        self.assertEqual('Day 7', descriptor.end_day)
+        appt_describe = DispenseAppointmentDescibe(
+            dispense_appointment=dispense_appointment)
+        self.assertTrue(appt_describe.human_readiable())
+        self.assertEqual('Day 1', appt_describe.start_day)
+        self.assertEqual('Day 7', appt_describe.end_day)
 
-    def test_dispense_timepoint_human_readiable_days(self):
-        dispense_timepoint = DispenseAppointment.objects.filter(
+    def test_dispense_appointment_human_readiable_days(self):
+        dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        descriptor = TimepointDescriptor(
-            dispense_timepoint=dispense_timepoint)
-        self.assertTrue(descriptor.human_readiable())
-        self.assertIn('Day 1', descriptor.human_readiable())
-        self.assertIn('Day 7', descriptor.human_readiable())
+        appt_describe = DispenseAppointmentDescibe(
+            dispense_appointment=dispense_appointment)
+        self.assertTrue(appt_describe.human_readiable())
+        self.assertIn('Day 1', appt_describe.human_readiable())
+        self.assertIn('Day 7', appt_describe.human_readiable())
 
-    def test_dispense_timepoint_human_readiable_days_1(self):
-        dispense_timepoint = DispenseAppointment.objects.filter(
+    def test_dispense_appointment_human_readiable_days_1(self):
+        dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        dispense_timepoint = dispense_timepoint.next()
-        descriptor = TimepointDescriptor(
-            dispense_timepoint=dispense_timepoint)
-        self.assertTrue(descriptor.human_readiable())
-        self.assertIn('Day 8', descriptor.human_readiable())
-        self.assertIn('Day 14', descriptor.human_readiable())
+        dispense_appointment = dispense_appointment.next()
+        appt_describe = DispenseAppointmentDescibe(
+            dispense_appointment=dispense_appointment)
+        self.assertTrue(appt_describe.human_readiable())
+        self.assertIn('Day 8', appt_describe.human_readiable())
+        self.assertIn('Day 14', appt_describe.human_readiable())

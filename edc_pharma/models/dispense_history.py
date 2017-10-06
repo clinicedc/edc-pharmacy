@@ -22,7 +22,7 @@ class DispenseHistory(BaseUuidModel):
         help_text='')
 
     def __str__(self):
-        return (f'{self.dispense_timepoint} - {self.dispense_datetime}')
+        return (f'{self.dispense_appointment} - {self.dispense_datetime}')
 
     class Meta:
         app_label = 'edc_pharma'
