@@ -24,11 +24,14 @@ class DispensePlanScheduler:
     dispense_timepoint_cls = DispenseTimepointCreator
     dispense_schedule_creator_cls = DispenseScheduleCreator
 
-    def __init__(self, enrolled_subject, dispense_plan=None,
+    def __init__(self, randomized_subject, dispense_plan=None,
                  arm=None, *args, **kwargs):
-        self.enrolled_subject = enrolled_subject
+        self.randomized_subject = randomized_subject
         self.arm = arm
         self.dispense_plan = dispense_plan or dispense_plans.get(arm)
+        if not self.dispense_plan:
+            raise DispensePlanSchedulerException(
+                f'Failed to find dispense schedule plan, for {self.arm}.')
 
     @property
     def subject_schedules(self):
@@ -39,7 +42,7 @@ class DispensePlanScheduler:
             self.validate_dispense_plan(dispense_plan=self.dispense_plan)
             schedule_details = self.dispense_plan.get(schedule_name)
             schedule_period = Period(
-                timepoint=schedules.next_timepoint or self.enrolled_subject.randomization_datetime,
+                timepoint=schedules.next_timepoint or self.randomized_subject.randomization_datetime,
                 duration=schedule_details.get('duration'),
                 unit=schedule_details.get('unit'))
             schedule = SchedulePlan(
@@ -68,7 +71,7 @@ class DispensePlanScheduler:
             schedule_obj = self.dispense_schedule_creator_cls(
                 arm=self.arm,
                 schedule=schedule,
-                subject_identifier=self.enrolled_subject.subject_identifier,
+                subject_identifier=self.randomized_subject.subject_identifier,
                 sequence=sequence).create()
             schedule_plan = self.dispense_plan.get(schedule_name)
 
@@ -76,5 +79,5 @@ class DispensePlanScheduler:
                 schedule_name=schedule_name, schedule_plan=schedule_plan,
                 schedule=schedule_obj,
                 timepoints=schedule.visits,
-                subject_identifier=self.enrolled_subject.subject_identifier
+                subject_identifier=self.randomized_subject.subject_identifier
             ).create()

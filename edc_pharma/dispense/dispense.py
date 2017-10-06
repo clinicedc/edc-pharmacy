@@ -13,9 +13,11 @@ class Dispense:
     """
     print_label_cls = DispenseLabel
 
-    def __init__(self, subject_identifier=None, timepoint_id=None):
+    def __init__(self, subject_identifier=None, timepoint_id=None,
+                 user=None):
         self.subject_identifier = subject_identifier
         self.timepoint_id = timepoint_id
+        self.user = user
         self.printed_labels = self.print_labels()
 
     @property

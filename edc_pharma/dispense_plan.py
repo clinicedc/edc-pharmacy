@@ -12,8 +12,8 @@ dispense_plan_control.update(
         'unit': WEEKS,
         'description': 'Enrollment Schedule 1',
         'dispense_profile': {
-            'enrollment': site_profiles.get(name='enrollment.control_arm'),
-            'followup': site_profiles.get(name='followup.control_arm'),
+            'enrollment': site_profiles.get(name='enrollment.control'),
+            'followup': site_profiles.get(name='followup.control'),
         }
     }})
 dispense_plan_control.update(
@@ -23,8 +23,8 @@ dispense_plan_control.update(
         'unit': WEEKS,
         'description': 'Follow Up Schedule 1',
         'dispense_profile': {
-            'enrollment': site_profiles.get(name='followup.control_arm'),
-            'followup': site_profiles.get(name='followup.control_arm'),
+            'enrollment': site_profiles.get(name='followup.control'),
+            'followup': site_profiles.get(name='followup.control'),
         }
     }})
 
@@ -52,5 +52,5 @@ dispense_plan_singledose.update(
         }
     }})
 
-dispense_plans.update({'control_arm': dispense_plan_control})
+dispense_plans.update({'control': dispense_plan_control})
 dispense_plans.update({'single_dose': dispense_plan_singledose})

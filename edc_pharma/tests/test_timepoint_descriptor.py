@@ -25,28 +25,28 @@ class TestTimepointDescriptor(TestCase):
                 'number_of_visits': 2, 'duration': 2, 'unit': WEEKS,
                 'description': 'Enrollment',
                 'dispense_profile': {
-                    'enrollment': site_profiles.get(name='enrollment.control_arm'),
-                    'followup': site_profiles.get(name='followup.control_arm'),
+                    'enrollment': site_profiles.get(name='enrollment.control'),
+                    'followup': site_profiles.get(name='followup.control'),
                 }},
             'schedule2': {
                 'number_of_visits': 2, 'duration': 8, 'unit': WEEKS,
                 'description': 'Followup',
                 'dispense_profile': {
-                    'enrollment': site_profiles.get(name='enrollment.control_arm'),
-                    'followup': site_profiles.get(name='followup.control_arm'),
+                    'enrollment': site_profiles.get(name='enrollment.control'),
+                    'followup': site_profiles.get(name='followup.control'),
                 }}}
-        self.enrolled_subject = RandomizedSubjectDummy(
+        self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispensePlanScheduler(
-            enrolled_subject=self.enrolled_subject,
+            randomized_subject=self.randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
         dispense.create_schedules()
 
     def test_dispense_timepoint_start_day(self):
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
         descriptor = TimepointDescriptor(
@@ -56,7 +56,7 @@ class TestTimepointDescriptor(TestCase):
 
     def test_dispense_timepoint_human_readiable_days_7(self):
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
         dispense_timepoint = dispense_timepoint.next()
@@ -68,7 +68,7 @@ class TestTimepointDescriptor(TestCase):
 
     def test_dispense_timepoint_human_readiable_days_3(self):
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
         descriptor = TimepointDescriptor(
@@ -79,7 +79,7 @@ class TestTimepointDescriptor(TestCase):
 
     def test_dispense_timepoint_human_readiable_days(self):
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
         descriptor = TimepointDescriptor(
@@ -90,7 +90,7 @@ class TestTimepointDescriptor(TestCase):
 
     def test_dispense_timepoint_human_readiable_days_1(self):
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
         dispense_timepoint = dispense_timepoint.next()

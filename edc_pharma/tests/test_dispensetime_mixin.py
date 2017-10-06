@@ -17,8 +17,8 @@ class RandomizedSubjectDummy:
         self.subject_identifier = subject_identifier
 
 
-@tag('TestDispense')
-class TestDispense(TestCase):
+@tag('dispensetimemixin')
+class TestDispenseTimepointMixin(TestCase):
 
     def setUp(self):
         self.dispense_plan = {
@@ -43,24 +43,28 @@ class TestDispense(TestCase):
             arm='control')
         dispense.create_schedules()
 
-    def test_print_label(self):
-        dispense_timepoint = DispenseTimepoint.objects.all().order_by(
-            'created').first()
-        Dispense(
-            subject_identifier=self.randomized_subject.subject_identifier,
-            timepoint_id=dispense_timepoint.id)
-        self.assertEqual(DispenseHistory.objects.filter(
-            dispense_timepoint__schedule__subject_identifier=self.randomized_subject.subject_identifier,
-            dispense_timepoint__timepoint=date(2017, 8, 24),
-        ).count(), 1)
+    def test_dispensetime_next(self):
+        dispense_timepoint = DispenseTimepoint.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
+        ).order_by('created').first()
+        self.assertEqual(dispense_timepoint.next().timepoint, date(2017, 9, 1))
 
-    def test_print_label1(self):
-        dispense_timepoint = DispenseTimepoint.objects.all().order_by(
-            'created').first()
-        Dispense(
-            subject_identifier=self.randomized_subject.subject_identifier,
-            timepoint_id=dispense_timepoint.id)
-        self.assertEqual(DispenseHistory.objects.filter(
-            dispense_timepoint__schedule__subject_identifier=self.randomized_subject.subject_identifier,
-            dispense_timepoint__timepoint=date(2017, 8, 24),
-        ).count(), 1)
+    def test_dispensetime_next_1(self):
+        dispense_timepoint = DispenseTimepoint.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
+        ).order_by('created').first()
+        dispense_timepoint = dispense_timepoint.next()
+        dispense_timepoint = dispense_timepoint.next()
+        self.assertIsNone(dispense_timepoint)
+
+    def test_dispensetime_previous(self):
+        dispense_timepoint = DispenseTimepoint.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
+        ).order_by('created').first()
+        self.assertIsNone(dispense_timepoint.previous())
+
+    def test_dispensetime_next_2(self):
+        dispense_timepoint = DispenseTimepoint.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
+        ).order_by('created').first()
+        self.assertIsNone(dispense_timepoint.previous())

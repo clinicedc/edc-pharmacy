@@ -28,7 +28,7 @@ class TestDispenseProfileSelector(TestCase):
         self.dispense_plan = DispenseTimepoint.objects.create(
             timepoint=datetime.today(),
             schedule=self.schedule,
-            profile_label='enrollment.control_arm')
+            profile_label='enrollment.control')
 
     def test_schedule_subject_selector(self):
         """Assert that first schedule (enrollment timepoint) returns enrollment

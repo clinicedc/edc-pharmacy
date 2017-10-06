@@ -37,7 +37,7 @@ class TestDispenseProfile(TestCase):
 
     def test_site_profiles_control_arm(self):
         control_arm = site_profiles.get(
-            'enrollment.control_arm')
+            'enrollment.control')
         self.assertTrue(len(control_arm.medication_types), 2)
         self.assertEqual(control_arm.medication_types.get(
             'amphotericin').name, 'amphotericin')
@@ -46,7 +46,7 @@ class TestDispenseProfile(TestCase):
 
     def test_site_profiles_control_arm_followup(self):
         control_arm = site_profiles.get(
-            'followup.control_arm')
+            'followup.control')
         self.assertTrue(len(control_arm.medication_types), 2)
         self.assertEqual(control_arm.medication_types.get(
             'amphotericin').name, 'amphotericin')

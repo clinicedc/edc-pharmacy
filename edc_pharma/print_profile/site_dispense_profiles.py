@@ -51,13 +51,13 @@ single_dose_followup.add_medication_type(medications.get('flucytosine'))
 site_profiles.register(single_dose_followup)
 
 control_arm_enrollemnt = DispenseProfile(
-    name='enrollment', profile_type='control_arm')
+    name='enrollment', profile_type='control')
 control_arm_enrollemnt.add_medication_type(medications.get('amphotericin'))
 control_arm_enrollemnt.add_medication_type(medications.get('flucytosine'))
 site_profiles.register(control_arm_enrollemnt)
 
 control_followup_profile = DispenseProfile(
-    name='followup', profile_type='control_arm')
+    name='followup', profile_type='control')
 control_followup_profile.add_medication_type(medications.get('amphotericin'))
 control_followup_profile.add_medication_type(medications.get('flucytosine'))
 site_profiles.register(control_followup_profile)

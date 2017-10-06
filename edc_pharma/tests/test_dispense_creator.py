@@ -25,27 +25,27 @@ class TestDispenseCreator(TestCase):
             'schedule1': {
                 'number_of_visits': 2, 'duration': 2, 'unit': WEEKS,
                 'dispense_profile': {
-                    'enrollment': site_profiles.get(name='enrollment.control_arm'),
-                    'followup': site_profiles.get(name='followup.control_arm'),
+                    'enrollment': site_profiles.get(name='enrollment.control'),
+                    'followup': site_profiles.get(name='followup.control'),
                 }},
             'schedule2': {
                 'number_of_visits': 2, 'duration': 8, 'unit': WEEKS,
                 'dispense_profile': {
-                    'enrollment': site_profiles.get(name='enrollment.control_arm'),
-                    'followup': site_profiles.get(name='followup.control_arm'),
+                    'enrollment': site_profiles.get(name='enrollment.control'),
+                    'followup': site_profiles.get(name='followup.control'),
                 }}}
-        self.enrolled_subject = RandomizedSubjectDummy(
+        self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispensePlanScheduler(
-            enrolled_subject=self.enrolled_subject,
+            randomized_subject=self.randomized_subject,
             dispense_plan=self.dispense_plan,
-            arm='control_arm')
+            arm='control')
         dispense.create_schedules()
 
     def test_dispense_history_creator(self):
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).first()
         creator = DispenseHistoryCreator(
             dispense_timepoint=dispense_timepoint)
@@ -56,7 +56,7 @@ class TestDispenseCreator(TestCase):
 
     def test_dispense_history_creator_1(self):
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).first()
         creator = DispenseHistoryCreator(
             dispense_timepoint=dispense_timepoint)
@@ -67,13 +67,13 @@ class TestDispenseCreator(TestCase):
 
     def test_dispense_history_creator_2(self):
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).first()
         creator = DispenseHistoryCreator(
             dispense_timepoint=dispense_timepoint)
         creator.save_or_update()
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=True
         )
         self.assertEqual(dispense_timepoint.count(), 1)
@@ -81,7 +81,7 @@ class TestDispenseCreator(TestCase):
     @tag('creator_3')
     def test_dispense_history_creator_3(self):
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
         creator = DispenseHistoryCreator(
             dispense_timepoint=dispense_timepoint)
@@ -91,7 +91,7 @@ class TestDispenseCreator(TestCase):
             dispense_timepoint=dispense_timepoint)
         creator.save_or_update()
         dispense_timepoint = DispenseTimepoint.objects.filter(
-            schedule__subject_identifier=self.enrolled_subject.subject_identifier,
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=True
         )
         self.assertEqual(dispense_timepoint.count(), 2)

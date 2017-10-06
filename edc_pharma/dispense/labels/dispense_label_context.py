@@ -1,3 +1,6 @@
+from django.apps import apps as django_apps
+
+edc_pharma_app_config = django_apps.get_app_config('edc_pharma')
 
 
 class DispenseLabelContext:
@@ -12,11 +15,21 @@ class DispenseLabelContext:
         subject_identifier = self.dispense_timepoint.schedule.subject_identifier
         return {
             'barcode_value': subject_identifier,
-            'site': None,
+            'site': edc_pharma_app_config.site_code,
+            'telephone_number': None,
+            'patient': None,
+            'medication': None,
             'clinician_initials': None,
-            'timepoint': self.dispense_timepoint.timepoint.strftime(
+            'number_of_tablets': None,
+            'times_per_day': None,
+            'total_number_of_tablets': None,
+            'storage_instructions': None,
+            'sid': None,
+            'prepared_datetime': self.dispense_timepoint.timepoint.strftime(
                 '%Y-%m-%d'),
             'subject_identifier': subject_identifier,
+            'prepared_by': None,
+            'protocol': None,
             'initials': None,
         }
 
@@ -25,7 +38,7 @@ class DispenseLabelContext:
         context_list = []
         context = self.context
         for medication in self.dispense_timepoint.profile_medications:
-            context.update({'name': medication.name,
-                            'description': medication.description})
+            context.update({
+                'medication': medication.description})
             context_list.append(context)
         return context_list
