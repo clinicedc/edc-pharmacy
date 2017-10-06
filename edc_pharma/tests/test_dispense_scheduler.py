@@ -3,8 +3,10 @@ from edc_pharma.scheduler.dispense_plan_scheduler import DispensePlanSchedulerEx
 
 from django.test import tag, TestCase
 
+from edc_pharma.models.dispense_appointment import DispenseAppointment
+
 from ..constants import WEEKS
-from ..models import DispenseSchedule, DispenseTimepoint
+from ..models import DispenseSchedule
 from ..print_profile import site_profiles
 from ..scheduler import DispensePlanScheduler, InvalidSchedulePlanConfig
 
@@ -116,7 +118,7 @@ class TestDispensePlanScheduler(TestCase):
         dispense.create_schedules()
         schedule = DispenseSchedule.objects.all().first()
         self.assertEqual(
-            DispenseTimepoint.objects.filter(schedule=schedule).count(), 2)
+            DispenseAppointment.objects.filter(schedule=schedule).count(), 2)
 
     def test_schedule_subject4(self):
         randomized_subject = RandomizedSubjectDummy(
@@ -127,7 +129,7 @@ class TestDispensePlanScheduler(TestCase):
             dispense_plan=self.dispense_plan,
             arm='control_arm')
         dispense.create_schedules()
-        self.assertEqual(DispenseTimepoint.objects.all().count(), 4)
+        self.assertEqual(DispenseAppointment.objects.all().count(), 4)
 
     @tag('test_schedule_subject6')
     def test_schedule_subject6(self):
@@ -140,7 +142,7 @@ class TestDispensePlanScheduler(TestCase):
                 dispense_plan=self.dispense_plan,
                 arm='control_arm')
             dispense.create_schedules()
-            self.assertEqual(DispenseTimepoint.objects.all().count(), 4 * i)
+            self.assertEqual(DispenseAppointment.objects.all().count(), 4 * i)
 
     @tag('test_schedule_subject7')
     def test_schedule_subject7(self):
@@ -165,6 +167,6 @@ class TestDispensePlanScheduler(TestCase):
         dispense.create_schedules()
         schedule = DispenseSchedule.objects.all().order_by(
             'created').first()
-        p1, p2 = DispenseTimepoint.objects.filter(schedule=schedule)
+        p1, p2 = DispenseAppointment.objects.filter(schedule=schedule)
         self.assertEqual(p1.timepoint, date(2017, 8, 24))
         self.assertEqual(p2.timepoint, date(2017, 9, 1))

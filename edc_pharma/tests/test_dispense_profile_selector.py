@@ -3,7 +3,7 @@ from datetime import datetime, date
 from django.test import TestCase, tag
 
 from ..dispense_plan import dispense_plan_control
-from ..models import DispenseSchedule, DispenseTimepoint
+from ..models import DispenseSchedule, DispenseAppointment
 from ..print_profile import DispenseProfileSelector
 
 
@@ -25,7 +25,7 @@ class TestDispenseProfileSelector(TestCase):
             name='schedule1', sequence=1, duration='2',
             start_date=date(2017, 9, 25),
             end_date=date(2017, 9, 30))
-        self.dispense_plan = DispenseTimepoint.objects.create(
+        self.dispense_plan = DispenseAppointment.objects.create(
             timepoint=datetime.today(),
             schedule=self.schedule,
             profile_label='enrollment.control')

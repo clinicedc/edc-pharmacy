@@ -1,8 +1,8 @@
-from ..models import DispenseSchedule, DispenseTimepoint
+from ..models import DispenseSchedule, DispenseAppointment
 from ..print_profile import DispenseProfileSelector
 
 
-class DispenseTimepointCreator:
+class DispenseAppointmentCreator:
 
     """Creates dispense timepoints and update.
     """
@@ -25,12 +25,12 @@ class DispenseTimepointCreator:
         for code in self.timepoints:
             timepoint = self.timepoints.get(code)
             try:
-                DispenseTimepoint.objects.get(
+                DispenseAppointment.objects.get(
                     schedule=self.schedule,
                     timepoint=timepoint.timepoint_datetime,
                     profile_label=profile_selector.profile.label)
-            except DispenseTimepoint.DoesNotExist:
-                DispenseTimepoint.objects.create(
+            except DispenseAppointment.DoesNotExist:
+                DispenseAppointment.objects.create(
                     schedule=self.schedule,
                     profile_label=profile_selector.profile.label,
                     timepoint=timepoint.timepoint_datetime)

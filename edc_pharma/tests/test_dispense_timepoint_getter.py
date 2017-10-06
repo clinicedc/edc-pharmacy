@@ -1,9 +1,9 @@
 from datetime import datetime, date
+from edc_pharma.models import DispenseAppointment
 
 from django.test import tag, TestCase
 
 from ..constants import WEEKS
-from ..models import DispenseTimepoint
 from ..models.dispense_schedule import DispenseSchedule
 from ..print_profile import site_profiles
 from ..scheduler import DispensePlanScheduler
@@ -17,7 +17,7 @@ class RandomizedSubjectDummy:
 
 
 @tag('getter')
-class TestDispenseTimepointGetter(TestCase):
+class TestDispenseAppointmentGetter(TestCase):
 
     def setUp(self):
         self.dispense_plan = {
@@ -43,11 +43,11 @@ class TestDispenseTimepointGetter(TestCase):
         dispense.create_schedules()
 
     def test_schedule_subject_next(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        dispense_next = DispenseTimepoint.objects.filter(
+        dispense_next = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created')[1]
@@ -57,17 +57,17 @@ class TestDispenseTimepointGetter(TestCase):
                          dispense_next.timepoint)
 
     def test_schedule_subject_previous(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
-        dispense_current = DispenseTimepoint.objects.filter(
+        dispense_current = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created')[1]
         self.assertEqual(dispense_current.previous().timepoint,
                          dispense_timepoint.timepoint)
 
     def test_schedule_subject_completed(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
         dispense_timepoint.is_dispensed = True
@@ -75,7 +75,7 @@ class TestDispenseTimepointGetter(TestCase):
         self.assertEqual(dispense_timepoint.completed().count(), 1)
 
     def test_schedule_subject_next_timepoints(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
         dispense_timepoint.is_dispensed = True
@@ -112,7 +112,7 @@ class TestDispenseTimepointGetter(TestCase):
 
     @tag('test_dispense_schedule_profile')
     def test_dispense_schedule_profile(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
@@ -120,7 +120,7 @@ class TestDispenseTimepointGetter(TestCase):
 
     @tag('getter.profile')
     def test_dispense_schedule_profile_medications(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
@@ -129,7 +129,7 @@ class TestDispenseTimepointGetter(TestCase):
 
     @tag('getter.profile')
     def test_dispense_profile_medications(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
@@ -138,7 +138,7 @@ class TestDispenseTimepointGetter(TestCase):
 
     @tag('getter.profile')
     def test_dispense_profile_medications_1(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()

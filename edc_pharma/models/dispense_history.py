@@ -5,13 +5,13 @@ from django.db import models
 from .medication import Medication
 
 
-from.dispense_timepoint import DispenseTimepoint
+from.dispense_appointment import DispenseAppointment
 
 
 class DispenseHistory(BaseUuidModel):
 
-    dispense_timepoint = models.ForeignKey(
-        DispenseTimepoint)
+    dispense_appointment = models.ForeignKey(
+        DispenseAppointment)
 
     dispense_datetime = models.DateTimeField()
 

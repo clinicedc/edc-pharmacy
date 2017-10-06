@@ -1,4 +1,4 @@
-from .creators import DispenseScheduleCreator, DispenseTimepointCreator
+from .creators import DispenseScheduleCreator, DispenseAppointmentCreator
 from .dispense_plan_scheduler import DispensePlanScheduler
 from .dispense_plan_scheduler import InvalidSchedulePlanConfig
 from .period import Period

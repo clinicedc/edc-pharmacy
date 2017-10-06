@@ -1,9 +1,9 @@
-from datetime import datetime, date
+from datetime import datetime
 
 from django.test import tag, TestCase
 
 from ..constants import WEEKS
-from ..models import DispenseTimepoint
+from ..models import DispenseAppointment
 from ..print_profile import site_profiles
 from ..scheduler import DispensePlanScheduler
 from ..timepoint_descriptor import TimepointDescriptor
@@ -45,7 +45,7 @@ class TestTimepointDescriptor(TestCase):
         dispense.create_schedules()
 
     def test_dispense_timepoint_start_day(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
@@ -55,7 +55,7 @@ class TestTimepointDescriptor(TestCase):
         self.assertEqual('Day 1', descriptor.start_day)
 
     def test_dispense_timepoint_human_readiable_days_7(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
@@ -67,7 +67,7 @@ class TestTimepointDescriptor(TestCase):
         self.assertEqual('Day 14', descriptor.end_day)
 
     def test_dispense_timepoint_human_readiable_days_3(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
@@ -78,7 +78,7 @@ class TestTimepointDescriptor(TestCase):
         self.assertEqual('Day 7', descriptor.end_day)
 
     def test_dispense_timepoint_human_readiable_days(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
@@ -89,7 +89,7 @@ class TestTimepointDescriptor(TestCase):
         self.assertIn('Day 7', descriptor.human_readiable())
 
     def test_dispense_timepoint_human_readiable_days_1(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()

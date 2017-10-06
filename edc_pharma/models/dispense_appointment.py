@@ -5,7 +5,7 @@ from django.db import models
 from .dispense_schedule import DispenseSchedule
 
 
-class DispenseTimepointMixin:
+class DispenseAppointmentMixin:
 
     def previous(self):
         return self.__class__.objects.filter(
@@ -44,7 +44,7 @@ class DispenseTimepointMixin:
         return medications
 
 
-class DispenseTimepoint(DispenseTimepointMixin, BaseUuidModel):
+class DispenseAppointment(DispenseAppointmentMixin, BaseUuidModel):
 
     timepoint = models.DateField()
 

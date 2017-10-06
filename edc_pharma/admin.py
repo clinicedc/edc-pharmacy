@@ -3,12 +3,12 @@ from edc_base.modeladmin_mixins import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
     ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
     ModelAdminReadOnlyMixin, ModelAdminInstitutionMixin)
-from edc_pharma.models.dispense_timepoint import DispenseTimepoint
+from edc_pharma.models import DispenseAppointment
 
 from django.contrib import admin
 
 from .admin_site import edc_pharma_admin
-from .forms import DispenseTimepointForm
+from .forms import DispenseAppointmentForm
 
 
 class ModelAdminMixin(ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
@@ -18,7 +18,7 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructions
     pass
 
 
-@admin.register(DispenseTimepoint, site=edc_pharma_admin)
-class DispenseTimepointAdmin(ModelAdminMixin, admin.ModelAdmin):
+@admin.register(DispenseAppointment, site=edc_pharma_admin)
+class DispenseAppointmentAdmin(ModelAdminMixin, admin.ModelAdmin):
 
-    form = DispenseTimepointForm
+    form = DispenseAppointmentForm

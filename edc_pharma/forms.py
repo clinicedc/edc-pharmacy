@@ -1,10 +1,10 @@
 from django import forms
 
-from .models import DispenseTimepoint
+from .models import DispenseAppointment
 
 
-class DispenseTimepointForm(forms.ModelForm):
+class DispenseAppointmentForm(forms.ModelForm):
 
     class Meta:
-        model = DispenseTimepoint
+        model = DispenseAppointment
         fields = '__all__'

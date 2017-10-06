@@ -1,11 +1,9 @@
 from datetime import datetime, date
-from edc_pharma.models.dispense_history import DispenseHistory
-from edc_pharma.models.dispense_timepoint import DispenseTimepoint
+from edc_pharma.models import DispenseAppointment
 
 from django.test import tag, TestCase
 
 from ..constants import WEEKS
-from ..dispense import Dispense
 from ..print_profile import site_profiles
 from ..scheduler import DispensePlanScheduler
 
@@ -18,7 +16,7 @@ class RandomizedSubjectDummy:
 
 
 @tag('dispensetimemixin')
-class TestDispenseTimepointMixin(TestCase):
+class TestDispenseAppointmentMixin(TestCase):
 
     def setUp(self):
         self.dispense_plan = {
@@ -44,13 +42,13 @@ class TestDispenseTimepointMixin(TestCase):
         dispense.create_schedules()
 
     def test_dispensetime_next(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
         self.assertEqual(dispense_timepoint.next().timepoint, date(2017, 9, 1))
 
     def test_dispensetime_next_1(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
         dispense_timepoint = dispense_timepoint.next()
@@ -58,13 +56,13 @@ class TestDispenseTimepointMixin(TestCase):
         self.assertIsNone(dispense_timepoint)
 
     def test_dispensetime_previous(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
         self.assertIsNone(dispense_timepoint.previous())
 
     def test_dispensetime_next_2(self):
-        dispense_timepoint = DispenseTimepoint.objects.filter(
+        dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
         self.assertIsNone(dispense_timepoint.previous())

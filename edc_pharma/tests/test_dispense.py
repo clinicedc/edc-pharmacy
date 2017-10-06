@@ -1,8 +1,9 @@
 from datetime import datetime, date
 from edc_pharma.models.dispense_history import DispenseHistory
-from edc_pharma.models.dispense_timepoint import DispenseTimepoint
 
 from django.test import tag, TestCase
+
+from edc_pharma.models.dispense_appointment import DispenseAppointment
 
 from ..constants import WEEKS
 from ..dispense import Dispense
@@ -44,23 +45,23 @@ class TestDispense(TestCase):
         dispense.create_schedules()
 
     def test_print_label(self):
-        dispense_timepoint = DispenseTimepoint.objects.all().order_by(
+        dispense_appointment = DispenseAppointment.objects.all().order_by(
             'created').first()
         Dispense(
             subject_identifier=self.randomized_subject.subject_identifier,
-            timepoint_id=dispense_timepoint.id)
+            timepoint_id=dispense_appointment.id)
         self.assertEqual(DispenseHistory.objects.filter(
-            dispense_timepoint__schedule__subject_identifier=self.randomized_subject.subject_identifier,
-            dispense_timepoint__timepoint=date(2017, 8, 24),
+            dispense_appointment__schedule__subject_identifier=self.randomized_subject.subject_identifier,
+            dispense_appointment__timepoint=date(2017, 8, 24),
         ).count(), 1)
 
     def test_print_label1(self):
-        dispense_timepoint = DispenseTimepoint.objects.all().order_by(
+        dispense_appointment = DispenseAppointment.objects.all().order_by(
             'created').first()
         Dispense(
             subject_identifier=self.randomized_subject.subject_identifier,
-            timepoint_id=dispense_timepoint.id)
+            timepoint_id=dispense_appointment.id)
         self.assertEqual(DispenseHistory.objects.filter(
-            dispense_timepoint__schedule__subject_identifier=self.randomized_subject.subject_identifier,
-            dispense_timepoint__timepoint=date(2017, 8, 24),
+            dispense_appointment__schedule__subject_identifier=self.randomized_subject.subject_identifier,
+            dispense_appointment__timepoint=date(2017, 8, 24),
         ).count(), 1)

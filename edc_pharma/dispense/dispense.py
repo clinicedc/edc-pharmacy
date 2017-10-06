@@ -2,7 +2,7 @@ from django.apps import apps as django_apps
 
 from ..dispense.labels import DispenseLabel
 
-from ..models.dispense_timepoint import DispenseTimepoint
+from ..models.dispense_appointment import DispenseAppointment
 
 edc_pharma_app_config = django_apps.get_app_config('edc_pharma')
 
@@ -21,15 +21,15 @@ class Dispense:
         self.printed_labels = self.print_labels()
 
     @property
-    def dispense_timepoint(self):
+    def dispense_appointment(self):
         """Returns dispense timepoint."""
-        return DispenseTimepoint.objects.get(
+        return DispenseAppointment.objects.get(
             schedule__subject_identifier=self.subject_identifier,
             id=self.timepoint_id)
 
     def print_labels(self):
         """Print labels using dispense profile. """
         printer = self.print_label_cls(
-            dispense_timepoint=self.dispense_timepoint,
+            dispense_appointment=self.dispense_appointment,
             copies=1, template_name=edc_pharma_app_config.template_name)
         return printer.print_labels

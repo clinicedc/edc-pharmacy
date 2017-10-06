@@ -1,4 +1,4 @@
-from ..models import DispenseTimepoint
+from ..models import DispenseAppointment
 
 
 class DispenseProfileSelector:
@@ -18,13 +18,13 @@ class DispenseProfileSelector:
         try:
             profile = self.schedule_plan.get(
                 'dispense_profile').get('enrollment')
-            DispenseTimepoint.objects.get(
+            DispenseAppointment.objects.get(
                 schedule__subject_identifier=self.subject_identifier,
                 profile_label=f'{profile.label}',
                 schedule__name=self.schedule_name
             )
             profile = self.schedule_plan.get(
                 'dispense_profile').get('followup')
-        except DispenseTimepoint.DoesNotExist:
+        except DispenseAppointment.DoesNotExist:
             pass
         return profile

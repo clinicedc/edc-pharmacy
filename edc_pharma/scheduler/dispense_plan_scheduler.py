@@ -1,6 +1,6 @@
 from edc_pharma.dispense_plan import dispense_plans
 
-from .creators import DispenseScheduleCreator, DispenseTimepointCreator
+from .creators import DispenseScheduleCreator, DispenseAppointmentCreator
 from .period import Period
 from .schedule_collection import Schedule as SchedulePlan
 from .schedule_collection import ScheduleCollection
@@ -21,7 +21,7 @@ class DispensePlanScheduler:
     """
 
     schedule_collection_cls = ScheduleCollection
-    dispense_timepoint_cls = DispenseTimepointCreator
+    dispense_timepoint_cls = DispenseAppointmentCreator
     dispense_schedule_creator_cls = DispenseScheduleCreator
 
     def __init__(self, randomized_subject, dispense_plan=None,
