@@ -1,6 +1,6 @@
 from datetime import datetime
-from edc_pharma.dispense.labels import DispenseLabelContext
-from edc_pharma.models.dispense_appointment import DispenseAppointment
+from ..dispense.labels import DispenseLabelContext
+from ..models import DispenseAppointment
 
 from django.test import tag, TestCase
 

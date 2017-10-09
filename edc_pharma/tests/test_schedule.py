@@ -9,7 +9,6 @@ from ..scheduler import Schedule
 from ..scheduler import ScheduleCollection
 from ..scheduler.period import Period
 
-
 dispense_plan = {
     'schedule1': {
         'number_of_visits': 2,
@@ -24,7 +23,6 @@ dispense_plan = {
 }
 
 
-@tag('dispense_schedule')
 class TestDispenseSchedule(TestCase):
 
     def test_repr(self):
@@ -35,7 +33,6 @@ class TestDispenseSchedule(TestCase):
         schedule = Schedule(period, name='schedule1')
         self.assertIsNotNone(schedule.__repr__())
 
-    @tag('schedule.1')
     def test_schedule_with_visit(self):
         period = Period(
             timepoint=datetime(2017, 8, 24), unit=WEEKS, duration=2)
@@ -177,7 +174,6 @@ class TestDispenseSchedule(TestCase):
         self.assertEqual(first_day.date(), datetime(2017, 8, 24).date())
         self.assertEqual(next_timepoint.date(), datetime(2017, 9, 1).date())
 
-    @tag('selector')
     def test_schedule_with_visit_selector3(self):
         period = Period(
             timepoint=datetime(2017, 8, 24), unit=WEEKS, duration=2)

@@ -1,11 +1,9 @@
-from datetime import datetime
+import arrow
 
 from dateutil.relativedelta import relativedelta
+from edc_base.utils import get_utcnow
 
-from ..constants import WEEKS, MONTHS, DAYS
-from ..holidays import ExcludeDays
-from .period_timepoint import PeriodTimepoint
-from .timepoint_selector import TimepointSelector
+from ..holidays import Country
 
 
 class Period:
@@ -16,57 +14,24 @@ class Period:
     weeks, and years. Given a timepoint_datetime the class calculates
     start_date and end_date excluding weekends and holidays.
     """
-    exclude_days_cls = ExcludeDays
-    period_timepoint_cls = PeriodTimepoint
-    timepoint_selector_cls = TimepointSelector
+    country_cls = Country
 
-    def __init__(self, timepoint=None, duration=None, weekends=None,
-                 holidays=None, unit=None, *args, **kwargs):
+    def __init__(self, start_datetime=None, unit=None, duration=None, **kwargs):
+        self.country = self.country_cls(**kwargs)
+        start_datetime = start_datetime or get_utcnow()
+        rdelta = relativedelta(**{unit: duration or 0})
+        end_datetime = start_datetime + rdelta
+        self.start_datetime = self.country.move_to_workday(
+            utc_datetime=start_datetime)
+        self.end_datetime = self.country.move_to_workday(
+            utc_datetime=end_datetime)
 
-        self.timepoint = timepoint
-        self.start_date = None
-        self.end_date = None
-        self.duration = duration or 0
-        self.weekends = weekends
-        self.holidays = holidays
-        self.unit = unit
-        self.estimate()
-        if self.start_date and self.end_date:
-            self.timepoints = self.period_timepoint_cls(
-                period=self).timepoints
-
-    def estimate(self):
-        if self.unit == DAYS:
-            self.of_days(self.duration)
-        elif self.unit == MONTHS:
-            self.of_months(self.duration)
-        elif self.unit == WEEKS:
-            self.of_weeks(self.duration)
+        self.workdays = []
+        if self.start_datetime and self.end_datetime:
+            for arr in arrow.Arrow.span_range(
+                    'day', self.start_datetime, self.end_datetime):
+                if self.country.is_workday(arr[0].datetime):
+                    self.workdays.append(arr[0].datetime)
 
     def __repr__(self):
         return f'{self.start_date.date()}, {self.end_date.date()}'
-
-    def exclude_days(self):
-        self.start_date = self.exclude_days_cls(day=self.start_date).day
-        self.end_date = self.exclude_days_cls(day=self.end_date).day
-
-    def between(self, timepoint=None, end_date=None):
-        self.start_date = timepoint
-        self.end_date = end_date
-        self.exclude_days()
-
-    def of_days(self, days):
-        self.start_date = self.timepoint or datetime.today()
-        self.end_date = self.start_date + relativedelta(days=days)
-        self.end_date = self.end_date - relativedelta(days=1)
-        self.exclude_days()
-
-    def of_months(self, months):
-        self.start_date = self.timepoint or datetime.today()
-        self.end_date = self.start_date + relativedelta(months=months)
-        self.exclude_days()
-
-    def of_weeks(self, weeks):
-        self.start_date = self.timepoint or datetime.today()
-        self.end_date = self.start_date + relativedelta(weeks=weeks)
-        self.exclude_days()

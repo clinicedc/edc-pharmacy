@@ -37,15 +37,15 @@ class Schedule:
     """
     timepoint_selector_cls = TimepointSelector
 
-    def __init__(self, period, name=None, number_of_visits=None,
+    def __init__(self, workdays=None, name=None, number_of_visits=None,
                  description=None):
         self._visits = {}
         self.name = name
         self.number_of_visits = number_of_visits or 1
-        self.period = period
+        self.workdays = workdays
         self.description = description
         self.selector = self.timepoint_selector_cls(
-            timepoints=self.period.timepoints,
+            workdays=self.workdays,
             number_of_visits=self.number_of_visits)
         self.prepare()
 

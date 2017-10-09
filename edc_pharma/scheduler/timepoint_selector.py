@@ -19,30 +19,31 @@ class TimepointSelector:
        2017-9-3, 2017-9-4, 2017-9-5, 2017-9-6].
     """
 
-    def __init__(self, timepoints=None, number_of_visits=None, *args, **kwargs):
+    def __init__(self, workdays=None, number_of_visits=None):
         self.selected_timepoints = []
-        self.timepoints = timepoints
+        self.workdays = workdays
         if number_of_visits == 1:
-            self.selected_timepoints.append(timepoints[0])
+            self.selected_timepoints.append(workdays[0])
         elif number_of_visits == 2:
-            self.selected_timepoints.append(timepoints[0])
-            self.selected_timepoints.append(self.mid())
+            self.selected_timepoints.append(workdays[0])
+            self.selected_timepoints.append(self.get_middle_workday())
         else:
-            divisible = int(len(timepoints) / number_of_visits)
+            divisible = int(len(workdays) / number_of_visits)
             for i in range(divisible):
                 if i == 0:
-                    self.selected_timepoints.append(timepoints[i])
+                    self.selected_timepoints.append(workdays[i])
                 else:
                     index = divisible * i
-                    self.selected_timepoints.append(timepoints[index])
+                    self.selected_timepoints.append(workdays[index])
 
-    def mid(self):
-        number_of_timepoints = len(self.timepoints)
+    def get_middle_workday(self):
 
         def is_odd(days=None):
             return True if not days % 2 == 0 else False
-        if is_odd(number_of_timepoints):
-            number_of_days = int((number_of_timepoints / 2) + 0.5)
+
+        number_of_days = len(self.workdays)
+        if is_odd(number_of_days):
+            number_of_days = int((number_of_days / 2) + 0.5)
         else:
-            number_of_days = int((number_of_timepoints / 2)) + 1
-        return self.timepoints[number_of_days]
+            number_of_days = int((number_of_days / 2)) + 1
+        return self.workdays[number_of_days]

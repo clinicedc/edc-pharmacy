@@ -12,6 +12,7 @@ class AppConfig(DjangoAppConfig):
     dispense_model = None
     dispensetimepoint_model = 'edc_pharma.dispenseappointment'
     template_name = None
+    holiday_csv_path = os.path.join(settings.BASE_DIR, 'holidays.csv')
     try:
         dispense_model = settings.EDC_PHARMA_DISPENSE_MODEL
     except AttributeError:
