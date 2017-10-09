@@ -1,21 +1,29 @@
 from datetime import datetime
 
-from django.test import TestCase
+import arrow
+from django.test import TestCase, tag
 
 from ..holidays import Country
 
 
+@tag('Country')
 class TestCountry(TestCase):
 
     def setUp(self):
         self.country = Country()
 
     def test_exclude_day(self):
-        workday = self.country.move_to_workday(datetime(2017, 9, 30))
+        start_datetime = arrow.Arrow.fromdatetime(
+            datetime(2017, 9, 30)).datetime
+        workday = self.country.move_to_workday(start_datetime)
+        print(workday)
         self.assertNotEqual(
-            workday.day.date(), datetime(2017, 9, 30).date())
+            workday, datetime(2017, 9, 30).date())
 
     def test_exclude_day1(self):
-        workday = self.country.move_to_workday(datetime(2017, 9, 30))
-        self.assertEqual(
-            workday.day.date(), datetime(2017, 10, 2).date())
+        start_datetime = arrow.Arrow.fromdatetime(
+            datetime(2017, 9, 30)).datetime
+        expected = arrow.Arrow.fromdatetime(
+            datetime(2017, 10, 2)).datetime
+        workday = self.country.move_to_workday(start_datetime)
+        self.assertEqual(workday, expected)

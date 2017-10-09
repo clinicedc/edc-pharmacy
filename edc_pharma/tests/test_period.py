@@ -1,20 +1,20 @@
-import arrow
-
 from datetime import datetime, date
+from pprint import pprint
 
+import arrow
+from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
 
 from ..constants import DAYS, WEEKS, MONTHS
 from ..scheduler import Period
-from dateutil.relativedelta import relativedelta
-from pprint import pprint
 
 
+@tag('period')
 class TestPeriod(TestCase):
 
     def test_of_days(self):
         period = Period(start_datetime=datetime(
-            2017, 9, 25), unit=DAYS, duration=1)
+            2017, 9, 25), unit=DAYS, duration=0)
         self.assertEqual(period.start_datetime.date(), date(2017, 9, 25))
         self.assertEqual(period.end_datetime.date(), date(2017, 9, 25))
 
