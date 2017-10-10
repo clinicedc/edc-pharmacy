@@ -1,7 +1,7 @@
-import arrow
-
-from dateutil.relativedelta import relativedelta
 from edc_base.utils import get_utcnow
+
+import arrow
+from dateutil.relativedelta import relativedelta
 
 from ..holidays import Country
 

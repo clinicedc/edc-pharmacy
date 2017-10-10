@@ -37,12 +37,13 @@ class Schedule:
     """
     timepoint_selector_cls = TimepointSelector
 
-    def __init__(self, workdays=None, name=None, number_of_visits=None,
+    def __init__(self, period, name=None, number_of_visits=None,
                  description=None):
         self._visits = {}
+        self.period = period
         self.name = name
         self.number_of_visits = number_of_visits or 1
-        self.workdays = workdays
+        self.workdays = self.period.workdays
         self.description = description
         self.selector = self.timepoint_selector_cls(
             workdays=self.workdays,
@@ -76,18 +77,18 @@ class SchedulesValidator:
                 vschedule = schedules.get(key)
                 if schedule.name == vschedule.name:
                     continue
-                if (schedule.period.start_date <= vschedule.period.end_date
-                        <= schedule.period.end_date):
+                if (schedule.period.start_datetime <= vschedule.period.end_datetime
+                        <= schedule.period.end_datetime):
                     raise DispensePlanScheduleOverlapError(
                         f'Overlap between {schedule.name} '
                         f'and {vschedule.name}. Check schedule period dates.')
-                if (schedule.period.start_date <= vschedule.period.start_date
-                        <= schedule.period.end_date):
+                if (schedule.period.start_datetime <= vschedule.period.start_datetime
+                        <= schedule.period.end_datetime):
                     raise DispensePlanScheduleOverlapError(
                         f'Overlap between {schedule.name} and {vschedule.name}.'
                         f' {vschedule.name} startdate should not fall in range '
-                        f'{schedule.period.start_date.date()} to '
-                        f'{schedule.period.end_date.date()} )')
+                        f'{schedule.period.start_datetime.date()} to '
+                        f'{schedule.period.end_datetime.date()} )')
 
 
 class ScheduleCollection(OrderedDict):
@@ -106,7 +107,7 @@ class ScheduleCollection(OrderedDict):
     def next_timepoint(self):
         last_schedule = self.last()
         if self.last():
-            return last_schedule.period.end_date + relativedelta(days=1)
+            return last_schedule.period.end_datetime + relativedelta(days=1)
 
     def last(self):
         try:

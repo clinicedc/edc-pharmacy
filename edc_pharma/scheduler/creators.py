@@ -54,8 +54,8 @@ class DispenseScheduleCreator:
             obj = DispenseSchedule.objects.get(
                 subject_identifier=self.subject_identifier,
                 name=self.schedule.name,
-                start_date=self.schedule.period.start_date.date(),
-                end_date=self.schedule.period.end_date.date())
+                start_datetime=self.schedule.period.start_datetime,
+                end_datetime=self.schedule.period.end_datetime)
         except DispenseSchedule.DoesNotExist:
             obj = DispenseSchedule.objects.create(
                 subject_identifier=self.subject_identifier,
@@ -63,6 +63,6 @@ class DispenseScheduleCreator:
                 sequence=self.sequence,
                 description=self.schedule.description,
                 arm=self.arm,
-                start_date=self.schedule.period.start_date.date(),
-                end_date=self.schedule.period.end_date.date())
+                start_datetime=self.schedule.period.start_datetime,
+                end_datetime=self.schedule.period.end_datetime)
         return obj

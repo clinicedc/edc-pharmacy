@@ -25,7 +25,7 @@ class DispensePlanScheduler:
     dispense_schedule_creator_cls = DispenseScheduleCreator
 
     def __init__(self, randomized_subject, dispense_plan=None,
-                 arm=None, *args, **kwargs):
+                 arm=None):
         self.randomized_subject = randomized_subject
         self.arm = arm
         self.dispense_plan = dispense_plan or dispense_plans.get(arm)
@@ -41,14 +41,15 @@ class DispensePlanScheduler:
         for schedule_name in self.dispense_plan or {}:
             self.validate_dispense_plan(dispense_plan=self.dispense_plan)
             schedule_details = self.dispense_plan.get(schedule_name)
+            start_datetime = schedules.next_timepoint or self.randomized_subject.randomization_datetime
             schedule_period = Period(
-                timepoint=schedules.next_timepoint or self.randomized_subject.randomization_datetime,
-                duration=schedule_details.get('duration'),
-                unit=schedule_details.get('unit'))
+                start_datetime=start_datetime,
+                unit=schedule_details.get('unit'),
+                duration=schedule_details.get('duration'))
             schedule = SchedulePlan(
+                schedule_period,
                 name=schedule_name,
                 number_of_visits=schedule_details.get('number_of_visits'),
-                period=schedule_period,
                 description=schedule_details.get('description'))
             schedules.add(schedule=schedule)
         return schedules

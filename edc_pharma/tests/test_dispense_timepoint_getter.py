@@ -89,7 +89,8 @@ class TestDispenseAppointmentGetter(TestCase):
         ).order_by('created').first()
         self.assertEqual(dispense_schedule.name, 'schedule1')
         self.assertEqual(dispense_schedule.sequence, 1)
-        self.assertEqual(dispense_schedule.start_date, date(2017, 8, 24))
+        self.assertEqual(dispense_schedule.start_datetime,
+                         date(2017, 8, 24))
 
     @tag('getter.current')
     def test_dispense_schedule_next(self):

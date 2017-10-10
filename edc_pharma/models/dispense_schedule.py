@@ -26,9 +26,9 @@ class DispenseSchedule(BaseUuidModel):
     description = models.CharField(
         max_length=100, null=True, blank=True)
 
-    start_date = models.DateField()
+    start_datetime = models.DateField()
 
-    end_date = models.DateField()
+    end_datetime = models.DateField()
 
     def next(self):
         return self.__class__.objects.filter(

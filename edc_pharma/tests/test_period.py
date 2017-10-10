@@ -3,13 +3,12 @@ from pprint import pprint
 
 import arrow
 from dateutil.relativedelta import relativedelta
-from django.test import TestCase, tag
+from django.test import TestCase
 
 from ..constants import DAYS, WEEKS, MONTHS
 from ..scheduler import Period
 
 
-@tag('period')
 class TestPeriod(TestCase):
 
     def test_of_days(self):
@@ -18,7 +17,6 @@ class TestPeriod(TestCase):
         self.assertEqual(period.start_datetime.date(), date(2017, 9, 25))
         self.assertEqual(period.end_datetime.date(), date(2017, 9, 25))
 
-    @tag('1')
     def test_of_days1(self):
         start_datetime = arrow.Arrow.fromdatetime(
             datetime(2017, 8, 24)).datetime
@@ -28,7 +26,6 @@ class TestPeriod(TestCase):
         self.assertEqual(period.end_datetime,
                          period.start_datetime + relativedelta(days=2))
 
-    @tag('1')
     def test_workdays(self):
         start_datetime = arrow.Arrow.fromdatetime(
             datetime(2017, 8, 24)).datetime
