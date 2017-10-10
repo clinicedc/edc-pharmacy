@@ -5,7 +5,7 @@ from django.test import TestCase, tag
 
 from ..constants import MONTHS
 from ..constants import WEEKS
-from ..scheduler import DispensePlanScheduleOverlapError
+from ..scheduler import DispenseScheduleOverlapError
 from ..scheduler import Schedule
 from ..scheduler import ScheduleCollection
 from ..scheduler.period import Period
@@ -25,7 +25,7 @@ dispense_plan = {
 }
 
 
-@tag('dispense_schedule')
+@tag('DispenseSchedule')
 class TestDispenseSchedule(TestCase):
 
     def test_repr(self):
@@ -78,6 +78,7 @@ class TestDispenseSchedule(TestCase):
             name='schedule1', number_of_visits=2, period=period)
         self.assertEqual(len(schedule.visits), 2)
 
+    @tag('11')
     def test_schedule_with_visit2(self):
         start_datetime = arrow.Arrow.fromdatetime(
             datetime(2017, 8, 24)).datetime
@@ -92,8 +93,9 @@ class TestDispenseSchedule(TestCase):
             datetime(2017, 8, 24).date())
         self.assertEqual(
             schedule.visits.get('visit1').timepoint_datetime.date(),
-            datetime(2017, 9, 22).date())
+            datetime(2017, 9, 21).date())
 
+    @tag('11')
     def test_add_schedule(self):
         start_datetime = arrow.Arrow.fromdatetime(
             datetime(2017, 8, 24)).datetime
@@ -108,6 +110,7 @@ class TestDispenseSchedule(TestCase):
         schedules = ScheduleCollection(schedule=schedule)
         self.assertTrue(len(schedules), 1)
 
+    @tag('11')
     def test_add_schedule1(self):
         schedules = ScheduleCollection()
         start_datetime = arrow.Arrow.fromdatetime(
@@ -129,9 +132,10 @@ class TestDispenseSchedule(TestCase):
         schedule2 = Schedule(
             name='schedule2', number_of_visits=2, period=p2)
         self.assertRaises(
-            DispensePlanScheduleOverlapError, schedules.add,
+            DispenseScheduleOverlapError, schedules.add,
             schedule=schedule2)
 
+    @tag('11')
     def test_get_last_schedule(self):
         schedules = ScheduleCollection()
         enrollment_plan = dispense_plan.get('schedule1')
@@ -158,6 +162,7 @@ class TestDispenseSchedule(TestCase):
         schedules.add(schedule=schedule2)
         self.assertTrue(schedule2.name, schedules.last().name)
 
+    @tag('11')
     def test_next_schedule_timepoint(self):
         schedules = ScheduleCollection()
         enrollment_plan = dispense_plan.get('schedule1')
@@ -170,8 +175,9 @@ class TestDispenseSchedule(TestCase):
             number_of_visits=enrollment_plan.get('number_of_visits'),
             period=p)
         schedules.add(schedule=schedule)
-        self.assertEqual(schedules.next_timepoint, datetime(2017, 9, 8))
+        self.assertEqual(schedules.next_timepoint, datetime(2017, 9, 7))
 
+    @tag('11')
     def test_schedule_with_visit_selector(self):
         start_datetime = arrow.Arrow.fromdatetime(
             datetime(2017, 8, 24)).datetime
@@ -207,21 +213,21 @@ class TestDispenseSchedule(TestCase):
         self.assertEqual(first_day.date(), datetime(2017, 8, 24).date())
         self.assertEqual(next_timepoint.date(), datetime(2017, 9, 1).date())
 
+    @tag('111')
     def test_schedule_with_visit_selector3(self):
         start_datetime = arrow.Arrow.fromdatetime(
             datetime(2017, 8, 24)).datetime
         period = Period(
             start_datetime=start_datetime, unit=WEEKS, duration=2)
         schedule = Schedule(
+            period,
             name='schedule1',
-            number_of_visits=3,
-            period=period)
-        print(schedule.selector.selected_timepoints)
+            number_of_visits=3)
         first_day, next_timepoint, third_timepoint = (
             schedule.selector.selected_timepoints)
         self.assertEqual(first_day.date(), datetime(2017, 8, 24).date())
-        self.assertEqual(next_timepoint.date(), datetime(2017, 8, 29).date())
-        self.assertEqual(third_timepoint.date(), datetime(2017, 9, 1).date())
+        self.assertEqual(next_timepoint.date(), datetime(2017, 8, 28).date())
+        self.assertEqual(third_timepoint.date(), datetime(2017, 8, 31).date())
 
     def test_schedule_with_visit_selector4(self):
         start_datetime = arrow.Arrow.fromdatetime(
@@ -233,7 +239,7 @@ class TestDispenseSchedule(TestCase):
         first_day, next_timepoint = (
             schedule.selector.selected_timepoints)
         self.assertEqual(first_day.date(), datetime(2017, 8, 24).date())
-        self.assertEqual(next_timepoint.date(), datetime(2017, 9, 25).date())
+        self.assertEqual(next_timepoint.date(), datetime(2017, 9, 23).date())
 
     def test_schedule_with_visit_selector5(self):
         start_datetime = arrow.Arrow.fromdatetime(
@@ -246,4 +252,4 @@ class TestDispenseSchedule(TestCase):
         first_day, next_timepoint = (
             schedule.selector.selected_timepoints)
         self.assertEqual(first_day.date(), datetime(2017, 8, 24).date())
-        self.assertEqual(next_timepoint.date(), datetime(2017, 9, 22).date())
+        self.assertEqual(next_timepoint.date(), datetime(2017, 9, 21).date())

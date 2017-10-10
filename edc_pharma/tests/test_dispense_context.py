@@ -1,12 +1,12 @@
 from datetime import datetime
-from ..dispense.labels import DispenseLabelContext
-from ..models import DispenseAppointment
 
 from django.test import tag, TestCase
 
 from ..constants import WEEKS
+from ..dispense.labels import DispenseLabelContext
+from ..models import DispenseAppointment
 from ..print_profile import site_profiles
-from ..scheduler import DispensePlanScheduler
+from ..scheduler import DispenseScheduler
 
 
 class RandomizedSubjectDummy:
@@ -40,7 +40,7 @@ class TestDispenseContext(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=randomized_subject, dispense_plan=self.dispense_plan,
             arm='control')
         dispense.create_schedules()

@@ -27,13 +27,13 @@ class DispenseAppointmentCreator:
             try:
                 DispenseAppointment.objects.get(
                     schedule=self.schedule,
-                    timepoint=timepoint.timepoint_datetime,
+                    appt_datetime=timepoint.timepoint_datetime,
                     profile_label=profile_selector.profile.label)
             except DispenseAppointment.DoesNotExist:
                 DispenseAppointment.objects.create(
                     schedule=self.schedule,
                     profile_label=profile_selector.profile.label,
-                    timepoint=timepoint.timepoint_datetime)
+                    appt_datetime=timepoint.timepoint_datetime)
 
 
 class DispenseScheduleCreator:

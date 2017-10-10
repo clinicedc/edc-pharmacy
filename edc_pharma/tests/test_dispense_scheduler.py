@@ -1,14 +1,13 @@
 from datetime import datetime, date
-from edc_pharma.scheduler.dispense_plan_scheduler import DispensePlanSchedulerException
+from edc_pharma.models.dispense_appointment import DispenseAppointment
 
 from django.test import tag, TestCase
-
-from edc_pharma.models.dispense_appointment import DispenseAppointment
 
 from ..constants import WEEKS
 from ..models import DispenseSchedule
 from ..print_profile import site_profiles
-from ..scheduler import DispensePlanScheduler, InvalidSchedulePlanConfig
+from ..scheduler import DispenseScheduler, InvalidScheduleConfig
+from ..scheduler import DispenseSchedulerException
 
 
 class RandomizedSubjectDummy:
@@ -42,7 +41,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=randomized_subject, dispense_plan=self.dispense_plan)
         self.assertEqual(len(dispense.subject_schedules),
                          len(self.dispense_plan))
@@ -55,7 +54,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
@@ -72,13 +71,13 @@ class TestDispensePlanScheduler(TestCase):
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
 
-        dispense_scheduler = DispensePlanScheduler(
+        dispense_scheduler = DispenseScheduler(
             randomized_subject=randomized_subject,
             dispense_plan=invalid_dispense_plan,
             arm='control_arm')
 
         self.assertRaises(
-            InvalidSchedulePlanConfig,
+            InvalidScheduleConfig,
             dispense_scheduler.validate_dispense_plan,
             dispense_plan=invalid_dispense_plan)
 
@@ -86,21 +85,21 @@ class TestDispensePlanScheduler(TestCase):
         """Assert that last schedule dates are calculated correctly."""
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24), subject_identifier='1111')
-        scheduller = DispensePlanScheduler(
+        scheduller = DispenseScheduler(
             randomized_subject=randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
         last_schedule = scheduller.subject_schedules.last()
         self.assertEqual(
-            last_schedule.period.start_date.date(), date(2017, 9, 8))
+            last_schedule.period.start_datetime.date(), date(2017, 9, 8))
         self.assertEqual(
-            last_schedule.period.end_date.date(), date(2017, 11, 3))
+            last_schedule.period.end_datetime.date(), date(2017, 11, 3))
 
     def test_schedule_subject2(self):
         """Assert that all schedules are created successfully."""
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24), subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
@@ -111,7 +110,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
@@ -124,7 +123,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
@@ -137,7 +136,7 @@ class TestDispensePlanScheduler(TestCase):
             randomized_subject = RandomizedSubjectDummy(
                 randomization_datetime=datetime(2017, 8, 24),
                 subject_identifier=f'111{i}')
-            dispense = DispensePlanScheduler(
+            dispense = DispenseScheduler(
                 randomized_subject=randomized_subject,
                 dispense_plan=self.dispense_plan,
                 arm='control_arm')
@@ -150,8 +149,8 @@ class TestDispensePlanScheduler(TestCase):
             randomized_subject = RandomizedSubjectDummy(
                 randomization_datetime=datetime(2017, 8, 24),
                 subject_identifier=f'111{i}')
-            self.assertRaises(DispensePlanSchedulerException,
-                              DispensePlanScheduler,
+            self.assertRaises(DispenseSchedulerException,
+                              DispenseScheduler,
                               randomized_subject=randomized_subject,
                               arm='control_arm_wrong')
 
@@ -160,7 +159,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
@@ -168,5 +167,5 @@ class TestDispensePlanScheduler(TestCase):
         schedule = DispenseSchedule.objects.all().order_by(
             'created').first()
         p1, p2 = DispenseAppointment.objects.filter(schedule=schedule)
-        self.assertEqual(p1.timepoint, date(2017, 8, 24))
-        self.assertEqual(p2.timepoint, date(2017, 9, 1))
+        self.assertEqual(p1.appt_datetime, date(2017, 8, 24))
+        self.assertEqual(p2.appt_datetime, date(2017, 9, 1))

@@ -5,7 +5,7 @@ from django.test import tag, TestCase
 
 from ..constants import WEEKS
 from ..print_profile import site_profiles
-from ..scheduler import DispensePlanScheduler
+from ..scheduler import DispenseScheduler
 
 
 class RandomizedSubjectDummy:
@@ -35,7 +35,7 @@ class TestDispenseAppointmentMixin(TestCase):
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=self.randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control')
@@ -45,7 +45,8 @@ class TestDispenseAppointmentMixin(TestCase):
         dispense_timepoint = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
-        self.assertEqual(dispense_timepoint.next().timepoint, date(2017, 9, 1))
+        self.assertEqual(dispense_timepoint.next(
+        ).appt_datetime, date(2017, 9, 1))
 
     def test_dispensetime_next_1(self):
         dispense_timepoint = DispenseAppointment.objects.filter(

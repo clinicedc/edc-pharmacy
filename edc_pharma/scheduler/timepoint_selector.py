@@ -29,7 +29,9 @@ class TimepointSelector:
             self.selected_timepoints.append(self.get_middle_workday())
         else:
             divisible = int(len(workdays) / number_of_visits)
+            divisible = divisible - 1
             for i in range(divisible):
+                print(i)
                 if i == 0:
                     self.selected_timepoints.append(workdays[i])
                 else:

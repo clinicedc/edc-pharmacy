@@ -1,14 +1,13 @@
 from datetime import datetime, date
+from edc_pharma.models.dispense_appointment import DispenseAppointment
 from edc_pharma.models.dispense_history import DispenseHistory
 
 from django.test import tag, TestCase
 
-from edc_pharma.models.dispense_appointment import DispenseAppointment
-
 from ..constants import WEEKS
 from ..dispense import Dispense
 from ..print_profile import site_profiles
-from ..scheduler import DispensePlanScheduler
+from ..scheduler import DispenseScheduler
 
 
 class RandomizedSubjectDummy:
@@ -38,7 +37,7 @@ class TestDispense(TestCase):
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=self.randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control')
@@ -52,7 +51,7 @@ class TestDispense(TestCase):
             timepoint_id=dispense_appointment.id)
         self.assertEqual(DispenseHistory.objects.filter(
             dispense_appointment__schedule__subject_identifier=self.randomized_subject.subject_identifier,
-            dispense_appointment__timepoint=date(2017, 8, 24),
+            dispense_appointment__appt_datetime__date=date(2017, 8, 24),
         ).count(), 1)
 
     def test_print_label1(self):
@@ -63,5 +62,5 @@ class TestDispense(TestCase):
             timepoint_id=dispense_appointment.id)
         self.assertEqual(DispenseHistory.objects.filter(
             dispense_appointment__schedule__subject_identifier=self.randomized_subject.subject_identifier,
-            dispense_appointment__timepoint=date(2017, 8, 24),
+            dispense_appointment__appt_datetime__date=date(2017, 8, 24),
         ).count(), 1)

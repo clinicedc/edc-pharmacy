@@ -4,7 +4,7 @@ from edc_pharma.scheduler.timepoint_selector import TimepointSelector
 from dateutil.relativedelta import relativedelta
 
 
-class DispensePlanScheduleOverlapError(Exception):
+class DispenseScheduleOverlapError(Exception):
     pass
 
 
@@ -79,12 +79,12 @@ class SchedulesValidator:
                     continue
                 if (schedule.period.start_datetime <= vschedule.period.end_datetime
                         <= schedule.period.end_datetime):
-                    raise DispensePlanScheduleOverlapError(
+                    raise DispenseScheduleOverlapError(
                         f'Overlap between {schedule.name} '
                         f'and {vschedule.name}. Check schedule period dates.')
                 if (schedule.period.start_datetime <= vschedule.period.start_datetime
                         <= schedule.period.end_datetime):
-                    raise DispensePlanScheduleOverlapError(
+                    raise DispenseScheduleOverlapError(
                         f'Overlap between {schedule.name} and {vschedule.name}.'
                         f' {vschedule.name} startdate should not fall in range '
                         f'{schedule.period.start_datetime.date()} to '

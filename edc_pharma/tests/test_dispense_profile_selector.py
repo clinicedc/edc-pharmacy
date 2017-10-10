@@ -23,8 +23,8 @@ class TestDispenseProfileSelector(TestCase):
         self.schedule = DispenseSchedule.objects.create(
             subject_identifier=self.enrolled_subject.subject_identifier,
             name='schedule1', sequence=1, duration='2',
-            start_date=date(2017, 9, 25),
-            end_date=date(2017, 9, 30))
+            start_datetime=date(2017, 9, 25),
+            end_datetime=date(2017, 9, 30))
         self.dispense_plan = DispenseAppointment.objects.create(
             timepoint=datetime.today(),
             schedule=self.schedule,

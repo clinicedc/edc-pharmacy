@@ -6,7 +6,7 @@ from django.test import tag, TestCase
 from ..constants import WEEKS
 from ..models.dispense_schedule import DispenseSchedule
 from ..print_profile import site_profiles
-from ..scheduler import DispensePlanScheduler
+from ..scheduler import DispenseScheduler
 
 
 class RandomizedSubjectDummy:
@@ -36,7 +36,7 @@ class TestDispenseAppointmentGetter(TestCase):
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispensePlanScheduler(
+        dispense = DispenseScheduler(
             randomized_subject=self.randomized_subject,
             dispense_plan=self.dispense_plan,
             arm='control')
@@ -53,8 +53,8 @@ class TestDispenseAppointmentGetter(TestCase):
         ).order_by('created')[1]
         self.assertNotEqual(dispense_timepoint.timepoint,
                             dispense_next.timepoint)
-        self.assertEqual(dispense_timepoint.next().timepoint,
-                         dispense_next.timepoint)
+        self.assertEqual(dispense_timepoint.next().appt_datetime,
+                         dispense_next.appt_datetime)
 
     def test_schedule_subject_previous(self):
         dispense_timepoint = DispenseAppointment.objects.filter(
@@ -63,8 +63,8 @@ class TestDispenseAppointmentGetter(TestCase):
         dispense_current = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created')[1]
-        self.assertEqual(dispense_current.previous().timepoint,
-                         dispense_timepoint.timepoint)
+        self.assertEqual(dispense_current.previous().appt_datetime,
+                         dispense_timepoint.appt_datetime)
 
     def test_schedule_subject_completed(self):
         dispense_timepoint = DispenseAppointment.objects.filter(

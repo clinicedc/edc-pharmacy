@@ -15,7 +15,7 @@ class TestPeriodWorkingDays(TestCase):
             datetime(2017, 8, 24)).datetime
         period = Period(
             start_datetime=start_datetime, unit=DAYS, duration=1)
-        self.assertEqual(len(period.workdays), 2)
+        self.assertEqual(len(period.workdays), 1)
 
     def test_period_timepoint3(self):
         # duration 0 zero index based
@@ -26,7 +26,7 @@ class TestPeriodWorkingDays(TestCase):
         expected_datetime1 = arrow.Arrow.fromdatetime(
             datetime(2017, 9, 1)).datetime
         period = Period(
-            start_datetime=start_datetime, unit=DAYS, duration=1)
+            start_datetime=start_datetime, unit=DAYS, duration=2)
         self.assertEqual(period.workdays[0], expected_datetime)
         self.assertEqual(period.workdays[1], expected_datetime1)
 
@@ -35,4 +35,4 @@ class TestPeriodWorkingDays(TestCase):
             datetime(2017, 8, 31)).datetime
         period = Period(
             start_datetime=start_datetime, unit=DAYS, duration=2)
-        self.assertEqual(len(period.workdays), 3)
+        self.assertEqual(len(period.workdays), 2)

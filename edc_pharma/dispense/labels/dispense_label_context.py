@@ -28,7 +28,7 @@ class DispenseLabelContext:
             'total_number_of_tablets': None,
             'storage_instructions': None,
             'sid': None,
-            'prepared_datetime': self.dispense_appointment.timepoint.strftime(
+            'prepared_datetime': self.dispense_appointment.appt_datetime.strftime(
                 '%Y-%m-%d'),
             'subject_identifier': subject_identifier,
             'prepared_by': None,

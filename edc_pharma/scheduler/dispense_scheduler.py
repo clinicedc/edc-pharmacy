@@ -1,20 +1,21 @@
 from edc_pharma.dispense_plan import dispense_plans
 
+from django.apps import apps as django_apps
 from .creators import DispenseScheduleCreator, DispenseAppointmentCreator
 from .period import Period
-from .schedule_collection import Schedule as SchedulePlan
+from .schedule_collection import Schedule
 from .schedule_collection import ScheduleCollection
 
 
-class DispensePlanSchedulerException(Exception):
+class DispenseSchedulerException(Exception):
     pass
 
 
-class InvalidSchedulePlanConfig(Exception):
+class InvalidScheduleConfig(Exception):
     pass
 
 
-class DispensePlanScheduler:
+class DispenseScheduler:
 
     """Given enrolled subject, calculates the dispense schedules and create
     records for the subject.
@@ -30,7 +31,7 @@ class DispensePlanScheduler:
         self.arm = arm
         self.dispense_plan = dispense_plan or dispense_plans.get(arm)
         if not self.dispense_plan:
-            raise DispensePlanSchedulerException(
+            raise DispenseSchedulerException(
                 f'Failed to find dispense schedule plan, for {self.arm}.')
 
     @property
@@ -46,7 +47,7 @@ class DispensePlanScheduler:
                 start_datetime=start_datetime,
                 unit=schedule_details.get('unit'),
                 duration=schedule_details.get('duration'))
-            schedule = SchedulePlan(
+            schedule = Schedule(
                 schedule_period,
                 name=schedule_name,
                 number_of_visits=schedule_details.get('number_of_visits'),
@@ -63,7 +64,7 @@ class DispensePlanScheduler:
                 plan['number_of_visits']
                 plan['dispense_profile']
             except KeyError as e:
-                raise InvalidSchedulePlanConfig(f'Missing expected key {e}')
+                raise InvalidScheduleConfig(f'Missing expected key {e}')
 
     def create_schedules(self):
         for sequence, schedule_name in enumerate(self.subject_schedules):
@@ -74,6 +75,7 @@ class DispensePlanScheduler:
                 schedule=schedule,
                 subject_identifier=self.randomized_subject.subject_identifier,
                 sequence=sequence).create()
+###
             schedule_plan = self.dispense_plan.get(schedule_name)
 
             self.dispense_timepoint_cls(

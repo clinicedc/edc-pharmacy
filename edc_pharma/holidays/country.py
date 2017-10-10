@@ -1,8 +1,7 @@
 import arrow
-
-from django.conf import settings
-from django.apps import apps as django_apps
 from dateutil.relativedelta import relativedelta
+from django.apps import apps as django_apps
+from django.conf import settings
 
 from .holidays import Holidays
 
@@ -13,8 +12,11 @@ class Country:
 
     holidays_cls = Holidays
 
-    def __init__(self, country=None, time_zone=None, **kwargs):
+    def __init__(self, country=None, time_zone=None, skip_holiday=None,
+                 skip_weekend=None, **kwargs):
         app_config = django_apps.get_app_config('edc_pharma')
+        self.skip_holiday = skip_holiday
+        self.skip_weekend = skip_weekend
         self.name = country or app_config.country
         self.time_zone = time_zone or settings.TIME_ZONE
         self.holidays = self.holidays_cls(country=self.name, **kwargs)
@@ -34,11 +36,17 @@ class Country:
         return utc_datetime.weekday() in [6, 7]
 
     def move_to_workday(self, utc_datetime=None):
-        while self.is_holiday(utc_datetime=utc_datetime):
-            utc_datetime = utc_datetime + relativedelta(days=1)
-        while self.is_weekend(utc_datetime):
-            days = 1 if utc_datetime.weekday() == 6 else 2
-            utc_datetime = utc_datetime + relativedelta(days=days)
+        check_again = False
+        if self.skip_holiday:
+            while self.is_holiday(utc_datetime=utc_datetime):
+                utc_datetime = utc_datetime + relativedelta(days=1)
+                check_again = True
+        if self.skip_weekend:
+            while self.is_weekend(utc_datetime=utc_datetime):
+                utc_datetime = utc_datetime + relativedelta(days=1)
+                check_again = True
+        if check_again:
+            self.move_to_workday(utc_datetime=utc_datetime)
         return utc_datetime
 
     def __str__(self):

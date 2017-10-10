@@ -51,7 +51,7 @@ class DispenseAppointmentDescibe:
         """Returns description of dispense timepoint example.
         (2017-08-24):day 1 to (2017-08-31): day 7.
         """
-        description = (f'({self.dispense_appointment.timepoint}):'
+        description = (f'({self.dispense_appointment.appt_datetime}):'
                        f'{self.start_day} to ({self.end_date}):'
                        f'{self.end_day}')
         return description
@@ -60,12 +60,12 @@ class DispenseAppointmentDescibe:
         """Returns count of days between two dispense timepoints.
         """
         next_timepoint = None
-        end_timepoint = dispense_appointment.schedule.end_date
+        end_timepoint = dispense_appointment.schedule.end_datetime
         if dispense_appointment.next():
             dispense_appointment_obj = dispense_appointment.next()
-            next_timepoint = dispense_appointment_obj.timepoint
+            next_timepoint = dispense_appointment_obj.appt_datetime
             end_timepoint = next_timepoint - relativedelta(days=1)
         next_timepoint = (
-            next_timepoint or dispense_appointment.schedule.end_date)
-        current_timepoint = dispense_appointment.timepoint
+            next_timepoint or dispense_appointment.schedule.end_datetime)
+        current_timepoint = dispense_appointment.appt_datetime
         return (end_timepoint, (end_timepoint - current_timepoint).days)

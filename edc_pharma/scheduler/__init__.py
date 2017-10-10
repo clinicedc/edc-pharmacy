@@ -1,6 +1,6 @@
 from .creators import DispenseScheduleCreator, DispenseAppointmentCreator
-from .dispense_plan_scheduler import DispensePlanScheduler
-from .dispense_plan_scheduler import InvalidSchedulePlanConfig
+from .dispense_scheduler import (
+    DispenseScheduler, InvalidScheduleConfig, DispenseSchedulerException)
 from .period import Period
-from .schedule_collection import ScheduleCollection, Schedule, DispensePlanScheduleOverlapError
+from .schedule_collection import ScheduleCollection, Schedule, DispenseScheduleOverlapError
 from .timepoint_selector import TimepointSelector
