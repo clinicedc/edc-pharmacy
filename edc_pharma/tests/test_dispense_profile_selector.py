@@ -26,7 +26,7 @@ class TestDispenseProfileSelector(TestCase):
             start_datetime=date(2017, 9, 25),
             end_datetime=date(2017, 9, 30))
         self.dispense_plan = DispenseAppointment.objects.create(
-            timepoint=datetime.today(),
+            appt_datetime=datetime.today(),
             schedule=self.schedule,
             profile_label='enrollment.control')
 

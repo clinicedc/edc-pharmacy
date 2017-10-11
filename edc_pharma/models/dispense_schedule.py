@@ -26,9 +26,9 @@ class DispenseSchedule(BaseUuidModel):
     description = models.CharField(
         max_length=100, null=True, blank=True)
 
-    start_datetime = models.DateField()
+    start_datetime = models.DateTimeField()
 
-    end_datetime = models.DateField()
+    end_datetime = models.DateTimeField()
 
     def next(self):
         return self.__class__.objects.filter(
@@ -42,7 +42,7 @@ class DispenseSchedule(BaseUuidModel):
 
     def __str__(self):
         return (f'{self.subject_identifier}@{self.name}.'
-                f' from {self.start_date} to {self.end_date}')
+                f' from {self.start_datetime} to {self.end_datetime}')
 
     class Meta:
         app_label = 'edc_pharma'

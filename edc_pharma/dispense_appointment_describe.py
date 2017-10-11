@@ -61,6 +61,7 @@ class DispenseAppointmentDescibe:
         """
         next_timepoint = None
         end_timepoint = dispense_appointment.schedule.end_datetime
+        print(end_timepoint)
         if dispense_appointment.next():
             dispense_appointment_obj = dispense_appointment.next()
             next_timepoint = dispense_appointment_obj.appt_datetime

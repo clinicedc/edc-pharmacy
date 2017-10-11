@@ -51,8 +51,8 @@ class TestDispenseAppointmentGetter(TestCase):
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created')[1]
-        self.assertNotEqual(dispense_timepoint.timepoint,
-                            dispense_next.timepoint)
+        self.assertNotEqual(dispense_timepoint.appt_datetime,
+                            dispense_next.appt_datetime)
         self.assertEqual(dispense_timepoint.next().appt_datetime,
                          dispense_next.appt_datetime)
 

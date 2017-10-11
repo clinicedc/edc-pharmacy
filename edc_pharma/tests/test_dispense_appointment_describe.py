@@ -54,6 +54,7 @@ class TestDispenseAppointmentDescribe(TestCase):
         self.assertTrue(describe.human_readiable())
         self.assertEqual('Day 1', describe.start_day)
 
+    @tag('readiable_days_7')
     def test_dispense_appointment_human_readiable_days_7(self):
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,

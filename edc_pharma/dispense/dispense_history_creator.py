@@ -24,8 +24,10 @@ class DispenseHistoryCreator:
             except ObjectDoesNotExist:
                 medication_obj = Medication.objects.create(
                     name=medication.name,
-                    description=medication.description,
-                    storage_instructions=medication.instruction)
+                    unit=medication.unit,
+                    amount=medication.amount,
+                    category=medication.category,
+                    description=medication.description)
             model_obj.medications.add(medication_obj)
 
     def save_or_update(self):
