@@ -167,5 +167,5 @@ class TestDispensePlanScheduler(TestCase):
         schedule = DispenseSchedule.objects.all().order_by(
             'created').first()
         p1, p2 = DispenseAppointment.objects.filter(schedule=schedule)
-        self.assertEqual(p1.appt_datetime, date(2017, 8, 24))
-        self.assertEqual(p2.appt_datetime, date(2017, 9, 1))
+        self.assertEqual(p1.appt_datetime.date(), date(2017, 8, 24))
+        self.assertEqual(p2.appt_datetime.date(), date(2017, 9, 1))

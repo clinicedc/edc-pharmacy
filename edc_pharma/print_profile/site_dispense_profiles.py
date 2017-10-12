@@ -1,4 +1,4 @@
-from edc_pharma.import_medication_list import medications
+from edc_pharma.medications import medications
 
 from ..print_profile import DispenseProfile
 

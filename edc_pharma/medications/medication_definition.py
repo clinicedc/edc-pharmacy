@@ -3,14 +3,14 @@ from edc_pharma.constants import MILLIGRAM, CAPSULE, VIAL
 
 class MedicationDefinition:
     def __init__(self, name=None, description=None, category=None,
-                 unit=None, milligram=None, weight=None,
+                 unit=None, milligram=None, total=None,
                  number_of_times_per_day=None,):
         self.name = name
         self.description = description
         self.category = category
         self.unit = unit
         self.milligram = milligram
-        self.weight = weight
+        self.total = total
         self.number_of_times_per_day = number_of_times_per_day
 
 
@@ -21,7 +21,7 @@ ambisome = MedicationDefinition(
     category=VIAL,
     unit=MILLIGRAM,
     milligram=10,
-    weight=500,
+    total=500,
     number_of_times_per_day=4)
 medications.update({'ambisome': ambisome})
 
@@ -31,7 +31,7 @@ fluconazole = MedicationDefinition(
     category=VIAL,
     unit=MILLIGRAM,
     milligram=1200,
-    weight=500,
+    total=500,
     number_of_times_per_day=4)
 medications.update({'fluconazole': fluconazole})
 
@@ -41,7 +41,7 @@ flucytosine = MedicationDefinition(
     category=CAPSULE,
     unit=MILLIGRAM,
     milligram=100,
-    weight=500,
+    total=500,
     number_of_times_per_day=4,)
 medications.update({'flucytosine': flucytosine})
 
@@ -49,7 +49,8 @@ amphotericin = MedicationDefinition(
     name='amphotericin',
     description='Amphotericin B 1 mg/kg',
     category=CAPSULE,
+    unit=MILLIGRAM,
     milligram=1,
-    weight=50,
+    total=50,
     number_of_times_per_day=4)
 medications.update({'amphotericin': amphotericin})

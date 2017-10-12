@@ -2,22 +2,35 @@
 
 class BaseFormula:
 
-    def __init__(self, weight=None, med_weight=None, millgrams=None, duration=None):
+    def __init__(self, weight=None, total=None, millgrams=None, duration=None):
         self.weight = weight
-        self.med_weight = med_weight
-        self.millgrams = millgrams
+        self.total = total
+        self.dosage = millgrams
         self.duration = duration
 
     @property
-    def total(self):
+    def required_quantity(self):
         original_value = self.duration * self.total_per_day
         new_value = int(round(original_value))
         return new_value if (
             new_value > original_value) else int(round(original_value)) + 1
 
     @property
-    def total_per_day(self):
-        return (self.weight * self.millgrams) / self.med_weight
+    def dose(self):
+        """Returns required dosage by weight in milligrams.
+        For Example
+            4mg/kg means give 4mg for every kg the person weighs.
+            A 75 kg person would need 75 x 4 = 300mg."""
+        return self.weight * self.dosage
 
+    @property
+    def formula(self):
+        return self.dose / self.total
+
+    @property
+    def total_per_day(self):
+        return (self.formula * 1)
+
+    @property
     def __repr__(self):
         return f'{self.definition.description}'

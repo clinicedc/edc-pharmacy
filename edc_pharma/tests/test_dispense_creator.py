@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from ..constants import WEEKS
 from ..dispense.dispense_history_creator import DispenseHistoryCreator
@@ -42,6 +42,7 @@ class TestDispenseCreator(TestCase):
             arm='control')
         dispense.create_schedules()
 
+    @tag('DispenseCreator')
     def test_dispense_history_creator(self):
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
@@ -49,20 +50,8 @@ class TestDispenseCreator(TestCase):
         creator = DispenseHistoryCreator(
             dispense_appointment=dispense_appointment)
         creator.save_or_update()
-
         self.assertEqual(DispenseHistory.objects.filter(
-            dispense_appointment=dispense_appointment).count(), 1)
-
-    def test_dispense_history_creator_1(self):
-        dispense_appointment = DispenseAppointment.objects.filter(
-            schedule__subject_identifier=self.randomized_subject.subject_identifier
-        ).first()
-        creator = DispenseHistoryCreator(
-            dispense_appointment=dispense_appointment)
-        creator.save_or_update()
-        dispensed_medications = DispenseHistory.objects.get(
-            dispense_appointment=dispense_appointment)
-        self.assertEqual(dispensed_medications.medications.all().count(), 2)
+            dispense_appointment=dispense_appointment).count(), 2)
 
     def test_dispense_history_creator_2(self):
         dispense_appointment = DispenseAppointment.objects.filter(
@@ -93,3 +82,16 @@ class TestDispenseCreator(TestCase):
             is_dispensed=True
         )
         self.assertEqual(dispense_appointment.count(), 2)
+
+    def test_dispense_history_creator_selected(self):
+        dispense_appointment = DispenseAppointment.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
+        ).first()
+        creator = DispenseHistoryCreator(
+            dispense_appointment=dispense_appointment,
+            selected=True,
+            medication_name='flucytosine')
+        creator.save_or_update()
+        history = DispenseHistory.objects.filter(
+            dispense_appointment=dispense_appointment)
+        self.assertEqual(history.count(), 1)

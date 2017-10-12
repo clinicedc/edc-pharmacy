@@ -46,7 +46,7 @@ class TestDispenseAppointmentMixin(TestCase):
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
         self.assertEqual(dispense_timepoint.next(
-        ).appt_datetime, date(2017, 9, 1))
+        ).appt_datetime.date(), date(2017, 9, 1))
 
     def test_dispensetime_next_1(self):
         dispense_timepoint = DispenseAppointment.objects.filter(

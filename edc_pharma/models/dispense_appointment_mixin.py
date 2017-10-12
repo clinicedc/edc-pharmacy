@@ -20,6 +20,12 @@ class DispenseAppointmentMixin(models.Model):
         help_text='',
         db_index=True)
 
+    dispense_datetime = models.DateTimeField(
+        verbose_name=('Dispense date and time'),
+        help_text='',
+        null=True,
+        blank=True)
+
     appt_reason = models.CharField(
         verbose_name=('Reason for appointment'),
         max_length=25,

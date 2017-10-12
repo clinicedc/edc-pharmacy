@@ -239,7 +239,7 @@ class TestDispenseSchedule(TestCase):
         first_day, next_timepoint = (
             schedule.selector.selected_timepoints)
         self.assertEqual(first_day.date(), datetime(2017, 8, 24).date())
-        self.assertEqual(next_timepoint.date(), datetime(2017, 9, 23).date())
+        self.assertEqual(next_timepoint.date(), datetime(2017, 9, 24).date())
 
     def test_schedule_with_visit_selector5(self):
         start_datetime = arrow.Arrow.fromdatetime(
@@ -252,4 +252,4 @@ class TestDispenseSchedule(TestCase):
         first_day, next_timepoint = (
             schedule.selector.selected_timepoints)
         self.assertEqual(first_day.date(), datetime(2017, 8, 24).date())
-        self.assertEqual(next_timepoint.date(), datetime(2017, 9, 21).date())
+        self.assertEqual(next_timepoint.date(), datetime(2017, 9, 22).date())
