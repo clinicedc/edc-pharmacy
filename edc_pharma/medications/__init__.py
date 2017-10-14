@@ -1,5 +1,4 @@
-from .base_formula import BaseFormula
-from .capsule_formula import CapsuleFormula
+from .capsule_dosage import CapsuleDosage
 from .medication import Medication
 from .medication_definition import MedicationDefinition, medications
-from .vial_formula import VialFormula
+from .vial_dosage import VialDosage

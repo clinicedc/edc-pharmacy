@@ -1,7 +1,7 @@
 from edc_pharma.constants import CAPSULE
 
-from .capsule_formula import CapsuleFormula
-from .vial_formula import VialFormula
+from .capsule_dosage import CapsuleDosage
+from .vial_dosage import VialDosage
 
 
 class Medication:
@@ -14,8 +14,8 @@ class Medication:
 
     """
 
-    vial_formula_cls = VialFormula
-    capsule_formula_cls = CapsuleFormula
+    capsule_dosage_cls = CapsuleDosage
+    vial_dosage_cls = VialDosage
 
     def __init__(self, medication_definition=None, weight=None, duration=None):
         self.definition = medication_definition
@@ -26,12 +26,12 @@ class Medication:
     def required_quantity(self):
         result = None
         if self.definition == CAPSULE:
-            result = self.capsule_formula(
+            result = self.capsule_dosage_cls(
                 weight=self.weight, total=self.definition.total,
                 millgrams=self.definition.milligram,
                 duration=self.duration)
         else:
-            result = self.vial_formula_cls(
+            result = self.vial_dosage_cls(
                 weight=self.weight, total=self.definition.total,
                 millgrams=self.definition.milligram,
                 duration=self.duration)
