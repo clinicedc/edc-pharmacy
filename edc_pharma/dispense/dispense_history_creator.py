@@ -15,7 +15,9 @@ class DispenseHistoryCreator:
         self.dispense_appointment = dispense_appointment
         self.selected = selected
 
-    def create_or_update(self):
+    def create_all(self):
+        """Create history record per medication and update the next dispense appt.
+        """
         if self.selected:
             medication_definition = medications.get(self.medication_name)
             self.create_history(medication_definition=medication_definition)
@@ -23,6 +25,7 @@ class DispenseHistoryCreator:
             for medication_definition in self.dispense_appointment.profile_medications:
                 self.create_history(
                     medication_definition=medication_definition)
+        self.dispense_appointment.update_next_dispense_datetime()
 
     def medication(self, medication_definition=None):
         try:
@@ -46,7 +49,7 @@ class DispenseHistoryCreator:
         model_obj.save()
 
     def save_or_update(self):
-        self.create_or_update()
+        self.create_all()
         self.dispense_appointment.is_dispensed = True
         self.dispense_appointment.save()
 

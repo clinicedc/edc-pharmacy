@@ -13,10 +13,10 @@ class Dispense:
     """
     print_label_cls = DispenseLabel
 
-    def __init__(self, subject_identifier=None, timepoint_id=None,
+    def __init__(self, subject_identifier=None, appointment_id=None,
                  user=None):
         self.subject_identifier = subject_identifier
-        self.timepoint_id = timepoint_id
+        self.appointment_id = appointment_id
         self.user = user
         self.printed_labels = self.print_labels()
 
@@ -25,7 +25,7 @@ class Dispense:
         """Returns dispense timepoint."""
         return DispenseAppointment.objects.get(
             schedule__subject_identifier=self.subject_identifier,
-            id=self.timepoint_id)
+            id=self.appointment_id)
 
     def print_labels(self):
         """Print labels using dispense profile. """
