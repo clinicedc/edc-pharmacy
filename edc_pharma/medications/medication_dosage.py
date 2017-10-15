@@ -4,7 +4,7 @@ from .capsule_dosage import CapsuleDosage
 from .vial_dosage import VialDosage
 
 
-class Medication:
+class MedicationDosage:
     """Given a medication definition and subject weight the class calculates the 
     quantity of medication or the volume to dispense.
     For Example.
@@ -23,19 +23,31 @@ class Medication:
         self.duration = duration
 
     @property
+    def capsules(self):
+        return self.capsule_dosage_cls(
+            body_weight=self.weight,
+            strength=self.definition.strength,
+            millgrams_per_vial=self.definition.milligram,
+            duration=self.duration,
+            use_body_weight=self.definition.use_body_weight)
+
+    @property
     def required_quantity(self):
         result = None
         if self.definition == CAPSULE:
-            result = self.capsule_dosage_cls(
-                weight=self.weight, total=self.definition.total,
-                millgrams=self.definition.milligram,
-                duration=self.duration)
+            result = self.capsules
         else:
-            result = self.vial_dosage_cls(
-                weight=self.weight, total=self.definition.total,
-                millgrams=self.definition.milligram,
-                duration=self.duration)
+            result = self.vials
         return result.required_quantity
+
+    @property
+    def vials(self):
+        result = self.vial_dosage_cls(
+            body_weight=self.weight, strength_of_vial=self.definition.strength,
+            millgrams_per_vial=self.definition.milligram,
+            duration=self.duration,
+            use_body_weight=self.definition.use_body_weight)
+        return result
 
     def __repr__(self):
         return f'{self.definition.description}'

@@ -7,11 +7,12 @@ class VialDosage(DrugMixin):
     """
 
     def __init__(self, body_weight=None, strength_of_vial=None,
-                 millgrams_per_vial=None, duration=None):
+                 millgrams_per_vial=None, duration=None, use_body_weight=None):
         self.body_weight = body_weight
         self.strength_of_vial = strength_of_vial
         self.millgrams_per_vial = millgrams_per_vial
         self.duration = duration
+        self.use_body_weight = use_body_weight
 
     @property
     def daily_dosage(self):

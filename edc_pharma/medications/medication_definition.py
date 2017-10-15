@@ -3,15 +3,16 @@ from edc_pharma.constants import MILLIGRAM, CAPSULE, VIAL
 
 class MedicationDefinition:
     def __init__(self, name=None, description=None, category=None,
-                 unit=None, milligram=None, total=None,
-                 number_of_times_per_day=None,):
+                 unit=None, milligram=None, strength=None,
+                 number_of_times_per_day=None, use_body_weight=None):
         self.name = name
         self.description = description
         self.category = category
         self.unit = unit
         self.milligram = milligram
-        self.total = total
+        self.strength = strength
         self.number_of_times_per_day = number_of_times_per_day
+        self.use_body_weight = use_body_weight
 
 
 medications = {}
@@ -21,8 +22,10 @@ ambisome = MedicationDefinition(
     category=VIAL,
     unit=MILLIGRAM,
     milligram=10,
-    total=500,
-    number_of_times_per_day=4)
+    strength=50,
+    number_of_times_per_day=4,
+    use_body_weight=True)
+
 medications.update({'ambisome': ambisome})
 
 fluconazole = MedicationDefinition(
@@ -31,8 +34,9 @@ fluconazole = MedicationDefinition(
     category=VIAL,
     unit=MILLIGRAM,
     milligram=1200,
-    total=500,
-    number_of_times_per_day=4)
+    strength=500,
+    number_of_times_per_day=4,
+    use_body_weight=False)
 medications.update({'fluconazole': fluconazole})
 
 flucytosine = MedicationDefinition(
@@ -41,8 +45,9 @@ flucytosine = MedicationDefinition(
     category=CAPSULE,
     unit=MILLIGRAM,
     milligram=100,
-    total=500,
-    number_of_times_per_day=4,)
+    strength=500,
+    number_of_times_per_day=4,
+    use_body_weight=True)
 medications.update({'flucytosine': flucytosine})
 
 amphotericin = MedicationDefinition(
@@ -51,6 +56,7 @@ amphotericin = MedicationDefinition(
     category=CAPSULE,
     unit=MILLIGRAM,
     milligram=1,
-    total=50,
-    number_of_times_per_day=4)
+    strength=50,
+    number_of_times_per_day=4,
+    use_body_weight=True)
 medications.update({'amphotericin': amphotericin})

@@ -7,10 +7,10 @@ class CapsuleDosage(DrugMixin):
     """
 
     def __init__(self, body_weight=None, strength=None,
-                 millgrams_per_vial=None, duration=None, use_body_weight=None):
+                 millgrams_per_capsule=None, duration=None, use_body_weight=None):
         self.body_weight = body_weight
         self.strength = strength
-        self.millgrams_per_vial = millgrams_per_vial
+        self.millgrams_per_capsule = millgrams_per_capsule
         self.duration = duration
         self.use_body_weight = use_body_weight
 
@@ -18,10 +18,10 @@ class CapsuleDosage(DrugMixin):
     def daily_dosage(self):
         """Returns dosage per day."""
         if self.use_body_weight:
-            daily_dosage = ((self.millgrams_per_vial * self.body_weight) /
+            daily_dosage = ((self.millgrams_per_capsule * self.body_weight) /
                             self.strength)
         else:
-            daily_dosage = self.millgrams_per_vial / self.strength
+            daily_dosage = self.millgrams_per_capsule / self.strength
         return round(daily_dosage)
 
     @property
