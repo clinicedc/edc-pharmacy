@@ -4,7 +4,8 @@ from edc_pharma.constants import MILLIGRAM, CAPSULE, VIAL
 class MedicationDefinition:
     def __init__(self, name=None, description=None, category=None,
                  unit=None, milligram=None, strength=None,
-                 number_of_times_per_day=None, use_body_weight=None):
+                 number_of_times_per_day=None, use_body_weight=None,
+                 single_dose=None):
         self.name = name
         self.description = description
         self.category = category
@@ -13,6 +14,7 @@ class MedicationDefinition:
         self.strength = strength
         self.number_of_times_per_day = number_of_times_per_day
         self.use_body_weight = use_body_weight
+        self.single_dose = single_dose
 
 
 medications = {}
@@ -24,7 +26,8 @@ ambisome = MedicationDefinition(
     milligram=10,
     strength=50,
     number_of_times_per_day=4,
-    use_body_weight=True)
+    use_body_weight=True,
+    single_dose=True)
 
 medications.update({'ambisome': ambisome})
 
@@ -36,7 +39,8 @@ fluconazole = MedicationDefinition(
     milligram=1200,
     strength=500,
     number_of_times_per_day=4,
-    use_body_weight=False)
+    use_body_weight=False,
+    single_dose=False)
 medications.update({'fluconazole': fluconazole})
 
 flucytosine = MedicationDefinition(
@@ -47,7 +51,8 @@ flucytosine = MedicationDefinition(
     milligram=100,
     strength=500,
     number_of_times_per_day=4,
-    use_body_weight=True)
+    use_body_weight=True,
+    single_dose=False)
 medications.update({'flucytosine': flucytosine})
 
 amphotericin = MedicationDefinition(
@@ -58,5 +63,6 @@ amphotericin = MedicationDefinition(
     milligram=1,
     strength=50,
     number_of_times_per_day=4,
-    use_body_weight=True)
+    use_body_weight=True,
+    single_dose=False)
 medications.update({'amphotericin': amphotericin})

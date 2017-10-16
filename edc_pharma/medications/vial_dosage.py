@@ -17,8 +17,12 @@ class VialDosage(DrugMixin):
     @property
     def daily_dosage(self):
         """Returns dosage per day."""
-        daily_dosage = ((self.millgrams_per_vial * self.body_weight) /
-                        self.strength_of_vial)
+        try:
+            daily_dosage = float(self.millgrams_per_vial) * self.body_weight
+            daily_dosage = daily_dosage / float(self.strength_of_vial)
+        except TypeError as e:
+            raise Exception(f"{self.millgrams_per_vial} * {self.body_weight} "
+                            f"/ {self.strength_of_vial} Got {e}")
         return round(daily_dosage)
 
     @property

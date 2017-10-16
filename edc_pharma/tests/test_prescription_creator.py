@@ -3,9 +3,9 @@ from datetime import datetime
 from django.test import TestCase, tag
 
 from ..constants import WEEKS
-from ..dispense.dispense_history_creator import DispenseHistoryCreator
+from ..dispense.prescription_creator import PrescriptionCreator
 from ..models import DispenseAppointment
-from ..models import DispenseHistory
+from ..models import Prescription
 from ..print_profile import site_profiles
 from ..scheduler import DispenseScheduler
 
@@ -17,7 +17,7 @@ class RandomizedSubjectDummy:
         self.subject_identifier = subject_identifier
 
 
-class TestDispenseCreator(TestCase):
+class TestPrescriptionCreator(TestCase):
 
     def setUp(self):
         self.dispense_plan = {
@@ -33,6 +33,7 @@ class TestDispenseCreator(TestCase):
                     'enrollment': site_profiles.get(name='enrollment.control'),
                     'followup': site_profiles.get(name='followup.control'),
                 }}}
+        self.options = {'weight': 40.0, 'duration': 7}
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
@@ -42,56 +43,46 @@ class TestDispenseCreator(TestCase):
             arm='control')
         dispense.create_schedules()
 
-    @tag('DispenseCreator')
     def test_dispense_history_creator(self):
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).first()
-        creator = DispenseHistoryCreator(
-            dispense_appointment=dispense_appointment)
+        creator = PrescriptionCreator(
+            dispense_appointment=dispense_appointment, options=self.options)
         creator.save_or_update()
-        self.assertEqual(DispenseHistory.objects.filter(
+        self.assertEqual(Prescription.objects.filter(
             dispense_appointment=dispense_appointment).count(), 2)
 
     def test_dispense_history_creator_2(self):
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).first()
-        creator = DispenseHistoryCreator(
-            dispense_appointment=dispense_appointment)
+        creator = PrescriptionCreator(
+            dispense_appointment=dispense_appointment, options=self.options)
         creator.save_or_update()
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
-            is_dispensed=True
+            is_dispensed=False
         )
-        self.assertEqual(dispense_appointment.count(), 1)
+        self.assertEqual(dispense_appointment.count(), 4)
 
     def test_dispense_history_creator_3(self):
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
-        creator = DispenseHistoryCreator(
-            dispense_appointment=dispense_appointment)
+        creator = PrescriptionCreator(
+            dispense_appointment=dispense_appointment, options=self.options)
         creator.save_or_update()
         dispense_appointment = dispense_appointment.next()
-        creator = DispenseHistoryCreator(
-            dispense_appointment=dispense_appointment)
+        creator = PrescriptionCreator(
+            dispense_appointment=dispense_appointment,
+            options=self.options)
         creator.save_or_update()
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
-            is_dispensed=True
         )
-        self.assertEqual(dispense_appointment.count(), 2)
-
-    def test_dispense_history_creator_selected(self):
-        dispense_appointment = DispenseAppointment.objects.filter(
-            schedule__subject_identifier=self.randomized_subject.subject_identifier
-        ).first()
-        creator = DispenseHistoryCreator(
-            dispense_appointment=dispense_appointment,
-            selected=True,
-            medication_name='flucytosine')
-        creator.save_or_update()
-        history = DispenseHistory.objects.filter(
-            dispense_appointment=dispense_appointment)
-        self.assertEqual(history.count(), 1)
+        self.assertEqual(Prescription.objects.filter(
+            dispense_appointment=dispense_appointment).count(), 2)
+        self.assertEqual(Prescription.objects.filter(
+            dispense_appointment__schedule__subject_identifier=self.randomized_subject.subject_identifier
+        ).count(), 4)

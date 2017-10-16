@@ -20,7 +20,10 @@ class MedicationDosage:
     def __init__(self, medication_definition=None, weight=None, duration=None):
         self.definition = medication_definition
         self.weight = weight
-        self.duration = duration
+        if self.definition.single_dose:
+            self.duration = 1
+        else:
+            self.duration = duration
 
     @property
     def capsules(self):

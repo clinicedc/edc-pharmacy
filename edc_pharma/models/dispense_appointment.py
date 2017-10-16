@@ -15,7 +15,7 @@ class DispenseAppointment(DispenseAppointmentMixin, BaseUuidModel):
     profile_label = models.CharField(max_length=100)
 
     def __str__(self):
-        return (f'{self.timepoint} - {self.profile_label}')
+        return (f'{self.appt_datetime} - {self.profile_label}')
 
     class Meta:
         app_label = 'edc_pharma'

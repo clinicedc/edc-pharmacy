@@ -16,6 +16,8 @@ class DrugMixin:
 
     @property
     def required_quantity(self):
+        print(self.duration)
+        print(self.daily_dosage)
         return self.daily_dosage * self.duration
 
     @property
