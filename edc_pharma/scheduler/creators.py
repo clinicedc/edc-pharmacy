@@ -22,18 +22,21 @@ class DispenseAppointmentCreator:
             subject_identifier=self.subject_identifier,
             schedule_name=self.schedule_name,
             schedule_plan=self.schedule_plan)
+        appointments = []
         for code in self.timepoints:
             timepoint = self.timepoints.get(code)
             try:
-                DispenseAppointment.objects.get(
+                appointment = DispenseAppointment.objects.get(
                     schedule=self.schedule,
                     appt_datetime=timepoint.timepoint_datetime,
                     profile_label=profile_selector.profile.label)
             except DispenseAppointment.DoesNotExist:
-                DispenseAppointment.objects.create(
+                appointment = DispenseAppointment.objects.create(
                     schedule=self.schedule,
                     profile_label=profile_selector.profile.label,
                     appt_datetime=timepoint.timepoint_datetime)
+            appointments.append(appointment)
+        return appointments
 
 
 class DispenseScheduleCreator:

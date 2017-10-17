@@ -7,7 +7,7 @@ class MedicationDefinition(ListModelMixin, BaseUuidModel):
 
     description = models.CharField(max_length=250,)
 
-    total = models.DecimalField(
+    strength = models.DecimalField(
         decimal_places=2,
         max_digits=5,
         blank=True,
@@ -22,6 +22,10 @@ class MedicationDefinition(ListModelMixin, BaseUuidModel):
     milligram = models.CharField(max_length=200)
 
     number_of_times_per_day = models.IntegerField(default=0)
+
+    single_dose = models.BooleanField(default=False, editable=False)
+
+    use_body_weight = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
         return self.name

@@ -56,12 +56,16 @@ class DispenseAppointmentDescibe:
                        f'{self.end_day}')
         return description
 
+    @property
+    def duration(self):
+        return self.count_days(
+            dispense_appointment=self.dispense_appointment)[1]
+
     def count_days(self, dispense_appointment=None):
         """Returns count of days between two dispense timepoints.
         """
         next_timepoint = None
         end_timepoint = dispense_appointment.schedule.end_datetime
-        print(end_timepoint)
         if dispense_appointment.next():
             dispense_appointment_obj = dispense_appointment.next()
             next_timepoint = dispense_appointment_obj.appt_datetime

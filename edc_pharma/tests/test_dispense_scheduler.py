@@ -42,11 +42,12 @@ class TestDispensePlanScheduler(TestCase):
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispenseScheduler(
-            randomized_subject=randomized_subject, dispense_plan=self.dispense_plan)
+            subject_identifier=randomized_subject.subject_identifier,
+            dispense_plan=self.dispense_plan,
+            arm='control_arm')
         self.assertEqual(len(dispense.subject_schedules),
                          len(self.dispense_plan))
 
-    @tag('dispense_scheduler.1')
     def test_schedule_subject1(self):
         """Assert that calculated subject_schedules equals
         number of specified in a plan."""
@@ -55,8 +56,9 @@ class TestDispensePlanScheduler(TestCase):
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispenseScheduler(
-            randomized_subject=randomized_subject,
+            subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
+            randomization_datetime=randomized_subject.randomization_datetime,
             arm='control_arm')
         self.assertEqual(len(dispense.subject_schedules), 1)
 
@@ -71,25 +73,23 @@ class TestDispensePlanScheduler(TestCase):
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
 
-        dispense_scheduler = DispenseScheduler(
-            randomized_subject=randomized_subject,
-            dispense_plan=invalid_dispense_plan,
-            arm='control_arm')
-
         self.assertRaises(
             InvalidScheduleConfig,
-            dispense_scheduler.validate_dispense_plan,
-            dispense_plan=invalid_dispense_plan)
+            DispenseScheduler,
+            subject_identifier=randomized_subject.subject_identifier,
+            dispense_plan=invalid_dispense_plan,
+            arm='control_arm')
 
     def test_last_schedule(self):
         """Assert that last schedule dates are calculated correctly."""
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24), subject_identifier='1111')
-        scheduller = DispenseScheduler(
-            randomized_subject=randomized_subject,
+        scheduler = DispenseScheduler(
+            subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
+            randomization_datetime=randomized_subject.randomization_datetime,
             arm='control_arm')
-        last_schedule = scheduller.subject_schedules.last()
+        last_schedule = scheduler.subject_schedules.last()
         self.assertEqual(
             last_schedule.period.start_datetime.date(), date(2017, 9, 8))
         self.assertEqual(
@@ -99,51 +99,48 @@ class TestDispensePlanScheduler(TestCase):
         """Assert that all schedules are created successfully."""
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24), subject_identifier='1111')
-        dispense = DispenseScheduler(
-            randomized_subject=randomized_subject,
+        DispenseScheduler(
+            subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
-        dispense.create_schedules()
         self.assertEqual(DispenseSchedule.objects.all().count(), 2)
 
     def test_schedule_subject3(self):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispenseScheduler(
-            randomized_subject=randomized_subject,
+        scheduler = DispenseScheduler(
+            subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
+            randomization_datetime=randomized_subject.randomization_datetime,
             arm='control_arm')
-        dispense.create_schedules()
         schedule = DispenseSchedule.objects.all().first()
         self.assertEqual(
             DispenseAppointment.objects.filter(schedule=schedule).count(), 2)
+        self.assertEqual(len(scheduler.dispense_appointments), 4)
 
     def test_schedule_subject4(self):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispenseScheduler(
-            randomized_subject=randomized_subject,
+        DispenseScheduler(
+            subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
+            randomization_datetime=randomized_subject.randomization_datetime,
             arm='control_arm')
-        dispense.create_schedules()
         self.assertEqual(DispenseAppointment.objects.all().count(), 4)
 
-    @tag('test_schedule_subject6')
     def test_schedule_subject6(self):
         for i in range(1, 5):
             randomized_subject = RandomizedSubjectDummy(
                 randomization_datetime=datetime(2017, 8, 24),
                 subject_identifier=f'111{i}')
-            dispense = DispenseScheduler(
-                randomized_subject=randomized_subject,
+            DispenseScheduler(
+                subject_identifier=randomized_subject.subject_identifier,
                 dispense_plan=self.dispense_plan,
                 arm='control_arm')
-            dispense.create_schedules()
             self.assertEqual(DispenseAppointment.objects.all().count(), 4 * i)
 
-    @tag('test_schedule_subject7')
     def test_schedule_subject7(self):
         for i in range(1, 5):
             randomized_subject = RandomizedSubjectDummy(
@@ -151,19 +148,18 @@ class TestDispensePlanScheduler(TestCase):
                 subject_identifier=f'111{i}')
             self.assertRaises(DispenseSchedulerException,
                               DispenseScheduler,
-                              randomized_subject=randomized_subject,
+                              subject_identifier=randomized_subject.subject_identifier,
                               arm='control_arm_wrong')
 
-    @tag('schedule_subject5')
     def test_schedule_subject5(self):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispenseScheduler(
-            randomized_subject=randomized_subject,
+        DispenseScheduler(
+            subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
+            randomization_datetime=randomized_subject.randomization_datetime,
             arm='control_arm')
-        dispense.create_schedules()
         schedule = DispenseSchedule.objects.all().order_by(
             'created').first()
         p1, p2 = DispenseAppointment.objects.filter(schedule=schedule)

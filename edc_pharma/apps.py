@@ -13,14 +13,14 @@ class AppConfig(DjangoAppConfig):
     name = 'edc_pharma'
     country = 'botswana'
     map_area = 'gaborone'
-    dispense_model = None
-    dispensetimepoint_model = 'edc_pharma.dispenseappointment'
+    prescription_model = None
+    dispense_appointment_model = 'edc_pharma.dispenseappointment'
     template_name = None
     holiday_csv_path = os.path.join(settings.BASE_DIR, 'holidays.csv')
     try:
-        dispense_model = settings.EDC_PHARMA_DISPENSE_MODEL
+        prescription_model = settings.EDC_PHARMA_PRESCRIPTION_MODEL
     except AttributeError:
-        dispense_model = None
+        prescription_model = None
 
     @property
     def study_site_name(self):

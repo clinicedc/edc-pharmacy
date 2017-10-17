@@ -37,7 +37,7 @@ class TestDispenseAppointmentGetter(TestCase):
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispenseScheduler(
-            randomized_subject=self.randomized_subject,
+            subject_identifier=self.randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             arm='control')
         dispense.create_schedules()
@@ -89,7 +89,7 @@ class TestDispenseAppointmentGetter(TestCase):
         ).order_by('created').first()
         self.assertEqual(dispense_schedule.name, 'schedule1')
         self.assertEqual(dispense_schedule.sequence, 1)
-        self.assertEqual(dispense_schedule.start_datetime,
+        self.assertEqual(dispense_schedule.start_datetime.date,
                          date(2017, 8, 24))
 
     @tag('getter.current')

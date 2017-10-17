@@ -1,5 +1,6 @@
 from edc_label.label import Label
-from edc_pharma.dispense.dispense_history_creator import DispenseHistoryCreator
+
+from edc_pharma.dispense.prescription_creator import PrescriptionCreator
 
 from .dispense_label_context import DispenseLabelContext
 
@@ -9,7 +10,7 @@ class DispenseLabel:
     """
     label_cls = Label
     label_context_cls = DispenseLabelContext
-    dispense_history_creator_cls = DispenseHistoryCreator
+    dispense_history_creator_cls = PrescriptionCreator
     template_name = 'dispense'
 
     def __init__(self, dispense_appointment=None, copies=None, template_name=None):

@@ -39,7 +39,7 @@ class TestDispenseAppointmentDescribe(TestCase):
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
         dispense = DispenseScheduler(
-            randomized_subject=self.randomized_subject,
+            subject_identifier=self.randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
         dispense.create_schedules()

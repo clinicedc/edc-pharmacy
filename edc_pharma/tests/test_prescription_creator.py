@@ -17,6 +17,7 @@ class RandomizedSubjectDummy:
         self.subject_identifier = subject_identifier
 
 
+@tag('prescription')
 class TestPrescriptionCreator(TestCase):
 
     def setUp(self):
@@ -37,19 +38,18 @@ class TestPrescriptionCreator(TestCase):
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispenseScheduler(
-            randomized_subject=self.randomized_subject,
+        DispenseScheduler(
+            subject_identifier=self.randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
+            randomization_datetime=self.randomized_subject.randomization_datetime,
             arm='control')
-        dispense.create_schedules()
 
     def test_dispense_history_creator(self):
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).first()
-        creator = PrescriptionCreator(
+        PrescriptionCreator(
             dispense_appointment=dispense_appointment, options=self.options)
-        creator.save_or_update()
         self.assertEqual(Prescription.objects.filter(
             dispense_appointment=dispense_appointment).count(), 2)
 
@@ -57,9 +57,8 @@ class TestPrescriptionCreator(TestCase):
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).first()
-        creator = PrescriptionCreator(
+        PrescriptionCreator(
             dispense_appointment=dispense_appointment, options=self.options)
-        creator.save_or_update()
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
@@ -70,14 +69,12 @@ class TestPrescriptionCreator(TestCase):
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).order_by('created').first()
-        creator = PrescriptionCreator(
+        PrescriptionCreator(
             dispense_appointment=dispense_appointment, options=self.options)
-        creator.save_or_update()
         dispense_appointment = dispense_appointment.next()
-        creator = PrescriptionCreator(
+        PrescriptionCreator(
             dispense_appointment=dispense_appointment,
             options=self.options)
-        creator.save_or_update()
         dispense_appointment = DispenseAppointment.objects.filter(
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
         )

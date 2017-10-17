@@ -1,3 +1,5 @@
+from dateutil.relativedelta import relativedelta
+from django.apps import apps as django_apps
 from django.db import models
 
 
@@ -72,6 +74,23 @@ class DispenseAppointmentMixin(models.Model):
         for _, value in self.print_profile.medication_types.items():
             medications.append(value)
         return medications
+
+    @property
+    def next_appt_datetime(self):
+        next_appt = self.next()
+        if next_appt:
+            return (next_appt.appt_datetime - relativedelta(days=2))
+
+    def update_next_dispense_datetime(self):
+        """Update the next appointment dispense datetime."""
+        app_config = django_apps.get_app_config('edc_pharma')
+        next_appt = self.next()
+        if self.next_appt_datetime:
+            # FIX use facility to check for day availability.
+            #             facility = app_config.facility
+            next_appt.dispense_datetime = self.next_appt_datetime
+            next_appt.save()
+        return next_appt
 
     class Meta:
         abstract = True
