@@ -3,12 +3,12 @@ from edc_base.model_mixins import BaseUuidModel
 from django.db import models
 
 from ..medications.medication_dosage import MedicationDosage
-
+from ..search_slug_model_mixin import SearchSlugModelMixin
 from .dispense_appointment import DispenseAppointment
 from .medication_definition import MedicationDefinition
 
 
-class Prescription(BaseUuidModel):
+class Prescription(SearchSlugModelMixin, BaseUuidModel):
 
     is_approved = models.BooleanField(
         default=False, editable=False)
