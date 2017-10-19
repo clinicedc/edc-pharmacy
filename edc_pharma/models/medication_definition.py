@@ -27,6 +27,9 @@ class MedicationDefinition(ListModelMixin, BaseUuidModel):
 
     use_body_weight = models.BooleanField(default=False, editable=False)
 
+    formula = models.CharField(
+        max_length=200, blank=True, null=True)
+
     def __str__(self):
         return self.name
 

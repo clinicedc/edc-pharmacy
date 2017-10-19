@@ -24,7 +24,7 @@ class Prescription(BaseUuidModel):
         null=True, blank=True)
 
     weight = models.DecimalField(
-        verbose_name='Weight in kg',
+        verbose_name='Body Weight in Kg',
         decimal_places=2,
         max_digits=5,
         blank=True,
@@ -34,8 +34,21 @@ class Prescription(BaseUuidModel):
 
     medication_definition = models.ForeignKey(MedicationDefinition)
 
-    result = models.IntegerField(
-        null=True, blank=True)
+    result = models.IntegerField(null=True, blank=True)
+
+    is_consented = models.NullBooleanField(
+        default=False)
+
+    medication_description = models.CharField(
+        max_length=100, null=True, blank=True)
+
+    arm = models.CharField(max_length=100, null=True, blank=True)
+
+    subject_identifier = models.CharField(
+        max_length=100, null=True, blank=True)
+
+    category = models.CharField(
+        max_length=100, null=True, blank=True)
 
     def __str__(self):
         return (f'{self.dispense_appointment} - {self.dispense_datetime}')

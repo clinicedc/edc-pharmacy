@@ -28,4 +28,21 @@ class DispenseAppointmentAdmin(ModelAdminMixin, admin.ModelAdmin):
 @admin.register(Prescription, site=edc_pharma_admin)
 class PrescriptionAdmin(ModelAdminMixin, admin.ModelAdmin):
 
+    fieldsets = (
+        ('Patient Summary', {
+            'fields': (
+                'is_consented',
+                'subject_identifier',
+                'arm')}),
+        ('Medication', {
+            'fields': (
+                'category',
+                'medication_description',)}),
+        ('Result', {
+            'fields': (
+                'description',
+                'duration',
+                'result',
+            )}),)
+
     form = PrescriptionForm
