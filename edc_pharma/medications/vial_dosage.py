@@ -18,7 +18,8 @@ class VialDosage(DrugMixin):
     def daily_dosage(self):
         """Returns dosage per day."""
         try:
-            daily_dosage = float(self.millgrams_per_vial) * self.body_weight
+            daily_dosage = float(self.millgrams_per_vial) * \
+                float(self.body_weight)
             daily_dosage = daily_dosage / float(self.strength_of_vial)
         except TypeError as e:
             raise Exception(f"{self.millgrams_per_vial} * {self.body_weight} "

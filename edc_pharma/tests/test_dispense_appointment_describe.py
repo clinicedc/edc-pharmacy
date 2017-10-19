@@ -16,7 +16,6 @@ class RandomizedSubjectDummy:
         self.subject_identifier = subject_identifier
 
 
-@tag('descriptor')
 class TestDispenseAppointmentDescribe(TestCase):
 
     def setUp(self):
@@ -38,11 +37,10 @@ class TestDispenseAppointmentDescribe(TestCase):
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispenseScheduler(
+        DispenseScheduler(
             subject_identifier=self.randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
-        dispense.create_schedules()
 
     def test_dispense_appointment_start_day(self):
         dispense_appointment = DispenseAppointment.objects.filter(
@@ -100,3 +98,37 @@ class TestDispenseAppointmentDescribe(TestCase):
         self.assertTrue(appt_describe.human_readiable())
         self.assertIn('Day 8', appt_describe.human_readiable())
         self.assertIn('Day 14', appt_describe.human_readiable())
+
+    def test_is_next_pending_appointment(self):
+        dispense_appointment = DispenseAppointment.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
+            is_dispensed=False
+        ).order_by('created').first()
+        describe = DispenseAppointmentDescibe(
+            dispense_appointment=dispense_appointment)
+        self.assertTrue(describe.is_next_pending_appointment())
+
+    @tag('descriptor')
+    def test_is_next_pending_appointment_1(self):
+        dispense_appointment = DispenseAppointment.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
+            is_dispensed=False
+        ).order_by('appt_datetime').first()
+        dispense_appointment.is_dispensed = True
+        dispense_appointment.save()
+        dispense_appointment = dispense_appointment.next()
+        describe = DispenseAppointmentDescibe(
+            dispense_appointment=dispense_appointment)
+        self.assertTrue(describe.is_next_pending_appointment())
+
+    @tag('descriptor')
+    def test_is_next_pending_appointment_2(self):
+        dispense_appointment1 = DispenseAppointment.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
+            is_dispensed=False
+        ).order_by('appt_datetime').first()
+        dispense_appointment1.is_dispensed = True
+        dispense_appointment1.save()
+        describe = DispenseAppointmentDescibe(
+            dispense_appointment=dispense_appointment1)
+        self.assertFalse(describe.is_next_pending_appointment())

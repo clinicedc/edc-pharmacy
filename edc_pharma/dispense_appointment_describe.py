@@ -56,6 +56,15 @@ class DispenseAppointmentDescibe:
                        f'{self.end_day}')
         return description
 
+    def is_next_pending_appointment(self):
+        from edc_pharma.models import DispenseAppointment
+        dispense_appointment = DispenseAppointment.objects.filter(
+            schedule__subject_identifier=self.dispense_appointment.schedule.subject_identifier,
+            is_dispensed=False
+        ).order_by('appt_datetime').first()
+        is_dispensed = True if dispense_appointment.id == self.dispense_appointment.id else False
+        return is_dispensed
+
     @property
     def duration(self):
         return self.count_days(

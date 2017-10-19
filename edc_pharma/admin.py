@@ -3,7 +3,8 @@ from edc_base.modeladmin_mixins import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
     ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
     ModelAdminReadOnlyMixin, ModelAdminInstitutionMixin)
-from edc_pharma.models import DispenseAppointment
+from edc_pharma.forms import PrescriptionForm
+from edc_pharma.models import DispenseAppointment, Prescription
 
 from django.contrib import admin
 
@@ -22,3 +23,9 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructions
 class DispenseAppointmentAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = DispenseAppointmentForm
+
+
+@admin.register(Prescription, site=edc_pharma_admin)
+class PrescriptionAdmin(ModelAdminMixin, admin.ModelAdmin):
+
+    form = PrescriptionForm
