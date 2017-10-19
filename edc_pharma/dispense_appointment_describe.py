@@ -1,7 +1,7 @@
 from dateutil.relativedelta import relativedelta
 
 
-class DispenseAppointmentDescibe:
+class DispenseAppointmentDescribe:
 
     """Given dispense timepoint,  this class returns human readiable 
     description about the dispense timepoint.
