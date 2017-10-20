@@ -13,6 +13,7 @@ CAPSULE = 'capsule'
 COMPLETE = 'done'
 IN_PROGRESS_APPT = 'in_progress'
 NEW = 'new'
+PRINT_SELECTED = 'print_selected'
 
 SCHEDULE_STATUS = (
     (NEW, 'New'),

@@ -73,6 +73,5 @@ class PrescriptionCreator:
                 subject_identifier=self.dispense_appointment.subject_identifier,
                 medication_description=medication_definition.description,
                 category=medication_definition.category,
-                dosage_formula=medication_definition.dosage_formula,
                 ** self.options)
         return prescription
