@@ -2,10 +2,16 @@ from edc_base.model_mixins import BaseUuidModel
 
 from django.db import models
 
+from edc_search.model_mixins import SearchSlugManager
+
 from ..medications.medication_dosage import MedicationDosage
 from ..search_slug_model_mixin import SearchSlugModelMixin
 from .dispense_appointment import DispenseAppointment
 from .medication_definition import MedicationDefinition
+
+
+class Manager(SearchSlugManager, models.Manager):
+    pass
 
 
 class Prescription(SearchSlugModelMixin, BaseUuidModel):
@@ -45,10 +51,13 @@ class Prescription(SearchSlugModelMixin, BaseUuidModel):
     arm = models.CharField(max_length=100, null=True, blank=True)
 
     subject_identifier = models.CharField(
-        max_length=100, null=True, blank=True)
+        verbose_name="Subject Identifier",
+        max_length=50, null=True, blank=True)
 
     category = models.CharField(
         max_length=100, null=True, blank=True)
+
+    objects = Manager()
 
     def __str__(self):
         return (f'{self.dispense_appointment} - {self.dispense_datetime}')

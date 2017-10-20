@@ -18,8 +18,8 @@ class CapsuleDosage(DrugMixin):
     def daily_dosage(self):
         """Returns dosage per day."""
         if self.use_body_weight:
-            daily_dosage = ((self.millgrams_per_capsule * self.body_weight) /
-                            self.strength)
+            daily_dosage = ((float(self.millgrams_per_capsule) * (self.body_weight)) /
+                            float(self.strength))
         else:
             daily_dosage = self.millgrams_per_capsule / self.strength
         return round(daily_dosage)

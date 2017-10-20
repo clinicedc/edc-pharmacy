@@ -33,3 +33,13 @@ class Dispense:
             dispense_appointment=self.dispense_appointment,
             copies=1, template_name=edc_pharma_app_config.template_name)
         return printer.print_labels
+
+
+class DispenseAction:
+
+    def __init__(self, appointment_id=None):
+        self.appointment_id = appointment_id
+        dispense_appt = DispenseAppointment.objects.get(
+            id=self.appointment_id)
+        dispense_appt.is_dispensed = True
+        dispense_appt.save()

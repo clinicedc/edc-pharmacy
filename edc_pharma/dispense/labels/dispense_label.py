@@ -27,8 +27,5 @@ class DispenseLabel:
         printed_labels = []
         for context in self.context_list or []:
             self.label.print_label(copies=self.copies, context=context)
-            dispense_creator = self.dispense_history_creator_cls(
-                dispense_appointment=self.dispense_appointment)
-            dispense_creator.save_or_update()
             printed_labels.append(context)
         return printed_labels

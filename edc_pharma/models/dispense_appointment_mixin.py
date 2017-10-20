@@ -34,6 +34,10 @@ class DispenseAppointmentMixin(models.Model):
         help_text=('Reason for appointment'),
         blank=True)
 
+    subject_identifier = models.CharField(
+        verbose_name="Subject Identifier",
+        max_length=50, null=True, blank=True)
+
     comment = models.CharField(
         'Comment',
         max_length=250,
