@@ -1,12 +1,12 @@
 from datetime import datetime
-from edc_pharma import DispenseAppointmentDescibe
+from edc_pharma import AppointmentDescriber
 
 from django.test import tag, TestCase
 
 from ..constants import WEEKS
 from ..models import DispenseAppointment
 from ..print_profile import site_profiles
-from ..scheduler import DispenseScheduler
+from ..scheduler import Scheduler
 
 
 class RandomizedSubjectDummy:
@@ -37,7 +37,7 @@ class TestDispenseAppointmentDescribe(TestCase):
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        DispenseScheduler(
+        Scheduler(
             subject_identifier=self.randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
@@ -47,7 +47,7 @@ class TestDispenseAppointmentDescribe(TestCase):
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        describe = DispenseAppointmentDescibe(
+        describe = AppointmentDescriber(
             dispense_appointment=dispense_appointment)
         self.assertTrue(describe.human_readiable())
         self.assertEqual('Day 1', describe.start_day)
@@ -59,7 +59,7 @@ class TestDispenseAppointmentDescribe(TestCase):
             is_dispensed=False
         ).order_by('created').first()
         dispense_appointment = dispense_appointment.next()
-        appt_describe = DispenseAppointmentDescibe(
+        appt_describe = AppointmentDescriber(
             dispense_appointment=dispense_appointment)
         self.assertTrue(appt_describe.human_readiable())
         self.assertIn('Day 8', appt_describe.start_day)
@@ -70,7 +70,7 @@ class TestDispenseAppointmentDescribe(TestCase):
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        appt_describe = DispenseAppointmentDescibe(
+        appt_describe = AppointmentDescriber(
             dispense_appointment=dispense_appointment)
         self.assertTrue(appt_describe.human_readiable())
         self.assertEqual('Day 1', appt_describe.start_day)
@@ -81,7 +81,7 @@ class TestDispenseAppointmentDescribe(TestCase):
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        appt_describe = DispenseAppointmentDescibe(
+        appt_describe = AppointmentDescriber(
             dispense_appointment=dispense_appointment)
         self.assertTrue(appt_describe.human_readiable())
         self.assertIn('Day 1', appt_describe.human_readiable())
@@ -93,7 +93,7 @@ class TestDispenseAppointmentDescribe(TestCase):
             is_dispensed=False
         ).order_by('created').first()
         dispense_appointment = dispense_appointment.next()
-        appt_describe = DispenseAppointmentDescibe(
+        appt_describe = AppointmentDescriber(
             dispense_appointment=dispense_appointment)
         self.assertTrue(appt_describe.human_readiable())
         self.assertIn('Day 8', appt_describe.human_readiable())
@@ -104,7 +104,7 @@ class TestDispenseAppointmentDescribe(TestCase):
             schedule__subject_identifier=self.randomized_subject.subject_identifier,
             is_dispensed=False
         ).order_by('created').first()
-        describe = DispenseAppointmentDescibe(
+        describe = AppointmentDescriber(
             dispense_appointment=dispense_appointment)
         self.assertTrue(describe.is_next_pending_appointment())
 
@@ -117,7 +117,7 @@ class TestDispenseAppointmentDescribe(TestCase):
         dispense_appointment.is_dispensed = True
         dispense_appointment.save()
         dispense_appointment = dispense_appointment.next()
-        describe = DispenseAppointmentDescibe(
+        describe = AppointmentDescriber(
             dispense_appointment=dispense_appointment)
         self.assertTrue(describe.is_next_pending_appointment())
 
@@ -129,6 +129,6 @@ class TestDispenseAppointmentDescribe(TestCase):
         ).order_by('appt_datetime').first()
         dispense_appointment1.is_dispensed = True
         dispense_appointment1.save()
-        describe = DispenseAppointmentDescibe(
+        describe = AppointmentDescriber(
             dispense_appointment=dispense_appointment1)
         self.assertFalse(describe.is_next_pending_appointment())

@@ -5,9 +5,9 @@ from django.test import TestCase, tag
 
 from ..constants import MONTHS
 from ..constants import WEEKS
-from ..scheduler import DispenseScheduleOverlapError
 from ..scheduler import Schedule
 from ..scheduler import ScheduleCollection
+from ..scheduler import ScheduleOverlapError
 from ..scheduler.period import Period
 
 
@@ -132,7 +132,7 @@ class TestDispenseSchedule(TestCase):
         schedule2 = Schedule(
             name='schedule2', number_of_visits=2, period=p2)
         self.assertRaises(
-            DispenseScheduleOverlapError, schedules.add,
+            ScheduleOverlapError, schedules.add,
             schedule=schedule2)
 
     @tag('11')

@@ -8,7 +8,7 @@ from django.test import TestCase, tag
 from ..constants import WEEKS
 from ..medications.prescription_approval_validator import PrescriptionApprovalValidatorError
 from ..print_profile import site_profiles
-from ..scheduler import DispenseScheduler
+from ..scheduler import Scheduler
 
 
 class RandomizedSubjectDummy:
@@ -39,7 +39,7 @@ class TestMedicationApprovalValidator(TestCase):
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        self.scheduler = DispenseScheduler(
+        self.scheduler = Scheduler(
             subject_identifier=self.randomized_subject.subject_identifier,
             randomization_datetime=self.randomized_subject.randomization_datetime,
             dispense_plan=self.dispense_plan,

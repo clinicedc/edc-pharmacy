@@ -1,1 +1,1 @@
-from .dispense_appointment_describe import DispenseAppointmentDescribe
+from .appointment_describer import AppointmentDescriber

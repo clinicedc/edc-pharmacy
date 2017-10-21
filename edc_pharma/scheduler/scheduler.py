@@ -2,11 +2,11 @@ from edc_pharma.dispense_plan import dispense_plans
 
 from .creators import DispenseScheduleCreator, DispenseAppointmentCreator
 from .period import Period
-from .schedule_collection import Schedule
+from .schedule import Schedule
 from .schedule_collection import ScheduleCollection
 
 
-class DispenseSchedulerException(Exception):
+class SchedulerException(Exception):
     pass
 
 
@@ -14,7 +14,7 @@ class InvalidScheduleConfig(Exception):
     pass
 
 
-class DispenseScheduler:
+class Scheduler:
 
     """Given enrolled subject, calculates the dispense schedules and create
     records for the subject.
@@ -32,7 +32,7 @@ class DispenseScheduler:
         self.dispense_plan = dispense_plan or dispense_plans.get(arm)
         self.dispense_appointments = []
         if not self.dispense_plan:
-            raise DispenseSchedulerException(
+            raise SchedulerException(
                 f'Failed to find dispense schedule plan, for {self.arm}.')
         self.create_schedules()
 

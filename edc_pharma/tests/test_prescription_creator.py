@@ -7,7 +7,7 @@ from ..dispense.prescription_creator import PrescriptionCreator
 from ..models import DispenseAppointment
 from ..models import Prescription
 from ..print_profile import site_profiles
-from ..scheduler import DispenseScheduler
+from ..scheduler import Scheduler
 
 
 class RandomizedSubjectDummy:
@@ -38,7 +38,7 @@ class TestPrescriptionCreator(TestCase):
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        DispenseScheduler(
+        Scheduler(
             subject_identifier=self.randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             randomization_datetime=self.randomized_subject.randomization_datetime,

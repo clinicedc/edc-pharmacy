@@ -6,8 +6,8 @@ from django.test import tag, TestCase
 from ..constants import WEEKS
 from ..models import DispenseSchedule
 from ..print_profile import site_profiles
-from ..scheduler import DispenseScheduler, InvalidScheduleConfig
-from ..scheduler import DispenseSchedulerException
+from ..scheduler import Scheduler, InvalidScheduleConfig
+from ..scheduler import SchedulerException
 
 
 class RandomizedSubjectDummy:
@@ -41,7 +41,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispenseScheduler(
+        dispense = Scheduler(
             subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
@@ -55,7 +55,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispenseScheduler(
+        dispense = Scheduler(
             subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             randomization_datetime=randomized_subject.randomization_datetime,
@@ -75,7 +75,7 @@ class TestDispensePlanScheduler(TestCase):
 
         self.assertRaises(
             InvalidScheduleConfig,
-            DispenseScheduler,
+            Scheduler,
             subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=invalid_dispense_plan,
             arm='control_arm')
@@ -84,7 +84,7 @@ class TestDispensePlanScheduler(TestCase):
         """Assert that last schedule dates are calculated correctly."""
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24), subject_identifier='1111')
-        scheduler = DispenseScheduler(
+        scheduler = Scheduler(
             subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             randomization_datetime=randomized_subject.randomization_datetime,
@@ -99,7 +99,7 @@ class TestDispensePlanScheduler(TestCase):
         """Assert that all schedules are created successfully."""
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24), subject_identifier='1111')
-        DispenseScheduler(
+        Scheduler(
             subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             arm='control_arm')
@@ -109,7 +109,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        scheduler = DispenseScheduler(
+        scheduler = Scheduler(
             subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             randomization_datetime=randomized_subject.randomization_datetime,
@@ -123,7 +123,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        DispenseScheduler(
+        Scheduler(
             subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             randomization_datetime=randomized_subject.randomization_datetime,
@@ -135,7 +135,7 @@ class TestDispensePlanScheduler(TestCase):
             randomized_subject = RandomizedSubjectDummy(
                 randomization_datetime=datetime(2017, 8, 24),
                 subject_identifier=f'111{i}')
-            DispenseScheduler(
+            Scheduler(
                 subject_identifier=randomized_subject.subject_identifier,
                 dispense_plan=self.dispense_plan,
                 arm='control_arm')
@@ -146,8 +146,8 @@ class TestDispensePlanScheduler(TestCase):
             randomized_subject = RandomizedSubjectDummy(
                 randomization_datetime=datetime(2017, 8, 24),
                 subject_identifier=f'111{i}')
-            self.assertRaises(DispenseSchedulerException,
-                              DispenseScheduler,
+            self.assertRaises(SchedulerException,
+                              Scheduler,
                               subject_identifier=randomized_subject.subject_identifier,
                               arm='control_arm_wrong')
 
@@ -155,7 +155,7 @@ class TestDispensePlanScheduler(TestCase):
         randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        DispenseScheduler(
+        Scheduler(
             subject_identifier=randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             randomization_datetime=randomized_subject.randomization_datetime,

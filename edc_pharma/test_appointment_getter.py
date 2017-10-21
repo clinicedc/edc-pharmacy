@@ -6,7 +6,7 @@ from django.test import tag, TestCase
 from ..constants import WEEKS
 from ..models.dispense_schedule import DispenseSchedule
 from ..print_profile import site_profiles
-from ..scheduler import DispenseScheduler
+from ..scheduler import Scheduler
 
 
 class RandomizedSubjectDummy:
@@ -17,7 +17,7 @@ class RandomizedSubjectDummy:
 
 
 @tag('getter')
-class TestDispenseAppointmentGetter(TestCase):
+class TestAppointmentGetter(TestCase):
 
     def setUp(self):
         self.dispense_plan = {
@@ -36,7 +36,7 @@ class TestDispenseAppointmentGetter(TestCase):
         self.randomized_subject = RandomizedSubjectDummy(
             randomization_datetime=datetime(2017, 8, 24),
             subject_identifier='1111')
-        dispense = DispenseScheduler(
+        dispense = Scheduler(
             subject_identifier=self.randomized_subject.subject_identifier,
             dispense_plan=self.dispense_plan,
             arm='control')
