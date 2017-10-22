@@ -1,3 +1,5 @@
+from edc_pharma.models import WorkList
+
 from django.apps import apps as django_apps
 
 from ..constants import PRINT_SELECTED
@@ -58,10 +60,30 @@ class DispenseAction:
         self.validate(appointment=dispense_appt)
         dispense_appt.is_dispensed = True
         dispense_appt.save()
+        self.update_worklist(appointment=dispense_appt)
 
     def validate(self, appointment=None):
         if Prescription.objects.filter(
                 is_approved=False, dispense_apppointment=appointment):
-            raise MedicationNotApprovedError(f'Meication not approved error! '
-                                             'Please approved all medications '
-                                             'before dispensing. ')
+            raise MedicationNotApprovedError(f'Prescirption not approved error! '
+                                             'Please approve prescriptions you want to dispense. '
+                                             )
+
+    def next_appointment(self, appointment=None):
+
+        next_appointment = appointment.next()
+        if next_appointment:
+            return next_appointment
+        pending_appointment = DispenseAppointment.objects.filter(
+            is_dispensed=False,
+            subject_identifier=appointment.subject_identifier
+        ).order_by('appt_datetime')
+        if pending_appointment:
+            return pending_appointment.first()
+
+    def update_worklist(self, appointment=None):
+        appt = self.next_appointment(appointment=appointment)
+        worklist = WorkList.objects.get(
+            subject_identifier=appointment.subject_identifier)
+        worklist.next_dispensing_datetime = appt.dispense_datetime
+        worklist.save()
