@@ -46,9 +46,10 @@ class PrescriptionAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'medication_description',)}),
         ('Result', {
             'fields': (
-                'description',
                 'duration',
                 'result',
+                'description',
+                'recommanded_result',
             )}),)
 
     form = PrescriptionForm

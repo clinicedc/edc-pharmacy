@@ -83,3 +83,41 @@ class TestPrescriptionCreator(TestCase):
         self.assertEqual(Prescription.objects.filter(
             dispense_appointment__schedule__subject_identifier=self.randomized_subject.subject_identifier
         ).count(), 4)
+
+    def test_prescription_creator_initials(self):
+        self.options.update({
+            'clinician_initials': 'TT',
+            'initials': 'CC'})
+        dispense_appointment = DispenseAppointment.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
+        ).order_by('created').first()
+        PrescriptionCreator(
+            dispense_appointment=dispense_appointment, options=self.options)
+        dispense_appointment = dispense_appointment.next()
+        PrescriptionCreator(
+            dispense_appointment=dispense_appointment,
+            options=self.options)
+        dispense_appointment = DispenseAppointment.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier,
+        )
+        self.assertEqual(Prescription.objects.filter(
+            dispense_appointment=dispense_appointment).count(), 2)
+        self.assertEqual(Prescription.objects.filter(
+            dispense_appointment__schedule__subject_identifier=self.randomized_subject.subject_identifier
+        ).count(), 4)
+
+    def test_prescription_on_recommand_result(self):
+        self.options.update({
+            'clinician_initials': 'TT',
+            'initials': 'CC'})
+        dispense_appointment = DispenseAppointment.objects.filter(
+            schedule__subject_identifier=self.randomized_subject.subject_identifier
+        ).order_by('created').first()
+        PrescriptionCreator(
+            dispense_appointment=dispense_appointment, options=self.options)
+        prescription = Prescription.objects.all().order_by('created').first()
+        self.assertEqual(prescription.result, 7)
+        prescription.recommand_result = 10
+        prescription.duration = 8
+        prescription.save()
+        self.assertEqual(prescription.result, 7)

@@ -12,6 +12,18 @@ class DispenseAppointmentForm(forms.ModelForm):
 
 class PrescriptionForm(forms.ModelForm):
 
+    subject_identifier = forms.CharField(
+        label='Screening identifier',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
+    arm = forms.CharField(
+        label='Randomization Arm',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
+    result = forms.CharField(
+        label='Auto calculated required quantity',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
     class Meta:
         model = Prescription
         fields = '__all__'

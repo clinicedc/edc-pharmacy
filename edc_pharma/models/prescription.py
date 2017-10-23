@@ -1,3 +1,4 @@
+from edc_base.model_fields.custom_fields import InitialsField
 from edc_base.model_mixins import BaseUuidModel
 
 from django.db import models
@@ -17,6 +18,7 @@ class Manager(SearchSlugManager, models.Manager):
 class Prescription(SearchSlugModelMixin, BaseUuidModel):
 
     is_approved = models.BooleanField(
+        verbose_name='Approved?',
         default=False, editable=False)
 
     dispense_appointment = models.ForeignKey(
@@ -36,25 +38,48 @@ class Prescription(SearchSlugModelMixin, BaseUuidModel):
         blank=True,
         null=True)
 
-    duration = models.CharField(max_length=100)
+    clinician_initials = InitialsField(
+        verbose_name='Clinician initial',
+        default='--',
+    )
+
+    initials = InitialsField(
+        verbose_name='Subject initial',
+        default='--',
+    )
+
+    duration = models.CharField(
+        verbose_name='Duration for prescription',
+        max_length=100)
 
     medication_definition = models.ForeignKey(MedicationDefinition)
 
-    result = models.IntegerField(null=True, blank=True)
+    result = models.IntegerField(
+        verbose_name='Auto calculated required quantity',
+        null=True, blank=True)
+
+    recommanded_result = models.IntegerField(
+        verbose_name='Recommand required quantity',
+        null=True, blank=True)
 
     is_consented = models.NullBooleanField(
+        verbose_name='Is the consent completed?',
         default=False)
 
     medication_description = models.CharField(
+        verbose_name='Prescription Description',
         max_length=100, null=True, blank=True)
 
-    arm = models.CharField(max_length=100, null=True, blank=True)
+    arm = models.CharField(
+        verbose_name='Randomization Arm',
+        max_length=100, null=True, blank=True)
 
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
         max_length=50, null=True, blank=True)
 
     category = models.CharField(
+        verbose_name='Prescription category (Capsule or Vials).',
         max_length=100, null=True, blank=True)
 
     objects = Manager()
@@ -63,10 +88,11 @@ class Prescription(SearchSlugModelMixin, BaseUuidModel):
         return (f'{self.dispense_appointment} - {self.dispense_datetime}')
 
     def save(self, *args, **kwargs):
-        self.result = MedicationDosage(
-            medication_definition=self.medication_definition,
-            weight=self.weight,
-            duration=self.duration).required_quantity
+        if not self.id:
+            self.result = MedicationDosage(
+                medication_definition=self.medication_definition,
+                weight=self.weight,
+                duration=self.duration).required_quantity
         super().save(*args, **kwargs)
 
     class Meta:

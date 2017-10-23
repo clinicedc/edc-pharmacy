@@ -25,6 +25,7 @@ class Dispense:
         self.action = action
         self.printed_labels = self.print_labels()
 
+    @property
     def prescriptions(self):
         if self.action == PRINT_SELECTED:
             return self._prescriptions
