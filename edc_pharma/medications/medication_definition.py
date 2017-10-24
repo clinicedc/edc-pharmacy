@@ -31,9 +31,21 @@ ambisome = MedicationDefinition(
 
 medications.update({'ambisome': ambisome})
 
-fluconazole = MedicationDefinition(
-    name='fluconazole',
+fluconazole_800 = MedicationDefinition(
+    name='fluconazole_800mg',
     description='Fluconazole 800mg/day',
+    category=VIAL,
+    unit=MILLIGRAM,
+    milligram=800,
+    strength=500,
+    number_of_times_per_day=4,
+    use_body_weight=False,
+    single_dose=False)
+medications.update({'fluconazole_800mg': fluconazole_800})
+
+fluconazole_1200 = MedicationDefinition(
+    name='fluconazole_1200mg',
+    description='Fluconazole 1200mg/day',
     category=VIAL,
     unit=MILLIGRAM,
     milligram=1200,
@@ -41,7 +53,7 @@ fluconazole = MedicationDefinition(
     number_of_times_per_day=4,
     use_body_weight=False,
     single_dose=False)
-medications.update({'fluconazole': fluconazole})
+medications.update({'fluconazole_1200mg': fluconazole_1200})
 
 flucytosine = MedicationDefinition(
     name='flucytosine',
@@ -57,12 +69,24 @@ medications.update({'flucytosine': flucytosine})
 
 amphotericin = MedicationDefinition(
     name='amphotericin',
-    description='Amphotericin B 1 mg/kg',
-    category=CAPSULE,
+    description='Amphotericin B deoxycholate 1mg/kg/day',
+    category=VIAL,
     unit=MILLIGRAM,
     milligram=1,
     strength=50,
     number_of_times_per_day=4,
     use_body_weight=True,
-    single_dose=False)
+    single_dose=True)
 medications.update({'amphotericin': amphotericin})
+
+liposomal_amphotericin = MedicationDefinition(
+    name='liposomal_amphotericin',
+    description='Liposomal Amphotericin B 10mg/kg/day',
+    category=VIAL,
+    unit=MILLIGRAM,
+    milligram=1,
+    strength=50,
+    number_of_times_per_day=4,
+    use_body_weight=True,
+    single_dose=True)
+medications.update({'liposomal_amphotericin': liposomal_amphotericin})

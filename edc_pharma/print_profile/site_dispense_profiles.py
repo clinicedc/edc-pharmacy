@@ -39,15 +39,16 @@ site_profiles = SiteDispenseProfiles()
 
 single_dose_enrollment = DispenseProfile(
     name='enrollment', profile_type='single_dose')
-single_dose_enrollment.add_medication_type(medications.get('ambisome'))
-single_dose_enrollment.add_medication_type(medications.get('fluconazole'))
+single_dose_enrollment.add_medication_type(
+    medications.get('liposomal_amphotericin'))
+single_dose_enrollment.add_medication_type(
+    medications.get('fluconazole_1200mg'))
 single_dose_enrollment.add_medication_type(medications.get('flucytosine'))
 site_profiles.register(single_dose_enrollment)
 
 single_dose_followup = DispenseProfile(
     name='followup', profile_type='single_dose')
-single_dose_followup.add_medication_type(medications.get('fluconazole'))
-single_dose_followup.add_medication_type(medications.get('flucytosine'))
+single_dose_followup.add_medication_type(medications.get('fluconazole_800mg'))
 site_profiles.register(single_dose_followup)
 
 control_arm_enrollemnt = DispenseProfile(
@@ -58,6 +59,6 @@ site_profiles.register(control_arm_enrollemnt)
 
 control_followup_profile = DispenseProfile(
     name='followup', profile_type='control')
-control_followup_profile.add_medication_type(medications.get('amphotericin'))
-control_followup_profile.add_medication_type(medications.get('flucytosine'))
+control_followup_profile.add_medication_type(
+    medications.get('fluconazole_800mg'))
 site_profiles.register(control_followup_profile)
