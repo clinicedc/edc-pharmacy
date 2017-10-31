@@ -44,10 +44,11 @@ INSTALLED_APPS = [
     'edc_device.apps.AppConfig',
     'edc_identifier.apps.AppConfig',
     'edc_timepoint.apps.AppConfig',
-    'edc_pharma.apps.EdcAppointmentAppConfig',
-    'edc_pharma.apps.AppConfig',
+    'edc_facility.apps.AppConfig',
+    'edc_appointment.apps.AppConfig',
     'edc_pharma.apps.EdcLabelAppConfig',
     'edc_pharma.apps.EdcBaseAppConfig',
+    'edc_pharma.apps.AppConfig',
 ]
 
 # TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -92,11 +93,20 @@ WSGI_APPLICATION = 'edc_pharma.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': os.path.join(BASE_DIR, 'etc', 'mysql.conf'),
+        },
+    },
 }
 
 # Password validation
@@ -143,6 +153,9 @@ EDC_PHARMA_PRESCRIPTION_MODEL = None
 
 KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 LABEL_PRINTER = 'test_label_printer_ambition'
+
+COUNTRY = 'botswana'
+HOLIDAY_FILE = os.path.join(BASE_DIR, 'holidays.csv')
 
 if 'test' in sys.argv:
 

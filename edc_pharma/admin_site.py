@@ -6,4 +6,6 @@ class EdcPharmaAdminSite(AdminSite):
     site_title = 'Edc Pharmacy'
     index_title = 'Edc Pharmacy Administration'
     site_url = '/'
+
+
 edc_pharma_admin = EdcPharmaAdminSite(name='edc_pharma_admin')

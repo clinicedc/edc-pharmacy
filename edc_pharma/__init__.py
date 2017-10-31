@@ -1,1 +1,0 @@
-from .appointment_describer import AppointmentDescriber
