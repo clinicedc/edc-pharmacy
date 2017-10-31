@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models.aggregates import Sum
 from django.db.models.deletion import PROTECT
 from edc_base.model_mixins.base_uuid_model import BaseUuidModel
 
@@ -7,8 +8,6 @@ from ..choices import TIMING
 from .dosage_guideline import DosageGuideline
 from .medication import Medication
 from .prescription import Prescription
-from django.db.models.aggregates import Sum
-from decimal import Decimal
 
 
 class PrescriptionItem(BaseUuidModel):

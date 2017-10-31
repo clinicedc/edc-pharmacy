@@ -6,7 +6,7 @@ class AppointmentCreator(BaseAppointmentCreator):
     """Creates dispense timepoints and update.
     """
 
-    appointment_model = 'edc_pharma.appointment'
+    appointment_model = 'edc_pharmacy.appointment'
     # profile_selector_cls = DispenseProfileSelector
 
 #     def __init__(self, schedule_name=None, schedule_plan=None,

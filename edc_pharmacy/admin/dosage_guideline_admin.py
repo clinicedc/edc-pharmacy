@@ -1,13 +1,13 @@
 from django.contrib import admin
 from edc_base.modeladmin_mixins import audit_fieldset_tuple
 
-from ..admin_site import edc_pharma_admin
+from ..admin_site import edc_pharmacy_admin
 from ..forms import DosageGuidelineForm
 from ..models import DosageGuideline
 from .model_admin_mixin import ModelAdminMixin
 
 
-@admin.register(DosageGuideline, site=edc_pharma_admin)
+@admin.register(DosageGuideline, site=edc_pharmacy_admin)
 class DosageGuidelineAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = DosageGuidelineForm

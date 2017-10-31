@@ -3,13 +3,13 @@ from django.urls import path
 # from django.conf import settings
 # from edc_base.views import LoginView, LogoutView
 
-from .admin_site import edc_pharma_admin
+from .admin_site import edc_pharmacy_admin
 # from .views import HomeView, PatientRecordView
 
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
-    path(r'admin/', edc_pharma_admin.urls),
+    path(r'admin/', edc_pharmacy_admin.urls),
     #     url(r'^edc_label/', include('edc_label.urls', namespace='edc-label')),
     #     url(r'^edc/', include('edc_base.urls', namespace='edc-base')),
     #     url(r'^(?P<page>\d+)/$', HomeView.as_view(), name='home_url'),

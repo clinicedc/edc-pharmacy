@@ -1,9 +1,9 @@
 from django.db import models
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.utils import get_utcnow
+from edc_constants.constants import NEW
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_search.model_mixins import SearchSlugManager
-from edc_constants.constants import NEW
 
 from ..search_slug_model_mixin import SearchSlugModelMixin
 from ..choices import PRESCRIPTION_STATUS

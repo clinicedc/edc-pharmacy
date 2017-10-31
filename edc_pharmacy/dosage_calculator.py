@@ -8,7 +8,7 @@ class DosageGuidelineError(Exception):
 
 class DosageCalculator:
 
-    medication_model = 'edc_pharma.medication'
+    medication_model = 'edc_pharmacy.medication'
 
     def __init__(self, medication_name=None, dose=None, dose_units=None, dose_per_kg=None,
                  dose_frequency_factor=None, **kwargs):

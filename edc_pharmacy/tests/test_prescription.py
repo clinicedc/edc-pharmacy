@@ -1,8 +1,8 @@
 from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
 
-from ..models import Prescription, Medication
 from ..choices import DRUG_ROUTE, DRUG_FORMULATION
+from ..models import Prescription, Medication
 
 
 class TestPrescription(TestCase):

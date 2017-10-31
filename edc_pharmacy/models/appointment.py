@@ -16,6 +16,3 @@ class Appointment(SearchSlugModelMixin, AppointmentModelMixin, BaseUuidModel):
 
     def __str__(self):
         return (f'{self.appt_datetime} - {self.profile_label}')
-
-    class Meta:
-        app_label = 'edc_pharma'

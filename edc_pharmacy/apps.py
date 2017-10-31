@@ -10,9 +10,9 @@ from edc_label.apps import AppConfig as BaseEdcLabelAppConfig
 
 
 class AppConfig(DjangoAppConfig):
-    name = 'edc_pharma'
+    name = 'edc_pharmacy'
     prescription_model = None
-    worklist_model = 'edc_pharma.worklist'
+    worklist_model = 'edc_pharmacy.worklist'
     template_name = None
     try:
         prescription_model = settings.EDC_PHARMA_PRESCRIPTION_MODEL
@@ -33,10 +33,10 @@ class AppConfig(DjangoAppConfig):
             self.country).get(self.map_area)
 
 
-if settings.APP_NAME == 'edc_pharma':
+if settings.APP_NAME == 'edc_pharmacy':
 
     class EdcAppointmentAppConfig(BaseEdcAppointmentAppConfig):
-        appointment_model = 'edc_pharma.appointment'
+        appointment_model = 'edc_pharmacy.appointment'
 
     class EdcFacilityAppConfig(BaseEdcFacilityAppConfig):
         definitions = {
@@ -52,4 +52,4 @@ if settings.APP_NAME == 'edc_pharma':
         default_cups_server_ip = None
         default_printer_label = 'mytest'
         extra_templates_folder = os.path.join(
-            settings.STATIC_ROOT, 'edc_pharma', 'label_templates')
+            settings.STATIC_ROOT, 'edc_pharmacy', 'label_templates')

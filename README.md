@@ -1,4 +1,4 @@
-# edc-pharma
+# edc-pharmacy
 
 ### medication
 

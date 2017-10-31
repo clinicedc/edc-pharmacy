@@ -16,7 +16,7 @@ import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_NAME = 'edc_pharma'
+APP_NAME = 'edc_pharmacy'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'edc_timepoint.apps.AppConfig',
     'edc_facility.apps.AppConfig',
     'edc_appointment.apps.AppConfig',
-    'edc_pharma.apps.EdcLabelAppConfig',
-    'edc_pharma.apps.EdcBaseAppConfig',
-    'edc_pharma.apps.AppConfig',
+    'edc_pharmacy.apps.EdcLabelAppConfig',
+    'edc_pharmacy.apps.EdcBaseAppConfig',
+    'edc_pharmacy.apps.AppConfig',
 ]
 
 # TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -68,7 +68,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'edc_pharma.urls'
+ROOT_URLCONF = 'edc_pharmacy.urls'
 
 TEMPLATES = [
     {
@@ -87,7 +87,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'edc_pharma.wsgi.application'
+WSGI_APPLICATION = 'edc_pharmacy.wsgi.application'
 
 
 # Database
@@ -146,7 +146,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'edc_pharma', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'edc_pharmacy', 'static')
 GIT_DIR = BASE_DIR
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 EDC_PHARMA_PRESCRIPTION_MODEL = None
