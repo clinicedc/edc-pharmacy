@@ -10,7 +10,10 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='edc_pharma',
+    name='edc_pharmacy',
+    version='0.1.0',
+    author=u'Erik van Widenfelt, Tshepiso Setsiba',
+    author_email='ew2789@gmail.com',
     packages=find_packages(),
     include_package_data=True,
     url='http://github.com/botswana-harvard/edc-pharmacy',
