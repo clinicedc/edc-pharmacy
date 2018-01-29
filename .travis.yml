@@ -23,7 +23,7 @@ before_install:
     - "sh -e /etc/init.d/xvfb start"
     - sleep 3 # give xvfb some time to start
 
-#virtualenv:
+# virtualenv:
 #  system_site_packages: true
 
 install:
@@ -31,14 +31,11 @@ install:
   - pip install -q Django==$DJANGO_VERSION
   - pip install flake8
   - pip install coveralls
-  #- pip install M2Crypto
-  #- pip install pyodbc
   - pip install pycups
-  #- pip install mysql-python
   - pip install -q -r requirements.txt
 
 before_script:
-  #- flake8 edc-pharma
+  #- flake8 edc-pharmacy
   # - mkdir -p crypto_fields/test_keys
     - mysql -e 'create database test_default CHARACTER SET utf8;'
   # - mysql -e 'create database td_lab CHARACTER SET utf8;'
@@ -47,7 +44,7 @@ script:
   - coverage run --source=edc_pharma manage.py test
 
 r_github_packages:
-  - edc-pharma/covr
+  - edc-pharmacy/covr
 
 after_success:
   - coveralls
