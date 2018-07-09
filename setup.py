@@ -16,7 +16,7 @@ setup(
     author_email='ew2789@gmail.com',
     packages=find_packages(),
     include_package_data=True,
-    url='http://github.com/botswana-harvard/edc-pharmacy',
+    url='http://github.com/clinicedc/edc-pharmacy',
     license='GPL license, see LICENSE',
     description='edc edc-pharmacy',
     long_description=README,
