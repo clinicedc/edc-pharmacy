@@ -25,7 +25,13 @@ setup(
     long_description=README,
     zip_safe=False,
     keywords='edc edc-pharmacy',
-    install_requires=['holidays'],
+    install_requires=[
+        'edc-base',
+        'edc-appointment',
+        'edc-label',
+        'edc-model-admin',
+        'edc-search',
+        'holidays'],
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
