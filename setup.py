@@ -13,9 +13,10 @@ with open(os.path.join(os.path.dirname(__file__), 'VERSION')) as f:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='edc_pharmacy',
+    name='edc-pharmacy',
     version=VERSION,
-    author=u'Erik van Widenfelt, Tshepiso Setsiba',
+    author='Tshepiso Setsiba',
+    maintainer='Erik van Widenfelt',
     author_email='ew2789@gmail.com',
     packages=find_packages(),
     include_package_data=True,
