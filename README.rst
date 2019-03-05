@@ -1,5 +1,4 @@
-|pypi| |travis| |coverage|
-
+|pypi| |travis| |codecov| |downloads|
 
 edc-pharmacy
 ------------
@@ -33,5 +32,8 @@ TODO:
 .. |travis| image:: https://travis-ci.org/clinicedc/edc-pharmacy.svg?branch=develop
     :target: https://travis-ci.org/clinicedc/edc-pharmacy
     
-.. |coverage| image:: https://coveralls.io/repos/github/clinicedc/edc-pharmacy/badge.svg?branch=develop
-    :target: https://coveralls.io/github/clinicedc/edc-pharmacy?branch=develop
+.. |codecov| image:: https://codecov.io/gh/clinicedc/edc-pharmacy/branch/develop/graph/badge.svg
+  :target: https://codecov.io/gh/clinicedc/edc-pharmacy
+
+.. |downloads| image:: https://pepy.tech/badge/edc-pharmacy
+   :target: https://pepy.tech/project/edc-pharmacy
