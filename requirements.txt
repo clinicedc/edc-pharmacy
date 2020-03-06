@@ -1,4 +1,0 @@
-edc-device
-edc-facility
-edc-visit-schedule
-edc-timepoint
