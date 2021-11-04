@@ -1,5 +1,3 @@
-import pdb
-
 from django.conf import settings
 from django.contrib import admin
 from django.template.loader import render_to_string
@@ -20,7 +18,7 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     show_object_tools = True
 
-    autocomplete_fields = ["rx", "dosage_guideline"]
+    autocomplete_fields = ["dosage_guideline", "formulation"]
 
     form = RxRefillForm
 
@@ -36,15 +34,26 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
                     "rx",
                     "dosage_guideline",
                     "formulation",
-                    "start_date",
-                    "end_date",
+                    "refill_date",
+                    "number_of_days",
+                )
+            },
+        ),
+        (
+            "Optional Customizations",
+            {
+                "description": "This section is only required if customizing the dosage guideline from above.",
+                "fields": (
                     "dose",
                     "frequency",
                     "frequency_units",
                     "weight_in_kgs",
-                    "notes",
-                )
+                ),
             },
+        ),
+        (
+            "Notes",
+            {"fields": ("notes",)},
         ),
         (
             "Verification",
@@ -63,7 +72,7 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
         "verified",
         "verified_datetime",
     )
-    list_filter = ("start_date", "end_date", "site")
+    list_filter = ("refill_date", "site")
     search_fields = [
         "id",
         "site__id",
@@ -73,9 +82,7 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
         "rx__registered_subject__initials",
         "dosage_guideline__medication__name",
     ]
-    ordering = ["rx__subject_identifier", "-start_date"]
-
-    readonly_fields = ["rx"]
+    ordering = ["rx__subject_identifier", "-refill_date"]
 
     @admin.display(description="Subject identifier")
     def subject_identifier(self, obj=None):
@@ -90,7 +97,7 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     @admin.display
     def dispense(self, obj=None):
-        add = True if not obj else obj.remaining > 0
+        add = True if not obj or obj.remaining is None else obj.remaining > 0
         if add:
             url = reverse("edc_pharmacy_admin:edc_pharmacy_dispensinghistory_add")
             url = f"{url}?rx_refill={obj.id}"
@@ -140,8 +147,8 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
             "age_in_years": formatted_age(
                 born=obj.rx.registered_subject.dob, reference_dt=get_utcnow()
             ),
-            "start_date": obj.start_date,
-            "end_date": obj.end_date,
+            "refill_date": obj.refill_date,
+            "number_of_days": obj.number_of_days,
             "duration": obj.duration,
             "remaining": obj.remaining,
             "total": obj.total,
@@ -160,12 +167,6 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
             )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def get_readonly_fields(self, request, obj=None):
-        readonly_fields = list(super().get_readonly_fields(request, obj=obj))
-        if not obj:
-            readonly_fields.remove("rx")
-        return tuple(readonly_fields)
-
 
 class RxRefillInlineAdmin(admin.StackedInline):
 
@@ -176,13 +177,13 @@ class RxRefillInlineAdmin(admin.StackedInline):
     fields = [
         "dosage_guideline",
         "formulation",
-        "start_date",
-        "end_date",
+        "refill_date",
+        "number_of_days",
         "dose",
         "frequency",
         "frequency_units",
     ]
 
     search_fields = ["dosage_guideline__medication__name"]
-    ordering = ["start_date"]
+    ordering = ["refill_date"]
     extra = 0
