@@ -4,12 +4,14 @@ from django.db.models.deletion import PROTECT
 from edc_model import models as edc_models
 from edc_sites.models import CurrentSiteManager, SiteModelMixin
 from edc_utils.date import get_utcnow_as_date
+from edc_visit_schedule.model_mixins import VisitCodeFieldsModelMixin
 
 from ..dosage_per_day import dosage_per_day
 from ..exceptions import ActivePrescriptionRefillExists
 from .dosage_guideline import DosageGuideline
 from .formulation import Formulation
 from .list_models import FrequencyUnits
+from .model_mixins import MedicationOrderModelMixin
 from .rx import Rx
 
 
@@ -21,7 +23,12 @@ class Manager(models.Manager):
         return self.get(prescription, medication, refill_date)
 
 
-class RxRefill(SiteModelMixin, edc_models.BaseUuidModel):
+class RxRefill(
+    MedicationOrderModelMixin,
+    VisitCodeFieldsModelMixin,
+    SiteModelMixin,
+    edc_models.BaseUuidModel,
+):
 
     rx = models.ForeignKey(Rx, on_delete=PROTECT)
 
@@ -88,15 +95,6 @@ class RxRefill(SiteModelMixin, edc_models.BaseUuidModel):
 
     active = models.BooleanField(default=False)
 
-    packed = models.BooleanField(default=False)
-    packed_datetime = models.DateTimeField(null=True, blank=True)
-
-    shipped = models.BooleanField(default=False)
-    shipped_datetime = models.DateTimeField(null=True, blank=True)
-
-    received_at_site = models.BooleanField(default=False)
-    received_at_site_datetime = models.DateTimeField(null=True, blank=True)
-
     verified = models.BooleanField(default=False)
     verified_datetime = models.DateTimeField(null=True, blank=True)
 
@@ -161,4 +159,7 @@ class RxRefill(SiteModelMixin, edc_models.BaseUuidModel):
     class Meta(edc_models.BaseUuidModel.Meta):
         verbose_name = "RX refill"
         verbose_name_plural = "RX refills"
-        unique_together = ["rx", "dosage_guideline", "refill_date"]
+        unique_together = [
+            ["rx", "dosage_guideline", "refill_date"],
+            ["rx", "visit_code", "visit_code_sequence"],
+        ]

@@ -1,9 +1,12 @@
+from uuid import uuid4
+
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from edc_pharmacy.dispensing import Dispensing
-from edc_pharmacy.models import RxRefill
+from edc_pharmacy.models import MedicationStockCreateLabels
+from edc_pharmacy.models.medication_stock_create_labels import Labels
 
-from ..refill_creator import RefillCreator
+from ..dispensing import Dispensing
+from ..refill import create_next_refill, create_refill
 from .dispensing_history import DispensingHistory
 
 
@@ -32,44 +35,33 @@ def dispensing_history_on_post_delete(sender, instance, using=None, **kwargs):
 
 @receiver(
     post_save,
-    dispatch_uid="create_next_refill_on_post_save",
+    dispatch_uid="create_refills_on_post_save",
 )
-def create_next_refill_on_post_save(sender, instance, raw, created, **kwargs):
+def create_refills_on_post_save(sender, instance, raw, created, **kwargs):
     if not raw:
         try:
             instance.creates_refills_from_crf
         except AttributeError:
             pass
         else:
-            if not RxRefill.objects.filter(
-                rx__subject_identifier=instance.subject_visit.subject_identifier
-            ).exists():
-                number_of_days = 0
-                if instance.subject_visit.appointment.next:
-                    number_of_days = (
-                        instance.subject_visit.appointment.next.appt_datetime
-                        - instance.subject_visit.appointment.appt_datetime
-                    ).days
-                RefillCreator(
-                    subject_identifier=instance.subject_visit.subject_identifier,
-                    refill_date=instance.subject_visit.appointment.appt_datetime,
-                    number_of_days=number_of_days,
-                    dosage_guideline=instance.next_dosage_guideline,
-                    formulation=instance.next_formulation,
-                    make_active=True,
-                )
-            if instance.subject_visit.appointment.next:
-                number_of_days = 0
-                if instance.subject_visit.appointment.next.next:
-                    number_of_days = (
-                        instance.subject_visit.appointment.next.next.appt_datetime
-                        - instance.subject_visit.appointment.next.appt_datetime
-                    ).days
-                RefillCreator(
-                    subject_identifier=instance.subject_visit.subject_identifier,
-                    refill_date=instance.subject_visit.appointment.next.appt_datetime,
-                    number_of_days=number_of_days,
-                    dosage_guideline=instance.next_dosage_guideline,
-                    formulation=instance.next_formulation,
-                    make_active=False,
-                )
+            if instance.creates_refills_from_crf:
+                create_refill(instance)
+                create_next_refill(instance)
+
+
+@receiver(
+    post_save,
+    sender=MedicationStockCreateLabels,
+    dispatch_uid="create_medication_stock_labels_on_post_save",
+)
+def create_medication_stock_labels_on_post_save(
+    sender, instance, raw, created, **kwargs
+):
+    if not raw:
+        qty_already_created = Labels.objects.filter(
+            medication_stock_create_labels=instance
+        ).count()
+        for i in range(0, instance.qty - qty_already_created):
+            Labels.objects.create(
+                medication_stock_create_labels=instance, stock_identifier=uuid4().hex
+            )

@@ -50,6 +50,7 @@ class TestDispense(TestCase):
             medication=self.medication,
         )
 
+    @tag("disp")
     def test_dispense(self):
         rx_refill = RxRefill.objects.create(
             rx=self.rx,

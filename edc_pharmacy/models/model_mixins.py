@@ -6,6 +6,7 @@ from edc_constants.constants import YES
 from ..exceptions import NextPrescriptionRefillError
 from .dosage_guideline import DosageGuideline
 from .formulation import Formulation
+from .medication_stock import MedicationStock
 
 
 class StudyMedicationModelMixin(models.Model):
@@ -22,6 +23,7 @@ class StudyMedicationModelMixin(models.Model):
 
     number_of_days = models.IntegerField(
         null=True,
+        blank=True,
         help_text="Leave blank to auto-calculate relative to the next scheduled appointment",
     )
 
@@ -39,10 +41,15 @@ class StudyMedicationModelMixin(models.Model):
         on_delete=PROTECT,
         related_name="next_dosageguideline",
         null=True,
+        blank=True,
     )
 
     next_formulation = models.ForeignKey(
-        Formulation, on_delete=PROTECT, related_name="next_formulation", null=True
+        Formulation,
+        on_delete=PROTECT,
+        related_name="next_formulation",
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -56,9 +63,9 @@ class StudyMedicationCrfModelMixin(StudyMedicationModelMixin):
     """Declare with a `subject_visit` field attr"""
 
     @property
-    def creates_refills_from_crf(self):
+    def creates_refills_from_crf(self) -> bool:
         """Attribute for signal"""
-        return None
+        return True
 
     def save(self, *args, **kwargs):
         if not self.number_of_days:
@@ -86,4 +93,28 @@ class StudyMedicationCrfModelMixin(StudyMedicationModelMixin):
         return 0
 
     class Meta(StudyMedicationModelMixin.Meta):
+        abstract = True
+
+
+class MedicationOrderModelMixin(models.Model):
+
+    medication_stock = models.ForeignKey(
+        MedicationStock,
+        null=True,
+        blank=False,
+        on_delete=PROTECT,
+    )
+
+    qty = models.DecimalField(null=True, blank=False, decimal_places=2, max_digits=10)
+
+    packed = models.BooleanField(default=False)
+    packed_datetime = models.DateTimeField(null=True, blank=True)
+
+    shipped = models.BooleanField(default=False)
+    shipped_datetime = models.DateTimeField(null=True, blank=True)
+
+    received_at_site = models.BooleanField(default=False)
+    received_at_site_datetime = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
         abstract = True

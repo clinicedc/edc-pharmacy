@@ -65,14 +65,26 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     list_display = (
         "subject_identifier",
+        "refill_date",
         "description",
         "dispense",
         "returns",
         "prescription",
+        "packed",
+        "shipped",
+        "received_at_site",
         "verified",
         "verified_datetime",
     )
-    list_filter = ("refill_date", "site")
+    list_filter = (
+        "refill_date",
+        "visit_code",
+        "visit_code_sequence",
+        "packed",
+        "shipped",
+        "received_at_site",
+        "site",
+    )
     search_fields = [
         "id",
         "site__id",
@@ -88,11 +100,11 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
     def subject_identifier(self, obj=None):
         return obj.rx.subject_identifier
 
-    @admin.display(description="Prescription")
+    @admin.display(description="Rx")
     def prescription(self, obj=None):
         url = reverse("edc_pharmacy_admin:edc_pharmacy_rx_changelist")
         url = f"{url}?q={obj.rx.id}"
-        context = dict(title="Back to RX", url=url, label="Prescription")
+        context = dict(title="Back to RX", url=url, label="Rx")
         return render_to_string("dashboard_button.html", context=context)
 
     @admin.display
@@ -138,7 +150,7 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
         )
         return format_html(f"{returns_html}<BR>{returns_history_html}")
 
-    @admin.display(description="Description")
+    @admin.display(description="Description of Refill")
     def description(self, obj=None):
         context = {
             "subject_identifier": obj.rx.registered_subject.subject_identifier,
@@ -148,8 +160,9 @@ class RxRefillAdmin(ModelAdminMixin, admin.ModelAdmin):
                 born=obj.rx.registered_subject.dob, reference_dt=get_utcnow()
             ),
             "refill_date": obj.refill_date,
+            "visit_code": obj.visit_code,
+            "visit_code_sequence": obj.visit_code_sequence,
             "number_of_days": obj.number_of_days,
-            "duration": obj.duration,
             "remaining": obj.remaining,
             "total": obj.total,
             "SHORT_DATE_FORMAT": settings.SHORT_DATE_FORMAT,

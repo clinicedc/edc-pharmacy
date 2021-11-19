@@ -30,11 +30,14 @@ def create_prescription(
         medication = medication_model_cls.objects.get(name__iexact=medication_name)
     except ObjectDoesNotExist:
         medication = medication_model_cls.objects.create(name=medication_name)
-    rx_model_cls.objects.create(
-        action_identifier=action.action_identifier,
-        subject_identifier=subject_identifier,
-        report_datetime=report_datetime,
-        rx_date=report_datetime.date(),
-        medication=medication,
-        randomizer_name=randomizer_name,
-    )
+    try:
+        rx_model_cls.objects.get(action_identifier=action.action_identifier)
+    except ObjectDoesNotExist:
+        rx_model_cls.objects.create(
+            action_identifier=action.action_identifier,
+            subject_identifier=subject_identifier,
+            report_datetime=report_datetime,
+            rx_date=report_datetime.date(),
+            medication=medication,
+            randomizer_name=randomizer_name,
+        )

@@ -4,9 +4,9 @@ from typing import Any, Optional, Union
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError, transaction
 
-from .exceptions import PrescriptionError, PrescriptionRefillError
-from .models import Rx, RxRefill
-from .utils import convert_to_utc_date
+from ..exceptions import PrescriptionError, PrescriptionRefillError
+from ..models import Rx, RxRefill
+from ..utils import convert_to_utc_date
 
 
 class RefillCreator:
@@ -14,6 +14,8 @@ class RefillCreator:
         self,
         subject_identifier: Optional[str] = None,
         refill_date: Union[datetime, date, type(None)] = None,
+        visit_code: Optional[str] = None,
+        visit_code_sequence: Optional[int] = None,
         number_of_days: Optional[int] = None,
         dosage_guideline: Optional[Any] = None,
         formulation: Optional[Any] = None,
@@ -23,12 +25,17 @@ class RefillCreator:
         if instance:
             self.subject_identifier = instance.get_subject_identifier()
             self.refill_date = convert_to_utc_date(instance.refill_date)
+            self.visit_code = instance.visit_code
+            self.visit_code_sequence = instance.visit_code_sequence
             self.number_of_days = instance.number_of_days
             self.dosage_guideline = instance.dosage_guideline
             self.formulation = instance.formulation
+
         else:
             self.subject_identifier = subject_identifier
             self.refill_date = convert_to_utc_date(refill_date)
+            self.visit_code = visit_code
+            self.visit_code_sequence = visit_code_sequence
             self.number_of_days = number_of_days
             self.dosage_guideline = dosage_guideline
             self.formulation = formulation
@@ -48,6 +55,8 @@ class RefillCreator:
             dosage_guideline=self.dosage_guideline,
             formulation=self.formulation,
             refill_date=self.refill_date,
+            visit_code=self.visit_code,
+            visit_code_sequence=self.visit_code_sequence,
             number_of_days=self.number_of_days,
         )
         try:
