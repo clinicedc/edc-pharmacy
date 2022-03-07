@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from setuptools import setup
-from setuptools import find_packages
-from os.path import join, abspath, normpath, dirname
+from os.path import abspath, dirname, join, normpath
+
+from setuptools import find_packages, setup
 
 with open(join(dirname(__file__), "README.rst")) as readme:
     README = readme.read()
@@ -28,6 +28,7 @@ setup(
     url="http://github.com/clinicedc/edc-pharmacy",
     license="GPL license, see LICENSE",
     description="Pharmacy module for clinicedc/edc projects",
+    long_description_content_type="text/x-rst",
     long_description=README,
     zip_safe=False,
     keywords="django edc edc-pharmacy",
