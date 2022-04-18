@@ -5,6 +5,8 @@ edc-pharmacy
 
 Work in progress ...
 
+Prescription (start) -> refill, refilll, ... -> Prescription (end)
+
 medication
 ==========
 
