@@ -46,6 +46,9 @@ DJANGO =
     dev: djdev
 
 [testenv]
+setenv =
+    SETUPTOOLS_USE_DISTUTILS = stdlib
+
 deps =
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/tox.txt
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/test_utils.txt
