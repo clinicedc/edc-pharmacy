@@ -38,16 +38,18 @@ isolated_build = true
 
 [gh-actions]
 python =
-    3.9: py39, lint
+    3.9: py39
+    3.10: py310, lint
 
 [gh-actions:env]
 DJANGO =
     3.2: dj32, lint
+    4.0: dj40
     dev: djdev
 
 [testenv]
 setenv =
-    SETUPTOOLS_USE_DISTUTILS = stdlib
+    py39: SETUPTOOLS_USE_DISTUTILS = stdlib
 
 deps =
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/tox.txt
@@ -55,6 +57,7 @@ deps =
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/edc.txt
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/third_party_dev.txt
     dj32: Django>=3.2,<3.3
+    dj40: Django>=4.0,<4.1
     djdev: https://github.com/django/django/tarball/main
 
 commands =
