@@ -14,11 +14,11 @@ project_settings = DefaultTestSettings(
     EDC_AUTH_CODENAMES_WARN_ONLY=True,
     EDC_AUTH_SKIP_SITE_AUTHS=True,
     EDC_AUTH_SKIP_AUTH_UPDATER=True,
+    AUTO_CREATE_KEYS=False,
     BASE_DIR=base_dir,
     APP_NAME=app_name,
     add_dashboard_middleware=True,
     add_lab_dashboard_middleware=True,
-    # use_test_urls=True,
 ).settings
 
 
