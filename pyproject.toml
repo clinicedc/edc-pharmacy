@@ -30,27 +30,26 @@ skip_covered = true
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-requires = tox-conda
 envlist =
-    py{310}-dj{32,dev},
+    py{38,39,310}-dj{32,40,41,dev},
     lint
+
 isolated_build = true
 
 [gh-actions]
 python =
-    3.9: py39
-    3.10: py310, lint
+    3.8: py38
+    3.9: py39, lint
+    3.10: py310
 
 [gh-actions:env]
 DJANGO =
     3.2: dj32, lint
     4.0: dj40
+    4.1: dj41
     dev: djdev
 
 [testenv]
-setenv =
-    py39: SETUPTOOLS_USE_DISTUTILS = stdlib
-
 deps =
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/tox.txt
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/test_utils.txt
@@ -58,11 +57,13 @@ deps =
     -r https://raw.githubusercontent.com/clinicedc/edc/develop/requirements.tests/third_party_dev.txt
     dj32: Django>=3.2,<3.3
     dj40: Django>=4.0,<4.1
+    dj41: Django>=4.1,<4.2
     djdev: https://github.com/django/django/tarball/main
 
 commands =
     pip install -U pip
     pip --version
+    pip freeze
     coverage run -a runtests.py
     coverage report
 
