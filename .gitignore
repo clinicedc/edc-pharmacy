@@ -1,7 +1,9 @@
+django_crypto_fields
 _version.py
 .pydevproject
 .project
 .settings
+.env
 db.sqlite3
 etc/
 .etc/
