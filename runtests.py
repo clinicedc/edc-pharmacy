@@ -28,6 +28,7 @@ project_settings = DefaultTestSettings(
     ),
     add_dashboard_middleware=True,
     add_lab_dashboard_middleware=True,
+    excluded_apps=["edc_adverse_event.apps.AppConfig", "adverse_event_app.apps.AppConfig"],
 ).settings
 
 
