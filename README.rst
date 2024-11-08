@@ -3,6 +3,9 @@
 edc-pharmacy
 ------------
 
+Concepts: order, receive, repack, stock request, transfer
+
+
 
 .. |pypi| image:: https://img.shields.io/pypi/v/edc-pharmacy.svg
    :target: https://pypi.python.org/pypi/edc-pharmacy
