@@ -5,7 +5,7 @@ edc-pharmacy
 EDC pharmacy is a simple pharmacy module for randomized control trials that can be integrated into clinicedc/edc projects.
 
 The module includes stock management to enable a research project team to track chain-of-custody of investigational product from a central site to each research site and finally to each patient.
-Stock items are physically labeled using the integrated labelling functionality. Generated labels use a randomly generated stock code and code128 barcodes.
+Stock items are physically labeled using the integrated labelling functionality. Generated labels use a randomly generated stock code and code128 barcodes. Label formats are fully customizable.
 
 When integrated with an clinicedc/edc project, study site requests for stock can be generated using the subject's randomization assignment, followup schedule, and prescription.
 
@@ -53,10 +53,10 @@ Details
 Qty vs Unit QTY
 +++++++++++++++
 
-* QTY is the container count, e.g. 5 bottles of 128 tablets
+* QTY is the container count, e.g. 5 bottles of 128 tablets.
 * UNIT_QTY is the total number of items in the container. A bottle of 128 has ``unit_qty`` of 128 and a ``qty`` of 1.
-* all stock items start with a ``qty_in``=1 and ``qty_out``=0 while the ``unit_qty`` = ``qty_in`` * container.qty or as in the example above, ``unit_qty` = 1 * 128 = 128
-* If the ``unit_qty_out`` equals the initial ``unit_qty_in``, e.g 128==128, the qty_out is set to 1. A stock item with qty_in=1 and qty_out=1 is not available / in stock.
+* All stock items start with a ``qty_in`` =1 and ``qty_out`` =0 while the ``unit_qty`` = ``qty_in`` * ``container.qty`` or as in the example above, ``unit_qty`` = 1 * 128 = 128.
+* If the ``unit_qty_out`` equals the initial ``unit_qty_in``, e.g 128==128, the ``qty_out`` is set to 1. A stock item with ``qty_in`` =1 and ``qty_out`` =1 is not available / in stock.
 
 
 
