@@ -2,8 +2,69 @@
 
 edc-pharmacy
 ------------
+EDC pharmacy is a simple pharmacy module for randomized control trials that can be integrated into clinicedc/edc projects.
 
-Concepts: order, receive, repack, stock request, transfer
+The module includes stock management to enable a research project team to track chain-of-custody of investigational product from a central site to each research site and finally to each patient.
+Stock items are physically labeled using the integrated labelling functionality. Generated labels use a randomly generated stock code and code128 barcodes.
+
+When integrated with an clinicedc/edc project, study site requests for stock can be generated using the subject's randomization assignment, followup schedule, and prescription.
+
+Installation
+============
+
+.. code-block:: bash
+
+    pip install edc_pharmacy
+
+More likely, ``edc_pharmacy`` is installed as a requirement of a ``clinicedc/edc`` project.
+
+
+Overview
+========
+Concepts
+++++++++
+
+* order (central)
+* receive/label/confirm (central)
+* repack/label/confirm (central)
+* generate stock request PRN (site)
+* allocate to subject (central)
+* pack (central)
+* transfer/confirm (central to site)
+
+Also:
+
+* medication
+* formulation
+* prescription
+
+Features
+++++++++
+
+* Tracks lot# with randomization assignment
+* prints code128 label sheets (py_labels2, django_pylabel, edc_pylabel)
+* generates a stock request based on subjects with valid prescriptions (Rx) using the next scheduled visit (see edc_appointment, edc_visit_tracking, edc_visit_schedule)
+* stock are created in data but only available if confirmed by scanning barcode into system.
+
+
+Details
+=======
+
+Qty vs Unit QTY
++++++++++++++++
+
+* QTY is the container count, e.g. 5 bottles of 128 tablets
+* UNIT_QTY is the total number of items in the container. A bottle of 128 has ``unit_qty`` of 128 and a ``qty`` of 1.
+* all stock items start with a ``qty_in``=1 and ``qty_out``=0 while the ``unit_qty`` = ``qty_in`` * container.qty or as in the example above, ``unit_qty` = 1 * 128 = 128
+* If the ``unit_qty_out`` equals the initial ``unit_qty_in``, e.g 128==128, the qty_out is set to 1. A stock item with qty_in=1 and qty_out=1 is not available / in stock.
+
+
+
+Repack
+++++++
+
+Create new stock from an existing stock item. The container of the new stock item cannot be the same as the source container.
+For example, create bottles of 128 tabs from a single bulk barrel of tablets.
 
 
 
