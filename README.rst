@@ -58,7 +58,9 @@ Qty vs Unit QTY
 * All stock items start with a ``qty_in`` =1 and ``qty_out`` =0 while the ``unit_qty`` = ``qty_in`` * ``container.qty`` or as in the example above, ``unit_qty`` = 1 * 128 = 128.
 * If the ``unit_qty_out`` equals the initial ``unit_qty_in``, e.g 128==128, the ``qty_out`` is set to 1. A stock item with ``qty_in`` =1 and ``qty_out`` =1 is not available / in stock.
 
-
+Orders
+++++++
+Track orders of IMP by recording the LOT # and expiration date.
 
 Repack
 ++++++
