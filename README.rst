@@ -29,8 +29,10 @@ Concepts
 * repack/label/confirm (central)
 * generate stock request PRN (site)
 * allocate to subject (central)
-* pack (central)
-* transfer/confirm (central to site)
+* transfer (from central to site)
+* verify transfer at site
+* dispense to clinican
+* dispense to patient (via CRF)
 
 Also:
 
