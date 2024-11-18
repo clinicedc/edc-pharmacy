@@ -24,15 +24,20 @@ Overview
 Concepts
 ++++++++
 
+Task at Central
+
 * order (central)
-* receive/label/confirm (central)
-* repack/label/confirm (central)
+* receive, label as bulk stock, confirm
+* repack/decant, label as stock, confirm
+* with site stock request, allocate to subject, label for subject
+* transfer stock to site
+
+Tasks at Site
+
 * generate stock request PRN (site)
-* allocate to subject (central)
-* transfer (from central to site)
-* verify transfer at site
-* dispense to clinican
-* dispense to patient (via CRF)
+* receive physical stock at site, confirm transfered stock at site
+* dispense to clinic/patient
+* confirm dispense to patient on CRF
 
 Also:
 
@@ -64,8 +69,8 @@ Orders
 ++++++
 Track orders of IMP by recording the LOT # and expiration date.
 
-Repack
-++++++
+Repack/Decant
++++++++++++++
 
 Create new stock from an existing stock item. The container of the new stock item cannot be the same as the source container.
 For example, create bottles of 128 tabs from a single bulk barrel of tablets.
