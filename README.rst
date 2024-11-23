@@ -76,6 +76,29 @@ Create new stock from an existing stock item. The container of the new stock ite
 For example, create bottles of 128 tabs from a single bulk barrel of tablets.
 
 
+User Testing
+============
+
+Watermarks
+++++++++++
+
+Print a watermark on labels during UAT deployments
+
+.. code-block:: python
+
+    EDC_PHARMACY_LABEL_WATERMARK_WORD = "DO NOT USE"
+
+See also `pylabels2 <https://github.com/erikvw/pylabels2>`__.
+
+Print watermark on reports during UAT deployments
+
+.. code-block:: python
+
+    EDC_PDF_REPORTS_WATERMARK_WORD = "SAMPLE"
+    EDC_PDF_REPORTS_WATERMARK_FONT = ("Helvetica", 100)
+
+See also `edc-pdf-reports <https://github.com/clinicedc/edc-pdf-reports>`__.
+
 
 .. |pypi| image:: https://img.shields.io/pypi/v/edc-pharmacy.svg
    :target: https://pypi.python.org/pypi/edc-pharmacy
