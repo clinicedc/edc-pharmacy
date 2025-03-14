@@ -1,3 +1,7 @@
+unreleased
+----------
+- add stored_at_site boolean to stock table
+
 1.0.3
 -----
 - precommit
