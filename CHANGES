@@ -1,6 +1,7 @@
-unreleased
+1.0.4
 ----------
 - add stored_at_site boolean to stock table
+- add stockout
 
 1.0.3
 -----
