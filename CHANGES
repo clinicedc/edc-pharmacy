@@ -1,3 +1,12 @@
+1.0.6
+-----
+- add screen to move stock stored at site from one bin to another
+- automatically increase bin capacity if moving in
+  more items than current capacity can hold
+- set minvaluevalidator=0 for storagebin capacity
+- fix exception raised when attempting to print stock not yet
+  allocated
+
 1.0.4
 ----------
 - add stored_at_site boolean to stock table
