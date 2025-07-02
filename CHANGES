@@ -1,3 +1,7 @@
+1.1.6
+-----
+- add missing migration
+
 1.1.5
 -----
 - add model to track stock qty (unit qty in) adjustments.
