@@ -1,3 +1,15 @@
+1.2.0
+-----
+- rename model stockconfirmation to confirmation
+- rename model stocktransfirmationconfirmation to
+  confirmation_at_site
+- rename model stocktransfirmationconfirmationitems to
+  confirmation_at_site_items
+- remove boolean fields confirmed, transferred, confirmed_at_site,
+  dispensed from stock model
+- refine admin models and list filters
+- add additional validation for transfer_stock, confirm_at_site
+
 1.1.6
 -----
 - add missing migration
