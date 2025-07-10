@@ -1,3 +1,21 @@
+1.2.3
+-----
+- remove transaction.atomic in signals
+- fix migration 0062 directly importing renamed models
+- fix migration 0086 directly importing renamed models
+- replace outdated reference to column `dispensed` with `dispensitem__isnull`
+  in allocation_admin
+
+1.2.2
+-----
+- remove site from fields when creating Confirmation instance
+- remove SiteModelMixin from model Confirmation
+
+1.2.1
+-----
+- automatically assume last prescription is active if MultipleObjectsReturned
+  and update Rx accordingly
+
 1.2.0
 -----
 - rename model stockconfirmation to confirmation
