@@ -1,3 +1,11 @@
+1.2.1
+-----
+- remove transaction.atomic in signals
+- fix migration 0062 directly importing renamed models
+- fix migration 0086 directly importing renamed models
+- replace outdated reference to column `dispensed` with `dispensitem__isnull`
+  in allocation_admin
+
 1.2.0
 -----
 - rename model stockconfirmation to confirmation
