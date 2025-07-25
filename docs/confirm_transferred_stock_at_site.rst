@@ -25,13 +25,13 @@ Reference the Stock transfer manifest
    :width: 600
 
 
-and transcribe the reference number, location and items from the Stock transfer manifest
+and transcribe the reference number, location and number of items from the Stock transfer manifest
 
 
 .. image:: images/confirm_transferred_stock_at_site_dialogue.png
    :width: 300
 
-
+Click ``submit``
 
 .. attention::
     next steps to be written
