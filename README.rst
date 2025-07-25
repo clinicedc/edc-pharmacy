@@ -1,4 +1,4 @@
-|pypi| |actions| |codecov| |downloads| |black| |isort|
+|pypi| |actions| |codecov| |downloads| |black| |isort| |docs|
 
 edc-pharmacy
 ------------
