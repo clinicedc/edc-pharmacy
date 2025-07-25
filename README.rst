@@ -117,3 +117,7 @@ See also `edc-pdf-reports <https://github.com/clinicedc/edc-pdf-reports>`__.
 
 .. |isort| image:: https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336
     :target: https://pycqa.github.io/isort/
+
+.. |docs| image:: https://app.readthedocs.org/projects/edc-pharmacy/badge/?version=latest
+    :target: https://edc-pharmacy.readthedocs.io/en/latest/
+
